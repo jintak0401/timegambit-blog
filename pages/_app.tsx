@@ -1,7 +1,11 @@
-import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import { ThemeProvider } from 'next-themes';
-import siteMetadata from '@data/siteMetadata';
+
+import '@/css/katex.css';
+import '@/css/globals.css';
+import '@/css/prism.css';
+
+import siteMetadata from '@/data/siteMetadata';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (

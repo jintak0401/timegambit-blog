@@ -7,12 +7,12 @@ module.exports = {
     node: true,
     es6: true,
   },
-  plugins: ['@typescript-eslint'],
+  plugins: ['@typescript-eslint', 'simple-import-sort', 'unused-imports'],
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:jsx-a11y/recommended',
+    'plugin:@next/next/recommended',
     'plugin:prettier/recommended',
     'next',
     'next/core-web-vitals',
@@ -22,9 +22,8 @@ module.exports = {
       'off',
       {
         endOfLine: 'auto',
+        singleQuote: true
       },
-      'error',
-      {singleQuote: true}
     ],
     'react/react-in-jsx-scope': 'off',
     'jsx-a11y/anchor-is-valid': [
@@ -41,5 +40,32 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/ban-ts-comment': 'off',
+    '@typescript-eslint/no-unused-vars': 'off',
+    'unused-imports/no-unused-imports': 'warn',
+    'simple-import-sort/exports': 'warn',
+    'simple-import-sort/imports': [
+      'warn',
+      {
+        groups: [
+          ['^@?\\w', '^\\u0000'],
+          ['^.+\\.s?css$'],
+          ['^@/lib', '^@/hooks'],
+          ['^@/data'],
+          ['^@/components'],
+          ['^@/'],
+          [
+            '^\\./?$',
+            '^\\.(?!/?$)',
+            '^\\.\\./?$',
+            '^\\.\\.(?!/?$)',
+            '^\\.\\./\\.\\./?$',
+            '^\\.\\./\\.\\.(?!/?$)',
+            '^\\.\\./\\.\\./\\.\\./?$',
+            '^\\.\\./\\.\\./\\.\\.(?!/?$)',
+          ],
+          ['^'],
+        ],
+      },
+    ],
   },
 };
