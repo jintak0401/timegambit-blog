@@ -1,19 +1,19 @@
-import type { GetStaticProps } from 'next';
+import type { GetStaticProps, InferGetStaticPropsType } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 
-import { getAllPosts, getContentBySlug } from '@/lib/remark/mdx';
-import { PostFrontMatter } from '@/lib/types';
+import { allBlogs } from '@/.contentlayer/generated';
 
 export const getStaticProps: GetStaticProps = async () => {
-  const posts = getAllPosts();
-  const content = await getContentBySlug('blog', posts[posts.length - 1].slug);
+  const posts = allBlogs;
   return {
     props: { posts },
   };
 };
 
-export default function Home({ posts }: { posts: PostFrontMatter[] }) {
+export default function Home({
+  posts,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center py-2">
       <Head>
