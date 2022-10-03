@@ -1,9 +1,9 @@
 import type { AppProps } from 'next/app';
 import { ThemeProvider } from 'next-themes';
 
-import '@/css/katex.css';
-import '@/css/globals.css';
+import '@/css/tailwind.css';
 import '@/css/prism.css';
+import '@/css/katex.css';
 
 import siteMetadata from '@/data/siteMetadata';
 
