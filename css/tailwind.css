@@ -23,3 +23,13 @@ input:-webkit-autofill,
 input:-webkit-autofill:focus {
     transition: background-color 600000s 0s, color 600000s 0s;
 }
+
+::-webkit-scrollbar {
+    @apply bg-gray-300 dark:bg-gray-700 w-3;
+}
+
+::-webkit-scrollbar-thumb {
+    background-clip: padding-box;
+    border: 1px solid transparent;
+    @apply bg-gray-500 dark:bg-gray-300 rounded-lg border-transparent border-2;
+}
