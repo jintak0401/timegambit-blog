@@ -20,17 +20,22 @@ const siteMetadata = {
   analytics: {
     googleAnalyticsId: '', // e.g. UA-000000-2 or G-XXXXXXX
   },
+  newsletter: {
+    // supports mailchimp, buttondown, convertkit, klaviyo, revue
+    // Please add your .env file and modify it according to your selection
+    provider: 'buttondown',
+  },
   comment: {
     provider: 'giscus', // supported providers: giscus, utterances, disqus
     giscusConfig: {
       // Visit the link below, and follow the steps in the 'configuration' section
       // https://giscus.app/
       repo: process.env.NEXT_PUBLIC_GISCUS_REPO,
-      repoId: process.env.NEXT_PUBLIC_GISCUS_REPOSITORY_ID,
+      repositoryId: process.env.NEXT_PUBLIC_GISCUS_REPOSITORY_ID,
       category: process.env.NEXT_PUBLIC_GISCUS_CATEGORY,
       categoryId: process.env.NEXT_PUBLIC_GISCUS_CATEGORY_ID,
       mapping: 'pathname',
-      reactionsEnabled: '1',
+      reactions: '1',
       // Send discussion metadata periodically to the parent window: 1 = enable / 0 = disable
       emitMetaData: '0',
       // theme example: light, dark, dark_dimmed, dark_high_contrast
