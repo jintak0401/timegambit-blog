@@ -3,6 +3,9 @@ import { InferGetStaticPropsType } from 'next';
 
 import { coreContent, sortedBlogPost } from '@/lib/contentlayer';
 
+import { MDXLayoutRenderer } from '@/components/MDXComponents';
+import PageTitle from '@/components/PageTitle';
+
 const DEFAULT_LAYOUT = 'PostLayout';
 
 export async function getStaticPaths() {
@@ -24,7 +27,7 @@ export const getStaticProps = async ({
   const sortedPosts = sortedBlogPost(
     post?.category
       ? allBlogs.filter((p) => p.category === post.category)
-      : allBlogs
+      : allBlogs.filter((p) => !p.category)
   );
   const series = post.category
     ? sortedPosts
@@ -69,8 +72,6 @@ export default function BlogPost({
   next,
   series,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  return <div>임시</div>;
-  /*
   return (
     <>
       {'draft' in post && post.draft !== true ? (
@@ -93,5 +94,4 @@ export default function BlogPost({
       )}
     </>
   );
-*/
 }
