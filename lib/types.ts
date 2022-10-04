@@ -1,4 +1,4 @@
-import { MDXRemoteSerializeResult } from 'next-mdx-remote';
+import { Parent } from 'unist';
 
 export interface ProjectData {
   [key: string]: {
@@ -31,15 +31,15 @@ export interface PageFrontMatter {
   slug: string;
 }
 
-export interface PostProps {
-  source: MDXRemoteSerializeResult;
-  frontMatter: PostFrontMatter;
+export interface Heading extends Parent {
+  type: 'heading';
+  depth: 1 | 2 | 3 | 4 | 5 | 6;
 }
 
-export interface BlogPostProps {
-  post: PostProps;
-  ogImage: string;
-  series?: PostFrontMatter[];
-}
+export type Toc = {
+  value: string;
+  depth: number;
+  url: string;
+}[];
 
 export type FileType = 'blog' | 'page';

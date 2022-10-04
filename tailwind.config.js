@@ -14,7 +14,7 @@ module.exports = {
     './components/**/*.tsx',
     './layouts/**/*.tsx',
     './lib/**/*.ts',
-    './posts/**/*.mdx',
+    './data/**/*.mdx',
   ],
   darkMode: 'class',
   theme: {
