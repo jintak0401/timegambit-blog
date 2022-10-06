@@ -9,6 +9,7 @@ import siteMetadata from '@/data/siteMetadata';
 import Comments from '@/components/comments';
 import Link from '@/components/Link';
 import PageTitle from '@/components/PageTitle';
+import ScrollIndicator from '@/components/ScrollIndicator';
 import ScrollTopAndComment from '@/components/ScrollTopAndComment';
 import SectionContainer from '@/components/SectionContainer';
 import { BlogSEO } from '@/components/SEO';
@@ -26,10 +27,11 @@ export default function PostLayout({ content, next, prev, children }: Props) {
 
   return (
     <SectionContainer>
+      <ScrollIndicator />
       <TOC />
       <BlogSEO url={`${siteMetadata.siteUrl}/blog/${slug}`} {...content} />
       <ScrollTopAndComment />
-      <article>
+      <article className="transition-colors duration-500">
         <div>
           <header>
             <div className="space-y-1 border-b border-gray-200 pb-10 text-center dark:border-gray-700">
