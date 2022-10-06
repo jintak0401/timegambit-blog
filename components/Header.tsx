@@ -29,7 +29,7 @@ export default function Header() {
           >
             <Link href={href}>
               <a
-                className={`mx-1 rounded p-1 font-semibold text-gray-900 dark:text-gray-100 sm:px-4 sm:py-2 ${
+                className={`mx-1 rounded p-1 font-semibold text-gray-900 transition-all duration-500 dark:text-gray-100 sm:px-4 sm:py-2 ${
                   isSamePath(title)
                     ? 'bg-primary-100 text-primary-600 dark:bg-primary-800 dark:text-primary-300'
                     : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'
