@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --timing-func: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 .task-list-item::before {
     @apply hidden;
 }
@@ -24,6 +28,12 @@ input:-webkit-autofill:focus {
     transition: background-color 600000s 0s, color 600000s 0s;
 }
 
+@layer components {
+    .w-section {
+        @apply mx-auto max-w-3xl px-4 sm:px-6 xl:max-w-5xl xl:px-0;
+    }
+}
+
 ::-webkit-scrollbar {
     @apply bg-gray-300 dark:bg-gray-700 w-3;
 }
@@ -32,4 +42,21 @@ input:-webkit-autofill:focus {
     background-clip: padding-box;
     border: 1px solid transparent;
     @apply bg-gray-500 dark:bg-gray-300 rounded-lg border-transparent border-2;
+}
+
+/* we define color scheme here */
+
+.dark {
+    --base-color: 23 23 23;
+}
+
+.light {
+    --base-color: 255 255 255;
+}
+
+html,
+body {
+    background-color: rgb(var(--base-color));
+    transition: background-color 500ms;
+    transition-timing-function: var(--timing-func);
 }
