@@ -2,12 +2,9 @@ import type { GetStaticProps, InferGetStaticPropsType } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 
-import { allBlogs } from '@/.contentlayer/generated';
-
 export const getStaticProps: GetStaticProps = async () => {
-  const posts = allBlogs;
   return {
-    props: { posts },
+    props: { posts: [] },
   };
 };
 
