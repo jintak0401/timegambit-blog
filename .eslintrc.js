@@ -35,7 +35,7 @@ module.exports = {
       },
     ],
     'react/prop-types': 0,
-    "no-console": "warn",
+    'no-console': 'warn',
     'no-unused-vars': 0,
     'react/no-unescaped-entities': 0,
     '@typescript-eslint/explicit-module-boundary-types': 'off',
