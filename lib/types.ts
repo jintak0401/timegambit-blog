@@ -1,5 +1,7 @@
 import { Parent } from 'unist';
 
+import { ConvertPick } from '@/lib/contentlayer';
+
 export interface ProjectData {
   [key: string]: {
     title: string;
@@ -8,9 +10,14 @@ export interface ProjectData {
   }[];
 }
 
-export interface PostItems {
-  [key: string]: string;
-}
+export type PostListItem = ConvertPick<{
+  title: string;
+  slug: string;
+  date: string;
+  images: string[];
+  summary?: string;
+  tags?: string[];
+}>;
 
 export interface PostFrontMatter {
   title: string;
