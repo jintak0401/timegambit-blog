@@ -1,39 +1,49 @@
-import Link from '@/components/Link'
-import PageTitle from '@/components/PageTitle'
-import SectionContainer from '@/components/SectionContainer'
-import { BlogSEO } from '@/components/SEO'
-import Image from '@/components/Image'
-import Tag from '@/components/Tag'
-import siteMetadata from '@/data/siteMetadata'
-import Comments from '@/components/comments'
-import ScrollTopAndComment from '@/components/ScrollTopAndComment'
-import { CoreContent } from '@/lib/utils/contentlayer'
-import { ReactNode } from 'react'
-import type { Blog, Authors } from 'contentlayer/generated'
+import type { Authors, Blog } from 'contentlayer/generated';
+import { ReactNode } from 'react';
 
-const editUrl = (slug) => `${siteMetadata.siteRepo}/blob/master/data/blog/${slug}`
+import { CoreContent } from '@/lib/contentlayer';
+
+import siteMetadata from '@/data/siteMetadata';
+
+import Comments from '@/components/comments';
+import Image from '@/components/Image';
+import Link from '@/components/Link';
+import PageTitle from '@/components/PageTitle';
+import ScrollTopAndComment from '@/components/ScrollTopAndComment';
+import SectionContainer from '@/components/SectionContainer';
+import { BlogSEO } from '@/components/SEO';
+import Tag from '@/components/Tag';
+
+const editUrl = (slug) =>
+  `${siteMetadata.siteRepo}/blob/master/data/blog/${slug}`;
 const discussUrl = (slug) =>
   `https://mobile.twitter.com/search?q=${encodeURIComponent(
     `${siteMetadata.siteUrl}/blog/${slug}`
-  )}`
+  )}`;
 
 const postDateTemplate: Intl.DateTimeFormatOptions = {
   weekday: 'long',
   year: 'numeric',
   month: 'long',
   day: 'numeric',
-}
+};
 
 interface Props {
-  content: CoreContent<Blog>
-  authorDetails: CoreContent<Authors>[]
-  next?: { slug: string; title: string }
-  prev?: { slug: string; title: string }
-  children: ReactNode
+  content: CoreContent<Blog>;
+  authorDetails: CoreContent<Authors>[];
+  next?: { slug: string; title: string };
+  prev?: { slug: string; title: string };
+  children: ReactNode;
 }
 
-export default function PostLayout({ content, authorDetails, next, prev, children }: Props) {
-  const { slug, date, title, tags } = content
+export default function PostLayout({
+  content,
+  authorDetails,
+  next,
+  prev,
+  children,
+}: Props) {
+  const { slug, date, title, tags } = content;
 
   return (
     <SectionContainer>
@@ -52,7 +62,10 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                   <dt className="sr-only">Published on</dt>
                   <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
                     <time dateTime={date}>
-                      {new Date(date).toLocaleDateString(siteMetadata.locale, postDateTemplate)}
+                      {new Date(date).toLocaleDateString(
+                        siteMetadata.locale,
+                        postDateTemplate
+                      )}
                     </time>
                   </dd>
                 </div>
@@ -71,7 +84,10 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
               <dd>
                 <ul className="flex justify-center space-x-8 sm:space-x-12 xl:block xl:space-x-0 xl:space-y-8">
                   {authorDetails.map((author) => (
-                    <li className="flex items-center space-x-2" key={author.name}>
+                    <li
+                      className="flex items-center space-x-2"
+                      key={author.name}
+                    >
                       {author.avatar && (
                         <Image
                           src={author.avatar}
@@ -83,7 +99,9 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                       )}
                       <dl className="whitespace-nowrap text-sm font-medium leading-5">
                         <dt className="sr-only">Name</dt>
-                        <dd className="text-gray-900 dark:text-gray-100">{author.name}</dd>
+                        <dd className="text-gray-900 dark:text-gray-100">
+                          {author.name}
+                        </dd>
                         <dt className="sr-only">Twitter</dt>
                         <dd>
                           {author.twitter && (
@@ -91,7 +109,10 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                               href={author.twitter}
                               className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
                             >
-                              {author.twitter.replace('https://twitter.com/', '@')}
+                              {author.twitter.replace(
+                                'https://twitter.com/',
+                                '@'
+                              )}
                             </Link>
                           )}
                         </dd>
@@ -102,7 +123,9 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
               </dd>
             </dl>
             <div className="divide-y divide-gray-200 dark:divide-gray-700 xl:col-span-3 xl:row-span-2 xl:pb-0">
-              <div className="prose max-w-none pt-10 pb-8 dark:prose-dark">{children}</div>
+              <div className="prose max-w-none pt-10 pb-8 dark:prose-dark">
+                {children}
+              </div>
               <div className="pt-6 pb-6 text-sm text-gray-700 dark:text-gray-300">
                 <Link href={discussUrl(slug)} rel="nofollow">
                   {'Discuss on Twitter'}
@@ -164,5 +187,5 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
         </div>
       </article>
     </SectionContainer>
-  )
+  );
 }
