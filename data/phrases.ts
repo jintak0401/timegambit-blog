@@ -18,6 +18,7 @@ const phrases = {
     title: '포스트',
     description: '학습한 내용과 지식들을 공유 및 정리합니다.',
     noPost: '포스트를 찾을 수 없네요...',
+    search: '어떤 글을 찾으시나요?',
   },
   SignIn: {
     title: 'Time Gambit 블로그에 어서오세요! 다음으로 로그인 해주세요.',

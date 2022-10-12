@@ -36,7 +36,7 @@ export default function ListLayout({ posts, title, description }: Props) {
               aria-label="Search articles"
               type="text"
               onChange={(e) => setSearchValue(e.target.value)}
-              placeholder="Search articles"
+              placeholder={phrases.Blog.search}
               className="block w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-900 transition-colors duration-500 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-900 dark:bg-gray-800 dark:text-gray-100"
             />
             <svg
