@@ -1,3 +1,5 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.5/dist/web/static/pretendard-dynamic-subset.css");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -28,10 +30,33 @@ input:-webkit-autofill:focus {
     transition: background-color 600000s 0s, color 600000s 0s;
 }
 
+@layer base {
+    html {
+        font-family: "Pretendard", sans-serif;
+    }
+}
+
 @layer components {
     .w-section {
         @apply mx-auto max-w-3xl px-4 sm:px-6 xl:max-w-5xl xl:px-0;
     }
+
+    .card {
+        z-index: 1;
+        @apply rounded-md py-10 relative;
+    }
+
+    .card::before {
+        content: "";
+        z-index: -1;
+        /*box-shadow: rgba(0, 0, 0, 0.1) 0 10px 20px 0;*/
+        @apply absolute w-full h-full top-0 left-0 shadow-2xl rounded-md opacity-0 transition-opacity duration-500;
+    }
+
+    .card:hover::before {
+        @apply opacity-100;
+    }
+
 }
 
 ::-webkit-scrollbar {
