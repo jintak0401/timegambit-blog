@@ -7709,6 +7709,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-icons@npm:^4.4.0":
+  version: 4.4.0
+  resolution: "react-icons@npm:4.4.0"
+  peerDependencies:
+    react: "*"
+  checksum: dd93a1dcc8ac8a3cf46a2b33e80b586fa967331fa5fcb90d061abf276155a8363a331643e203d67cb9bab4261d00a757da854bcce1fce2c6e4258bf3e33f711b
+  languageName: node
+  linkType: hard
+
 "react-is@npm:^16.13.1":
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
@@ -8891,6 +8900,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"swr@npm:^1.3.0":
+  version: 1.3.0
+  resolution: "swr@npm:1.3.0"
+  peerDependencies:
+    react: ^16.11.0 || ^17.0.0 || ^18.0.0
+  checksum: e7a184f0d560e9c8be85c023cc8e65e56a88a6ed46f9394b301b07f838edca23d2e303685319a4fcd620b81d447a7bcb489c7fa0a752c259f91764903c690cdb
+  languageName: node
+  linkType: hard
+
 "tailwindcss@npm:^3.1.8":
   version: 3.1.8
   resolution: "tailwindcss@npm:3.1.8"
@@ -8992,6 +9010,7 @@ __metadata:
     prettier-plugin-tailwindcss: ^0.1.13
     react: 18.2.0
     react-dom: 18.2.0
+    react-icons: ^4.4.0
     rehype-autolink-headings: ^6.1.1
     rehype-katex: ^6.0.2
     rehype-preset-minify: ^6.0.0
@@ -9001,6 +9020,7 @@ __metadata:
     remark-footnotes: ^4.0.1
     remark-gfm: ^3.0.1
     remark-math: ^5.1.1
+    swr: ^1.3.0
     tailwindcss: ^3.1.8
     typescript: 4.8.3
     unist-util-visit: ^4.1.1
