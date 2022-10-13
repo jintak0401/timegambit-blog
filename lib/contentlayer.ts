@@ -19,7 +19,7 @@ type OrNull<T> = { [K in keyof T]: Exclude<T[K], undefined> | null };
 type PickRequired<T> = {
   [K in keyof T as undefined extends T[K] ? never : K]: T[K];
 };
-type ConvertPick<T> = ConvertUndefined<T> & PickRequired<T>;
+export type ConvertPick<T> = ConvertUndefined<T> & PickRequired<T>;
 
 /**
  *
