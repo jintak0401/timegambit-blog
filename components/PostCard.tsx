@@ -15,7 +15,7 @@ interface Props {
 const PostCard = ({ post }: Props) => {
   const { title, summary, tags, images, slug, date } = post;
   return (
-    <article className="my-10 box-border max-w-full gap-4 space-y-2 hover:bg-gray-100 dark:hover:bg-gray-800 xl:grid xl:grid-cols-3 xl:items-center xl:space-y-0">
+    <article className="header-text my-10 box-border max-w-full gap-4 space-y-2 transition-colors duration-300 hover:bg-gray-100 dark:hover:bg-gray-800 xl:grid xl:grid-cols-3 xl:items-center xl:space-y-0">
       <Link href={`/blog/${slug}`}>
         <a>
           <Image
@@ -32,9 +32,13 @@ const PostCard = ({ post }: Props) => {
       </Link>
       <div className="flex flex-col justify-between gap-4 xl:col-span-2 xl:h-full">
         <div className="space-y-2">
-          <h3 className="w-fit cursor-pointer text-start text-2xl font-bold leading-8 tracking-tight hover:text-primary-500">
-            {title}
-          </h3>
+          <Link href={`/blog/${slug}`}>
+            <a>
+              <h3 className="w-fit cursor-pointer text-start text-2xl font-bold leading-8 tracking-tight hover:text-primary-500">
+                {title}
+              </h3>
+            </a>
+          </Link>
           <ul className="flex flex-wrap">
             {tags &&
               tags.map((tag) => (

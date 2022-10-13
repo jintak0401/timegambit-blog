@@ -57,6 +57,9 @@ input:-webkit-autofill:focus {
         @apply opacity-100;
     }
 
+    .header-text {
+        @apply dark:text-gray-100 text-gray-900;
+    }
 }
 
 ::-webkit-scrollbar {
@@ -72,16 +75,16 @@ input:-webkit-autofill:focus {
 /* we define color scheme here */
 
 .dark {
-    --base-color: 23 23 23;
+    --base-color: #171717;
 }
 
 .light {
-    --base-color: 255 255 255;
+    --base-color: #ffffff;
 }
 
 html,
 body {
-    background-color: rgb(var(--base-color));
+    background-color: var(--base-color);
     transition: background-color 500ms;
     transition-timing-function: var(--timing-func);
 }
