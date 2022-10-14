@@ -4,7 +4,7 @@ import { PostListItem } from '@/lib/types';
 
 import phrases from '@/data/phrases';
 
-import PostCard from '@/components/PostCard';
+import PostList from '@/components/PostList';
 
 interface Props {
   posts: PostListItem[];
@@ -55,14 +55,7 @@ export default function ListLayout({ posts, title, description }: Props) {
             </svg>
           </div>
         </div>
-        <ul>
-          {!filteredBlogPosts.length && phrases.Blog.noPost}
-          {displayPosts.map((post) => (
-            <li key={post.title}>
-              <PostCard post={post} />
-            </li>
-          ))}
-        </ul>
+        <PostList posts={displayPosts} />
       </div>
     </>
   );

@@ -14,6 +14,13 @@ const phrases = {
   cancel: '취소',
   toc: 'Table of contents',
   delete_successful: '성공적으로 삭제했습니다',
+  Main: {
+    name: 'Time Gambit',
+    description: '호기심과 탐구심과 순수함을 잃지 않으려고 노력합니다.',
+    subDescription: '백엔드에도 관심이 많은 프론트엔드 개발자 지망생입니다.',
+    recentPosts: '최신 포스트',
+    allPosts: 'ALL POSTS',
+  },
   Blog: {
     title: '포스트',
     description: '학습한 내용과 지식들을 공유 및 정리합니다.',
