@@ -1,13 +1,6 @@
-/**
- * CSS Styles for code highlighting.
- * Feel free to customize token styles 
- * by copying from a prismjs compatible theme:
- * https://github.com/PrismJS/prism-themes
- */
-
 /* Code title styles */
 .remark-code-title {
-    @apply rounded-t bg-gray-700 px-5 py-3 font-mono text-sm font-bold text-gray-200;
+    @apply rounded-t bg-gray-700 px-5 py-3 font-mono text-base font-bold text-gray-200;
 }
 
 .remark-code-title + div > pre {
@@ -24,33 +17,43 @@
 }
 
 .code-line.inserted {
-    @apply bg-green-500 bg-opacity-20;
+    background-color: var(--green-30);
 }
 
 .code-line.deleted {
-    @apply bg-red-500 bg-opacity-20;
+    background-color: var(--red-30);
 }
 
 .highlight-line {
-    @apply -mx-4 border-l-4 border-primary-500 bg-gray-700 bg-opacity-50;
+    color: var(--foreground);
+    background-color: var(--comment-30);
+    @apply -mx-4 border-l-4 border-primary-500;
 }
 
 .line-number::before {
-    @apply mr-4 -ml-2 inline-block w-4 text-right text-gray-400;
     content: attr(line);
+    @apply mr-4 -ml-2 inline-block w-4 text-right text-gray-400;
 }
 
 :root {
-    --background: #282A36;
-    --comment: #6272A4; /* use */
-    --foreground: #F8F8F2; /* use */
-    --cyan: #8BE9FD; /* use */
-    --green: #50FA7B; /* use */
-    --orange: #FFB86C; /* use */
-    --pink: #FF79C6; /* use */
-    --purple: #BD93F9; /* use */
-    --red: #FF5555; /* use */
-    --yellow: #F1FA8C; /* use */
+    --selection: #44475A;
+    --comment: #6272A4;
+    --foreground: #F8F8F2;
+    --cyan: #8BE9FD;
+    --green: #50FA7B;
+    --orange: #FFB86C;
+    --pink: #FF79C6;
+    --purple: #BD93F9;
+    --red: #FF5555;
+    --yellow: #F1FA8C;
+
+    --comment-30: #6272A433;
+    --green-30: #50FA7B33;
+    --red-30: #FF555533;
+}
+
+pre > code {
+    background-color: inherit !important;
 }
 
 pre::-webkit-scrollbar {
@@ -66,32 +69,22 @@ pre::-webkit-scrollbar-thumb {
     border-radius: 8px;
 }
 
-.limit-300 {
-    height: 300px !important
+code[class*=language-] ::-moz-selection, code[class*=language-]::-moz-selection, pre[class*=language-] ::-moz-selection, pre[class*=language-]::-moz-selection {
+    text-shadow: none;
+    background-color: var(--selection)
 }
 
-.limit-300 {
-    height: 400px !important
-}
-
-.limit-500 {
-    height: 500px !important
-}
-
-.limit-600 {
-    height: 600px !important
-}
-
-.limit-700 {
-    height: 700px !important
-}
-
-.limit-800 {
-    height: 800px !important
+code[class*=language-] ::selection, code[class*=language-]::selection, pre[class*=language-] ::selection, pre[class*=language-]::selection {
+    text-shadow: none;
+    background-color: var(--selection)
 }
 
 .language-css {
-    color: var(--purple)
+    color: var(--purple);
+}
+
+.language-css .token {
+    color: var(--pink);
 }
 
 .token.comment,
@@ -100,12 +93,15 @@ pre::-webkit-scrollbar-thumb {
     color: var(--comment);
 }
 
-.token.prolog {
+.token.prolog,
+.token.spread
+{
     color: var(--foreground);
 }
 
 .token.punctuation,
-.token.property
+.token.property,
+.token.property-access
 {
     color: var(--orange);
 }
@@ -132,7 +128,9 @@ pre::-webkit-scrollbar-thumb {
 }
 
 .token.boolean,
-.token.constant
+.token.constant,
+.token.unit,
+.token.hexcode
 {
     color: var(--purple);
 }
@@ -150,13 +148,20 @@ pre::-webkit-scrollbar-thumb {
 
 .token.builtin,
 .token.url,
-.token.class-name
+.token.class-name,
+.token.class
 {
     color: var(--cyan);
 }
+
+.token.console {
+    color: var(--purple);
+}
+
 .token.attr-value,
 .language-css .token.url,
-.token.string
+.token.string,
+.token.regex
 {
     color: var(--yellow);
 }
@@ -165,8 +170,15 @@ pre::-webkit-scrollbar-thumb {
     color: rgba(255, 135, 157, 1);
 }
 
-.token.regex {
-    color: var(--red);
+
+.token.arrow,
+.token.script {
+    color: var(--foreground);
+}
+
+.token.regex-delimiter,
+.token.regex-flags {
+    color: #6897bb;
 }
 
 .token.important,
@@ -185,6 +197,3 @@ pre::-webkit-scrollbar-thumb {
 .token.table {
     display: inline;
 }
-
-
-/**************/
