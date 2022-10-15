@@ -52,6 +52,10 @@
     --red-30: #FF555533;
 }
 
+pre {
+    font-family: 'DejaVu Mono', 'Pretendard', serif;
+}
+
 pre > code {
     background-color: inherit !important;
 }
