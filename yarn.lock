@@ -2126,6 +2126,34 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@prisma/client@npm:^4.4.0":
+  version: 4.4.0
+  resolution: "@prisma/client@npm:4.4.0"
+  dependencies:
+    "@prisma/engines-version": 4.4.0-66.f352a33b70356f46311da8b00d83386dd9f145d6
+  peerDependencies:
+    prisma: "*"
+  peerDependenciesMeta:
+    prisma:
+      optional: true
+  checksum: 7ecd1dbfd7158baef5365beaead3d863841812cd939b7b1f5287f163281119de311ffdeb422d1105b15c939b50ca3760bb459ede63a34d5f7acda510d7c30b03
+  languageName: node
+  linkType: hard
+
+"@prisma/engines-version@npm:4.4.0-66.f352a33b70356f46311da8b00d83386dd9f145d6":
+  version: 4.4.0-66.f352a33b70356f46311da8b00d83386dd9f145d6
+  resolution: "@prisma/engines-version@npm:4.4.0-66.f352a33b70356f46311da8b00d83386dd9f145d6"
+  checksum: 91ca927a69f53ffd05ee02b25666531997202642dbe92ae2c6df6a28a38726894e3728377c49d2327a323461d92f5b7eedae0795ab6ca50ed59ae28c2775b38a
+  languageName: node
+  linkType: hard
+
+"@prisma/engines@npm:4.4.0":
+  version: 4.4.0
+  resolution: "@prisma/engines@npm:4.4.0"
+  checksum: e5a62e6c905cbe325f8aa15afe698f8a0a47fe7fdc4d4affdc8df86fcdc6fdd2857ac498611217daf5f8304846a32e199d100165c748b4e8a959bbf0670507a1
+  languageName: node
+  linkType: hard
+
 "@protobufjs/aspromise@npm:^1.1.1, @protobufjs/aspromise@npm:^1.1.2":
   version: 1.1.2
   resolution: "@protobufjs/aspromise@npm:1.1.2"
@@ -7588,6 +7616,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"prisma@npm:^4.4.0":
+  version: 4.4.0
+  resolution: "prisma@npm:4.4.0"
+  dependencies:
+    "@prisma/engines": 4.4.0
+  bin:
+    prisma: build/index.js
+    prisma2: build/index.js
+  checksum: fb44f8b36d59c411711b2f5cecbe112a6487c387a7dd7ade350c73c0e9f821dfdb30cd6271c2f2b9b713fda3a31eec4b241c482754b26bfcb6df831ba521a58e
+  languageName: node
+  linkType: hard
+
 "promise-inflight@npm:^1.0.1":
   version: 1.0.1
   resolution: "promise-inflight@npm:1.0.1"
@@ -8972,6 +9012,7 @@ __metadata:
     "@effect-ts/core": ^0.60.4
     "@next/bundle-analyzer": ^12.3.1
     "@next/eslint-plugin-next": ^12.3.1
+    "@prisma/client": ^4.4.0
     "@svgr/webpack": ^6.3.1
     "@tailwindcss/forms": ^0.5.3
     "@tailwindcss/typography": ^0.5.7
@@ -9008,6 +9049,7 @@ __metadata:
     preact: ^10.11.0
     prettier: ^2.7.1
     prettier-plugin-tailwindcss: ^0.1.13
+    prisma: ^4.4.0
     react: 18.2.0
     react-dom: 18.2.0
     react-icons: ^4.4.0
