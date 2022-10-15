@@ -1,6 +1,7 @@
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { ThemeProvider } from 'next-themes';
+import '@fontsource/dejavu-mono';
 
 import '@/css/tailwind.css';
 import '@/css/prism.css';
