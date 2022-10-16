@@ -34,6 +34,15 @@ input:-webkit-autofill:focus {
     html {
         font-family: "Pretendard", sans-serif;
     }
+
+    ::selection
+    {
+        @apply bg-primary-100 text-primary-500 dark:bg-primary-800 dark:text-primary-200;
+    }
+
+    ::-moz-selection {
+        @apply bg-primary-100 text-primary-500;
+    }
 }
 
 @layer components {
@@ -88,3 +97,4 @@ body {
     transition: background-color 500ms;
     transition-timing-function: var(--timing-func);
 }
+

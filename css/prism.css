@@ -75,12 +75,14 @@ pre::-webkit-scrollbar-thumb {
 
 code[class*=language-] ::-moz-selection, code[class*=language-]::-moz-selection, pre[class*=language-] ::-moz-selection, pre[class*=language-]::-moz-selection {
     text-shadow: none;
-    background-color: var(--selection)
+    background-color: var(--selection);
+    color: inherit;
 }
 
 code[class*=language-] ::selection, code[class*=language-]::selection, pre[class*=language-] ::selection, pre[class*=language-]::selection {
     text-shadow: none;
-    background-color: var(--selection)
+    background-color: var(--selection);
+    color: inherit;
 }
 
 .language-css {
