@@ -57,9 +57,9 @@ export function allCoreContent<T extends DocumentTypes>(contents: T[]) {
 }
 
 // TODO: refactor into contentlayer once compute over all docs is enabled
+const tagCount: Record<string, number> = {};
 export async function getAllTags(allBlogs: Blog[]) {
-  const tagCount: Record<string, number> = {};
-  // Iterate through each post, putting all found tags into `tags`
+  if (Object.keys(tagCount).length) return tagCount;
   allBlogs.forEach((file) => {
     if (file.tags && file.draft !== true) {
       file.tags.forEach((tag: string) => {
@@ -72,6 +72,5 @@ export async function getAllTags(allBlogs: Blog[]) {
       });
     }
   });
-
   return tagCount;
 }
