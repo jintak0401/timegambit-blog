@@ -1,6 +1,6 @@
 import phrases from '@/data/phrases';
 
-import Logo from './logo.svg';
+import Logo from '../data/logo.svg';
 
 const Introduction = () => {
   return (
