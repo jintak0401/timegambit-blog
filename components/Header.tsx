@@ -54,7 +54,7 @@ export default function Header() {
         <Link href="/" aria-label={siteMetadata.headerTitle}>
           <div className="flex cursor-pointer items-center justify-between">
             <div className="mr-3">
-              <Logo />
+              <Logo className="h-7 w-7 fill-current text-primary-500 dark:text-primary-300" />
             </div>
             {typeof siteMetadata.headerTitle === 'string' ? (
               <div className="hidden h-6 text-2xl font-semibold sm:block">
