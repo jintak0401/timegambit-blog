@@ -1,8 +1,8 @@
 const about = {
   Contact: {
-    email: 'jintak0401@naver.com',
-    github: 'https://github.com/jintak0401',
-    blog: 'https://timegambit.com',
+    Email: 'jintak0401@naver.com',
+    GitHub: 'https://github.com/jintak0401',
+    Blog: 'https://timegambit.com',
   },
   Skills: [
     {
