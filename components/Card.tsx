@@ -21,7 +21,7 @@ const Card = ({ title, description, imgSrc, href }: Props) => (
             <Image
               alt={title}
               src={imgSrc}
-              className="object-contain object-center md:h-36 lg:h-48"
+              className="object-cover object-center md:h-36 lg:h-48"
               width={544}
               height={306}
             />
