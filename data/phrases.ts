@@ -56,6 +56,10 @@ const phrases = {
     signOut: '로그아웃',
     deleteModalTitle: '메시지 삭제',
   },
+  About: {
+    title: '한진탁 | Time Gambit',
+    description: '',
+  },
   _404: {
     title: '잘못된 주소입니다!',
     description:
