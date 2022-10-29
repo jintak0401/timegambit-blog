@@ -33,7 +33,7 @@ export default function Home({
       <main className="flex flex-1 flex-col">
         <Introduction />
         <div className="flex justify-between">
-          <h2 className="header-text text-2xl font-semibold duration-500">
+          <h2 className="basic-text text-2xl font-semibold">
             {phrases.Main.recentPosts}
           </h2>
           <Link href="/blog">
