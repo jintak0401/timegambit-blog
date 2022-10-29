@@ -27,7 +27,7 @@ export default function ListLayout({ posts, title, description }: Props) {
     <>
       <div className="divide-y">
         <div className="space-y-2 pt-6 pb-8 md:space-y-5">
-          <h1 className="header-text text-3xl font-extrabold leading-9 transition-colors duration-500 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
+          <h1 className="basic-text text-3xl font-extrabold leading-9 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
             {title}
           </h1>
           {description && <p className="text-gray-500">{description}</p>}
