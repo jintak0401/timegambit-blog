@@ -15,7 +15,7 @@ interface Props {
 const PostCard = ({ post }: Props) => {
   const { title, summary, tags, images, slug, date } = post;
   return (
-    <article className="header-text my-10 box-border max-w-full gap-4 space-y-2 transition-colors duration-300 hover:bg-gray-100 dark:hover:bg-gray-800 xl:grid xl:grid-cols-3 xl:items-center xl:space-y-0">
+    <article className="basic-text my-10 box-border max-w-full gap-4 space-y-2 duration-300 hover:bg-gray-100 dark:hover:bg-gray-800 xl:grid xl:grid-cols-3 xl:items-center xl:space-y-0">
       <Link href={`/blog/${slug}`}>
         <a>
           <Image
