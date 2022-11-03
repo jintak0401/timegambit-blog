@@ -28,7 +28,6 @@ export default function PostLayout({ content, next, prev, children }: Props) {
   return (
     <SectionContainer>
       <ScrollIndicator />
-      <TOC />
       <BlogSEO url={`${siteMetadata.siteUrl}/blog/${slug}`} {...content} />
       <ScrollTopAndComment />
       <article className="transition-colors duration-500">
@@ -52,10 +51,11 @@ export default function PostLayout({ content, next, prev, children }: Props) {
             className="divide-y divide-gray-200 pb-8 dark:divide-gray-700 xl:divide-y-0 "
             style={{ gridTemplateRows: 'auto 1fr' }}
           >
-            <div className="divide-y divide-gray-200 dark:divide-gray-700 xl:col-span-3 xl:row-span-2 xl:pb-0">
+            <div className="relative divide-y divide-gray-200 dark:divide-gray-700 xl:col-span-3 xl:row-span-2 xl:pb-0">
               <div className="prose max-w-none pt-10 pb-8 dark:prose-dark">
                 {children}
               </div>
+              <TOC />
             </div>
             <footer>
               <div className="flex flex-col text-sm font-medium sm:flex-row sm:justify-between sm:text-base">
