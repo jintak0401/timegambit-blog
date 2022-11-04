@@ -1,13 +1,15 @@
-import { Dispatch, SetStateAction, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
+import { TocElement } from '@/lib/types';
 
 const observerOption = {
   threshold: 0.4,
   rootMargin: '-90px 0px 0px 0px',
 };
 
-export const useIntersectionObserver = (
-  setId: Dispatch<SetStateAction<string>>
-) => {
+export const useIntersectionObserver = () => {
+  const [currentId, setCurrentId] = useState<string>('');
+  const [headingEls, setHeadingEls] = useState<TocElement[]>([]);
   const dirRef = useRef<string>('');
   const prevYpos = useRef<number>(0);
 
@@ -26,14 +28,22 @@ export const useIntersectionObserver = (
           (dirRef.current === 'down' && !entry.isIntersecting) ||
           (dirRef.current === 'up' && entry.isIntersecting)
         ) {
-          setId(entry.target.id);
+          setCurrentId(entry.target.id);
         }
       });
     }, observerOption);
 
-    const headingEls = document.querySelectorAll('h2, h3');
-    headingEls.forEach((h) => observer.observe(h));
-
+    const els = document.querySelectorAll('h2, h3');
+    setHeadingEls(
+      Array.from(els).map(({ id, nodeName, textContent }) => ({
+        id,
+        nodeName,
+        textContent: textContent as string,
+      }))
+    );
+    els.forEach((h) => observer.observe(h));
     return () => observer.disconnect();
-  }, [setId]);
+  }, []);
+
+  return { currentId, headingEls };
 };

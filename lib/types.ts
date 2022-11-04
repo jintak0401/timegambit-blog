@@ -49,4 +49,10 @@ export type Toc = {
   url: string;
 }[];
 
+export interface TocElement {
+  id: string;
+  nodeName: string;
+  textContent: string;
+}
+
 export type FileType = 'blog' | 'page';
