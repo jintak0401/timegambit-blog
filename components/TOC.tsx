@@ -4,15 +4,15 @@ const TOC = () => {
   const { headingEls, currentId } = useIntersectionObserver();
 
   return (
-    <aside className="absolute left-full ">
-      <ul className="fixed top-56 ml-12 hidden space-y-1.5 self-start border-l-2 pl-5 2xl:inline-block">
+    <aside className="absolute top-0 left-full hidden h-full break-words 2xl:inline-block">
+      <ul className="sticky top-10 ml-12 w-[calc(49vw-555px)] space-y-1.5 border-l-2 pl-5 transition-colors dark:border-gray-700">
         {headingEls
           .filter(({ textContent }) => textContent !== 'Footnotes')
           .map(({ id, textContent, nodeName }) => (
             <li key={id}>
               <a
                 href={`#${id}`}
-                className={`inline-block transition-colors transition-transform hover:underline
+                className={`inline-block transition-all hover:underline
                 ${
                   currentId === id
                     ? 'scale-105 text-primary-500 hover:text-primary-600 hover:dark:text-primary-400'
