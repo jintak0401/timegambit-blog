@@ -35,6 +35,8 @@ export const getStaticProps = async ({
         .map((p) => ({ title: p.title, slug: p.slug }))
     : null;
 
+  const categoryTitle = post.category ?? null;
+
   // prev and next will be a post which draft === false
   const postIndex = sortedPosts.findIndex((p) => p.slug === slug);
   let prevIndex = postIndex - 1,
@@ -62,6 +64,7 @@ export const getStaticProps = async ({
       prev,
       next,
       series,
+      categoryTitle,
     },
   };
 };
@@ -71,6 +74,7 @@ export default function BlogPost({
   prev,
   next,
   series,
+  categoryTitle,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>
@@ -81,6 +85,8 @@ export default function BlogPost({
           content={post}
           prev={prev}
           next={next}
+          categoryTitle={categoryTitle}
+          series={series}
         />
       ) : (
         <div className="mt-24 text-center">
