@@ -6,6 +6,7 @@ import formatDate from '@/lib/formatDate';
 
 import siteMetadata from '@/data/siteMetadata';
 
+import CategoryList from '@/components/CategoryList';
 import Comments from '@/components/comments';
 import Link from '@/components/Link';
 import PageTitle from '@/components/PageTitle';
@@ -20,9 +21,18 @@ interface Props {
   children: ReactNode;
   next?: { slug: string; title: string };
   prev?: { slug: string; title: string };
+  series?: { slug: string; title: string }[];
+  categoryTitle?: string;
 }
 
-export default function PostLayout({ content, next, prev, children }: Props) {
+export default function PostLayout({
+  content,
+  next,
+  prev,
+  series,
+  categoryTitle,
+  children,
+}: Props) {
   const { slug, date, title } = content;
 
   return (
@@ -52,6 +62,9 @@ export default function PostLayout({ content, next, prev, children }: Props) {
             style={{ gridTemplateRows: 'auto 1fr' }}
           >
             <div className="relative divide-gray-200 dark:divide-gray-700 xl:col-span-3 xl:row-span-2 xl:pb-0">
+              {categoryTitle && series && (
+                <CategoryList categoryTitle={categoryTitle} series={series} />
+              )}
               <div className="prose max-w-none pt-10 pb-8 dark:prose-dark">
                 {children}
               </div>
