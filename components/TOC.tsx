@@ -4,8 +4,8 @@ const TOC = () => {
   const { headingEls, currentId } = useIntersectionObserver();
 
   return (
-    <aside className="absolute left-full">
-      <ul className="fixed top-56 ml-10 hidden space-y-1.5 self-start 2xl:inline-block">
+    <aside className="absolute left-full ">
+      <ul className="fixed top-56 ml-12 hidden space-y-1.5 self-start border-l-2 pl-5 2xl:inline-block">
         {headingEls
           .filter(({ textContent }) => textContent !== 'Footnotes')
           .map(({ id, textContent, nodeName }) => (
