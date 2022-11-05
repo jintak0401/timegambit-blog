@@ -1,0 +1,205 @@
+/* Code title styles */
+.remark-code-title {
+    @apply rounded-t bg-gray-700 px-5 py-3 font-mono text-base font-bold text-gray-200;
+}
+
+.remark-code-title + div > pre {
+    @apply mt-0 rounded-t-none;
+}
+
+/* Code block styles */
+.code-highlight {
+    @apply float-left min-w-full;
+}
+
+.code-line {
+    @apply -mx-4 block border-l-4 border-transparent pl-4 pr-4;
+}
+
+.code-line.inserted {
+    background-color: var(--green-30);
+}
+
+.code-line.deleted {
+    background-color: var(--red-30);
+}
+
+.highlight-line {
+    color: var(--foreground);
+    background-color: var(--comment-30);
+    @apply -mx-4 border-l-4 border-primary-500;
+}
+
+.line-number::before {
+    content: attr(line);
+    @apply mr-4 -ml-2 inline-block w-4 text-right text-gray-400;
+}
+
+:root {
+    --selection: #44475A;
+    --comment: #6272A4;
+    --foreground: #F8F8F2;
+    --cyan: #8BE9FD;
+    --green: #50FA7B;
+    --orange: #FFB86C;
+    --pink: #FF79C6;
+    --purple: #BD93F9;
+    --red: #FF5555;
+    --yellow: #F1FA8C;
+
+    --comment-30: #6272A433;
+    --green-30: #50FA7B33;
+    --red-30: #FF555533;
+}
+
+pre {
+    font-family: 'DejaVu Mono', 'Pretendard', serif;
+}
+
+pre > code {
+    background-color: inherit !important;
+}
+
+pre::-webkit-scrollbar {
+    @apply h-3;
+}
+
+pre::-webkit-scrollbar-track {
+    background-color: var(--comment);
+}
+
+pre::-webkit-scrollbar-thumb {
+    background-color: var(--purple);
+    border-radius: 8px;
+}
+
+code[class*=language-] ::-moz-selection, code[class*=language-]::-moz-selection, pre[class*=language-] ::-moz-selection, pre[class*=language-]::-moz-selection {
+    text-shadow: none;
+    background-color: var(--selection);
+    color: inherit;
+}
+
+code[class*=language-] ::selection, code[class*=language-]::selection, pre[class*=language-] ::selection, pre[class*=language-]::selection {
+    text-shadow: none;
+    background-color: var(--selection);
+    color: inherit;
+}
+
+.language-css {
+    color: var(--purple);
+}
+
+.language-css .token {
+    color: var(--pink);
+}
+
+.token.comment,
+.token.variable
+{
+    color: var(--comment);
+}
+
+.token.prolog,
+.token.spread
+{
+    color: var(--foreground);
+}
+
+.token.punctuation,
+.token.property,
+.token.property-access
+{
+    color: var(--orange);
+}
+
+.namespace {
+    color: #e2777a;
+}
+
+.token.symbol {
+    color: rgba(255, 184, 108, 1);
+}
+
+.token.entity,
+.token.tag,
+.token.keyword,
+.token.selector,
+.token.important
+{
+    color: var(--pink);
+}
+
+.token.operator {
+    color: rgba(139, 233, 253, 1);
+}
+
+.token.boolean,
+.token.constant,
+.token.unit,
+.token.hexcode
+{
+    color: var(--purple);
+}
+
+.token.number {
+    color: rgba(189, 147, 249, 1);
+}
+
+.token.function,
+.token.attr-name,
+.token.atrule
+{
+    color: var(--green);
+}
+
+.token.builtin,
+.token.url,
+.token.class-name,
+.token.class
+{
+    color: var(--cyan);
+}
+
+.token.console {
+    color: var(--purple);
+}
+
+.token.attr-value,
+.language-css .token.url,
+.token.string,
+.token.regex
+{
+    color: var(--yellow);
+}
+
+.token.char {
+    color: rgba(255, 135, 157, 1);
+}
+
+
+.token.arrow,
+.token.script {
+    color: var(--foreground);
+}
+
+.token.regex-delimiter,
+.token.regex-flags {
+    color: #6897bb;
+}
+
+.token.important,
+.token.bold {
+    font-weight: bold;
+}
+
+.token.italic {
+    font-style: italic;
+}
+
+.token.table {
+    display: inline;
+}
+
+.token.table {
+    display: inline;
+}
