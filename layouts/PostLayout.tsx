@@ -14,9 +14,9 @@ import SectionContainer from '@/components/SectionContainer';
 import { BlogSEO } from '@/components/SEO';
 import Tag from '@/components/Tag';
 
-const editUrl = (slug) =>
+const editUrl = (slug: string) =>
   `${siteMetadata.siteRepo}/blob/master/data/blog/${slug}`;
-const discussUrl = (slug) =>
+const discussUrl = (slug: string) =>
   `https://mobile.twitter.com/search?q=${encodeURIComponent(
     `${siteMetadata.siteUrl}/blog/${slug}`
   )}`;

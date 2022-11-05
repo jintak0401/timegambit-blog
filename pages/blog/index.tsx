@@ -9,6 +9,7 @@ import siteMetadata from '@/data/siteMetadata';
 import { PageSEO } from '@/components/SEO';
 
 import ListLayout from '@/layouts/ListLayout';
+import { PostListItem } from '@/lib/types';
 
 export const getStaticProps = async () => {
   const posts = sortedBlogPost(allBlogs)
@@ -34,11 +35,7 @@ export default function BlogPage({
         description={siteMetadata.description}
       />
       <ListLayout
-        posts={posts}
-        /*
-        initialDisplayPosts={initialDisplayPosts}
-        pagination={pagination}
-*/
+        posts={posts as PostListItem[]}
         title={phrases.Blog.title}
         description={phrases.Blog.description}
       />
