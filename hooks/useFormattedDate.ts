@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import siteMetadata from '@/data/siteMetadata';
 
@@ -9,8 +9,14 @@ const OPTIONS: Intl.DateTimeFormatOptions = {
 };
 
 const useFormattedDate = (date: string) => {
-  const [formattedDate] = useState<string>(
-    new Date(date).toLocaleDateString(siteMetadata.locale, OPTIONS)
+  const [formattedDate, setFormattedDate] = useState<string>('');
+
+  useEffect(
+    () =>
+      setFormattedDate(
+        new Date(date).toLocaleDateString(siteMetadata.locale, OPTIONS)
+      ),
+    []
   );
 
   return formattedDate;
