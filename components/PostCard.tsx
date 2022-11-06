@@ -23,7 +23,6 @@ const PostCard = ({ post }: Props) => {
             src={images[0]}
             className="rounded-md object-cover"
             placeholder="blur"
-            blurDataURL={`/_next/image?url=/static/images/blog/${images[0]}&w=16&q=1`}
             layout="responsive"
             width={16}
             height={9}
