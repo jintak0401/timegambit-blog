@@ -129,10 +129,6 @@ code[class*=language-] ::selection, code[class*=language-]::selection, pre[class
     color: var(--pink);
 }
 
-.token.operator {
-    color: rgba(139, 233, 253, 1);
-}
-
 .token.boolean,
 .token.constant,
 .token.unit,
@@ -178,7 +174,9 @@ code[class*=language-] ::selection, code[class*=language-]::selection, pre[class
 
 
 .token.arrow,
-.token.script {
+.token.script,
+.token.operator
+{
     color: var(--foreground);
 }
 
