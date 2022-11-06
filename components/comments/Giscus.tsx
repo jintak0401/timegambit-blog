@@ -25,20 +25,20 @@ const Giscus = () => {
       categoryId,
       mapping,
       reactions,
-      metadata,
+      emitMetaData,
       inputPosition,
       lang,
-    } = siteMetadata?.comment?.giscusConfig;
+    } = siteMetadata.comment.giscusConfig;
 
     const script = document.createElement('script');
     script.src = 'https://giscus.app/client.js';
-    script.setAttribute('data-repo', repo);
-    script.setAttribute('data-repo-id', repositoryId);
-    script.setAttribute('data-category', category);
-    script.setAttribute('data-category-id', categoryId);
+    script.setAttribute('data-repo', repo as string);
+    script.setAttribute('data-repo-id', repositoryId as string);
+    script.setAttribute('data-category', category as string);
+    script.setAttribute('data-category-id', categoryId as string);
     script.setAttribute('data-mapping', mapping);
     script.setAttribute('data-reactions-enabled', reactions);
-    script.setAttribute('data-emit-metadata', metadata);
+    script.setAttribute('data-emit-metadata', emitMetaData);
     script.setAttribute('data-input-position', inputPosition);
     script.setAttribute('data-lang', lang);
     script.setAttribute('data-theme', commentsTheme);
