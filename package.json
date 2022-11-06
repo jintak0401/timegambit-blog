@@ -76,7 +76,10 @@
   },
   "packageManager": "yarn@3.2.3",
   "dependenciesMeta": {
-    "prisma@4.4.0": {
+    "@prisma/client@4.5.0": {
+      "unplugged": true
+    },
+    "prisma@4.5.0": {
       "unplugged": true
     }
   }
