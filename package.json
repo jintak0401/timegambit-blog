@@ -28,7 +28,6 @@
     "next": "12.3.1",
     "next-contentlayer": "^0.2.8",
     "next-themes": "^0.2.1",
-    "preact": "^10.11.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.4.0",
@@ -77,10 +76,10 @@
   },
   "packageManager": "yarn@3.2.3",
   "dependenciesMeta": {
-    "@prisma/client@4.4.0": {
+    "@prisma/client@4.5.0": {
       "unplugged": true
     },
-    "prisma@4.4.0": {
+    "prisma@4.5.0": {
       "unplugged": true
     }
   }

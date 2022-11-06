@@ -72,7 +72,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["next-contentlayer", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:0.2.8"],\
             ["next-themes", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:0.2.1"],\
             ["postcss", "npm:8.4.17"],\
-            ["preact", "npm:10.11.0"],\
             ["prettier", "npm:2.7.1"],\
             ["prettier-plugin-tailwindcss", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:0.1.13"],\
             ["prisma", "npm:4.5.0"],\
@@ -10797,15 +10796,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
-      ["preact", [\
-        ["npm:10.11.0", {\
-          "packageLocation": "./.yarn/cache/preact-npm-10.11.0-3c0f4d60eb-1e3f8e6fe8.zip/node_modules/preact/",\
-          "packageDependencies": [\
-            ["preact", "npm:10.11.0"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
       ["prelude-ls", [\
         ["npm:1.2.1", {\
           "packageLocation": "./.yarn/cache/prelude-ls-npm-1.2.1-3e4d272a55-cd192ec0d0.zip/node_modules/prelude-ls/",\
@@ -12513,7 +12503,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["next-contentlayer", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:0.2.8"],\
             ["next-themes", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:0.2.1"],\
             ["postcss", "npm:8.4.17"],\
-            ["preact", "npm:10.11.0"],\
             ["prettier", "npm:2.7.1"],\
             ["prettier-plugin-tailwindcss", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:0.1.13"],\
             ["prisma", "npm:4.5.0"],\
