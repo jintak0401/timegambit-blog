@@ -11,11 +11,11 @@ const siteMetadata = {
   image: '/static/images/avatar.png',
   socialBanner: '/static/images/twitter-card.png',
   email: 'jintak0401@naver.com',
-  github: 'https://github.com',
-  // twitter: 'https://twitter.com/Twitter',
-  // facebook: 'https://facebook.com',
-  // youtube: 'https://youtube.com',
-  // linkedin: 'https://www.linkedin.com',
+  github: '',
+  twitter: '',
+  facebook: '',
+  youtube: '',
+  linkedin: '',
   locale: 'ko-KR',
   analytics: {
     googleAnalyticsId: '', // e.g. UA-000000-2 or G-XXXXXXX
