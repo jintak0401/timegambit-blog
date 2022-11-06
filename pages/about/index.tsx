@@ -1,13 +1,14 @@
-import about from '@/data/about';
-import phrases from '@/data/phrases';
-import siteMetadata from '@/data/siteMetadata';
+import Image from "next/image";
+import Link from "next/link";
 
-import AboutList from '@/components/AboutList';
-import Image from 'next/image';
-import Link from 'next/link';
-import { PageSEO } from '@/components/SEO';
+import about from "@/data/about";
+import phrases from "@/data/phrases";
+import siteMetadata from "@/data/siteMetadata";
 
-const SELFIE_URL = '/static/images/selfie.jpg';
+import AboutList from "@/components/AboutList";
+import { PageSEO } from "@/components/SEO";
+
+const SELFIE_URL = "/static/images/selfie.jpg";
 
 export default function AboutPage() {
   const { title, description } = phrases.About;
@@ -21,11 +22,13 @@ export default function AboutPage() {
         {title}
       </h1>
       {description && <p className="text-gray-500">{description}</p>}
-      <section className="mb-7 mt-12 flex flex-col space-x-0 space-y-5 md:mt-20 md:mb-10 md:flex-row md:space-y-0 md:space-x-7">
+      <section
+        className="mb-7 mt-12 flex flex-col space-x-0 space-y-5 md:mt-20 md:mb-10 md:flex-row md:space-y-0 md:space-x-7">
         <Image
           alt="셀카"
           src={SELFIE_URL}
           placeholder="blur"
+          blurDataURL={`/_next/image?url=${SELFIE_URL}&w=16&q=1`}
           width="250"
           height="250"
           layout="fixed"
@@ -44,10 +47,13 @@ export default function AboutPage() {
                   {key}.
                 </span>
                 <Link
-                  className="font-medium text-primary-500 hover:text-primary-600 hover:underline dark:hover:text-primary-400"
-                  href={`${value.includes('@') ? 'mailto:' : ''}${value}`}
+                  href={`${value.includes("@") ? "mailto:" : ""}${value}`}
                 >
-                  {value}
+                  <a
+                    className="font-medium text-primary-500 hover:text-primary-600 hover:underline dark:hover:text-primary-400"
+                  >
+                    {value}
+                  </a>
                 </Link>
               </li>
             ))}
