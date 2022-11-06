@@ -2,7 +2,7 @@ import type { Blog } from 'contentlayer/generated';
 import { ReactNode } from 'react';
 
 import { CoreContent } from '@/lib/contentlayer';
-import formatDate from '@/lib/formatDate';
+import useFormattedDate from '@/hooks/useFormattedDate';
 
 import siteMetadata from '@/data/siteMetadata';
 
@@ -48,7 +48,7 @@ export default function PostLayout({
                 <div>
                   <dt className="sr-only">Published on</dt>
                   <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
-                    <time dateTime={date}>{formatDate(date)}</time>
+                    <time dateTime={date}>{useFormattedDate(date)}</time>
                   </dd>
                 </div>
               </dl>

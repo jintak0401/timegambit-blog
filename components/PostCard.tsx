@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
-import formatDate from '@/lib/formatDate';
 import { PostListItem } from '@/lib/types';
+import useFormattedDate from '@/hooks/useFormattedDate';
 
 import Tag from '@/components/Tag';
 import ViewCounter from '@/components/ViewCounter';
@@ -23,6 +23,7 @@ const PostCard = ({ post }: Props) => {
             src={images[0]}
             className="rounded-md object-cover"
             placeholder="blur"
+            blurDataURL={`/_next/image?url=${images[0]}&w=16&q=1`}
             layout="responsive"
             width={16}
             height={9}
@@ -51,7 +52,7 @@ const PostCard = ({ post }: Props) => {
         <dl className="flex gap-2 text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
           <dt className="sr-only">작성 날짜</dt>
           <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
-            <time dateTime={date}>{formatDate(date)}</time>
+            <time dateTime={date}>{useFormattedDate(date)}</time>
           </dd>
           <p className="bold">-</p>
           <dt className="sr-only">조회수</dt>
