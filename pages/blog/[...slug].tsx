@@ -78,10 +78,10 @@ export default function BlogPost({
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>
-      {'draft' in post && post.draft !== true ? (
+      {'draft' in post && post['draft'] !== true ? (
         <MDXLayoutRenderer
-          layout={post.layout || DEFAULT_LAYOUT}
-          toc={post.toc}
+          layout={post['layout'] || DEFAULT_LAYOUT}
+          toc={post['toc']}
           content={post}
           prev={prev}
           next={next}

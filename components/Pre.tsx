@@ -1,7 +1,7 @@
 import { ReactNode, useRef, useState } from 'react';
 
 interface Props {
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 const Pre = ({ children }: Props) => {
