@@ -3,8 +3,8 @@ import phrases from '@/data/phrases';
 import siteMetadata from '@/data/siteMetadata';
 
 import AboutList from '@/components/AboutList';
-import Image from '@/components/Image';
-import Link from '@/components/Link';
+import Image from 'next/image';
+import Link from 'next/link';
 import { PageSEO } from '@/components/SEO';
 
 const SELFIE_URL = '/static/images/selfie.jpg';
@@ -26,7 +26,6 @@ export default function AboutPage() {
           alt="셀카"
           src={SELFIE_URL}
           placeholder="blur"
-          blurDataURL={`/_next/image?url=/static/images/blog/${SELFIE_URL}&w=16&q=1`}
           width="250"
           height="250"
           layout="fixed"
