@@ -14,7 +14,9 @@ interface Props {
 const CategoryList = ({ categoryTitle, series }: Props) => {
   const router = useRouter();
   const [disclosure, setDisclosure] = useState(true);
-  const curSlug = decodeURI(router.asPath.split('/').at(-1) as string);
+  const curSlug = decodeURI(
+    (router.asPath.split('/').at(-1) as string).split('#')[0]
+  );
 
   const idx = series.map(({ slug }) => slug).indexOf(curSlug as string) + 1;
 
