@@ -1,18 +1,21 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-import siteMetadata from "@/data/siteMetadata";
+import siteMetadata from '@/data/siteMetadata';
 
 const OPTIONS: Intl.DateTimeFormatOptions = {
-  year: "numeric",
-  month: "long",
-  day: "numeric"
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
 };
 
 const useFormattedDate = (date: string) => {
-  const [formattedDate, setFormattedDate] = useState<string | null>(null);
+  const [formattedDate, setFormattedDate] = useState<string>('');
 
   useEffect(
-    () => setFormattedDate(new Date(date).toLocaleDateString(siteMetadata.locale, OPTIONS)),
+    () =>
+      setFormattedDate(
+        new Date(date).toLocaleDateString(siteMetadata.locale, OPTIONS)
+      ),
     []
   );
 

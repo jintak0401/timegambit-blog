@@ -101,6 +101,7 @@ module.exports = {
             blockquote: {
               color: theme('colors.gray.900'),
               borderLeftColor: theme('colors.gray.200'),
+              fontStyle: 'normal',
             },
           },
         },
@@ -162,6 +163,7 @@ module.exports = {
             blockquote: {
               color: theme('colors.gray.100'),
               borderLeftColor: theme('colors.gray.700'),
+              fontStyle: 'normal',
             },
           },
         },
