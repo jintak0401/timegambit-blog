@@ -1,0 +1,173 @@
+---
+title: 'next-mdx-remote vs mdx-bundler'
+date: 2022-11-06T14:07:19.674Z
+lastmod: '2022-11-06'
+tags: ['블로그', 'mdx']
+draft: false
+category: 블로그 제작일지
+summary: 블로그를 제작하면서 next-mdx-remote와 mdx-bundler 중 무엇을 사용할 것인지 고민했었는데, 이 두 라이브러리를 비교한 글입니다.
+images: ['/static/images/blog/make-blog-log/mdx-compiler/cover.webp']
+layout: PostSimple
+---
+
+## 3줄 요약
+
+1. next-mdx-remote는 컴파일러, mdx-bundler는 컴파일러 + 번들러 -> 후자는 mdx에서 컴포넌트 import 가능
+
+2. next-mdx-remote의 결과가 mdx-bundler의 결과보다 파싱한 크기가 큽니다.
+
+3. mdx-bundler가 더 좋은 선택이라고 생각합니다.
+
+
+## mdx를 html로
+
+Next.js로 개발한 제 블로그는 mdx 형식으로 글을 작성합니다. 이렇게 작성된 글을 웹에서 보려면 mdx를 JSX로 변환해주는
+과정이 필요합니다. 즉, mdx를 JSX로 변환해주는 컴파일러가 필요합니다. 이 컴파일러로 2개의 라이브러리가 있었습니다.
+첫 번째는 [next-mdx-remote](https://www.npmjs.com/package/next-mdx-remote),
+두 번째는 [mdx-bundler](https://www.npmjs.com/package/mdx-bundler)가 있었습니다.
+
+
+개인적으로 비슷한 역할을 하는 라이브러리들이 있으면 그 중에 더 많은 사람이 사용하는 라이브러리를 선택하여 사용합니다.
+그래서 처음에는 mdx-bundler보다 next-mdx-remote를 사용하려고 했습니다.
+
+### next-mdx-remote 컴파일 결과
+
+![next-mdx-remote](/static/images/blog/make-blog-log/mdx-컴파일러-비교/next-mdx-remote-log.webp)
+
+위 사진에서 `Show more (150 kB)`가 보이시나요? 길게 작성되어 있는 mdx 파일을 next-mdx-remote로 컴파일한 코드의
+크기가 **150KB**였습니다. 아무리 길다고 하지만 이건 너무하다고 생각이 들었습니다. 어떻게하면 이 크기를 줄일 수 있을까
+고민하다가 next-mdx-remote 대신 mdx-bundler으로도 컴파일해보고 비교해보자는 생각이 들었습니다.
+
+### mdx-bundler 컴파일 결과
+
+![next-mdx-remote](/static/images/blog/make-blog-log/mdx-컴파일러-비교/mdx-bundler-log.webp)
+
+mdx-bundler를 사용하여 컴파일한 결과에서는 **83.3KB**였습니다. next-mdx-remote의 150KB보다 훨씬 적었습니다.
+(참고로 19.4KB는 컴파일되기 전 mdx 파일입니다.) 둘의 컴파일 결과가 어떻게 다르길래 용량차이가 나는 것이었을까요?
+
+## 컴파일 결과 비교
+
+```js:next-mdx-remote
+/*@jsxRuntime automatic @jsxImportSource react*/
+const {Fragment: _Fragment, jsx: _jsx, jsxs: _jsxs} = arguments[0];
+const {useMDXComponents: _provideComponents} = arguments[0];
+function _createMdxContent(props) {
+  const _components = Object.assign({
+    h2: "h2",
+    a: "a",
+    svg: "svg",
+    path: "path",
+    p: "p",
+    pre: "pre",
+    code: "code",
+    strong: "strong",
+    h3: "h3",
+    em: "em",
+    ul: "ul",
+    li: "li",
+    br: "br",
+    blockquote: "blockquote",
+    ol: "ol"
+  }, _provideComponents(), props.components);
+  return _jsxs(_Fragment, {
+    children: [_jsxs(_components.h2, {
+      id: "overview",
+      children: [_jsx(_components.a, {
+        className: "activeSection",
+        href: "#overview",
+        children: _jsx(_components.svg, {
+          xmlns: "http://www.w3.org/2000/svg",
+          width: "20",
+          height: "20",
+          fill: "currentColor",
+          viewBox: "0 0 24 24",
+          children: _jsx(_components.path, { ... }
+      })
+    })]
+  });
+}
+
+...
+
+function MDXContent(props = {}) {
+  const {wrapper: MDXLayout} = Object.assign({}, _provideComponents(), props.components);
+  return MDXLayout ? _jsx(MDXLayout, Object.assign({}, props, {
+    children: _jsx(_createMdxContent, props)
+  })) : _createMdxContent(props);
+}
+
+...
+
+```
+
+```js:mdx-bundler
+var Component=(()=>{
+  var p=Object.create;
+  var t=Object.defineProperty;
+  var h=Object.getOwnPropertyDescriptor;
+  var m=Object.getOwnPropertyNames;
+  var u=Object.getPrototypeOf,N=Object.prototype.hasOwnProperty;
+  var k=(a,e)=>()=>(e||a((e={exports:{}}).exports,e),e.exports),
+      g=(a,e)=>{for(var s in e)t(a,s,{get:e[s],enumerable:!0})},
+      o=(a,e,s,l)=>{
+        if(e&&typeof e=="object"||typeof e=="function")
+          for(let c of m(e))!N.call(a,c)&&c!==s&&t(a,c,{get:()=>e[c],enumerable:!(l=h(e,c))||l.enumerable});
+        return a
+      };
+  ...
+
+  function d(a){
+    let e=Object.assign({
+      h2:"h2",a:"a",span:"span",p:"p",sup:"sup",div:"div",pre:"pre",code:"code",strong:"strong",h3:"h3",em:"em",ul:"ul",li:"li",blockquote:"blockquote",ol:"ol",section:"section"
+    },a.components);
+    return(0,n.jsxs)(n.Fragment,{children:[(0,n.jsxs)(e.h2,{id:"overview",children:[(0,n.jsx)(e.a,{ ... })]})]})
+  }
+
+  ...
+
+  function w(a={}){let{wrapper:e}=a.components||{};
+    return e?(0,n.jsx)(e,Object.assign({},a,{children:(0,n.jsx)(d,a)})):d(a)}var x=w;return y(v);})();
+  return Component;
+```
+
+컴파일한 결과는 모두 자바스크립트를 string화된 것들이었지만 보기 쉽게 js코드로 바꿔봤습니다.
+next-mdx-bundler의 경우 불필요한 주석도 남아있고, 줄바꿈 문자열인 \n과 공백도 많았으며(\n일 때마다 줄바꿈을 해줬습니다),
+전체적으로 사람이 읽기 좋은 코드 형태였습니다.
+
+반면 mdx-bundler를 사용한 경우, 처음 시작부터 `p, t, h, m, u, k` 등 최대한 변수의 이름도 줄이려고 하였고,
+false와 true도 글자수를 줄이기 위해 0과 !0으로 표현하며,
+\n과 띄어쓰기조차 거의 존재하지 않았습니다.(\n이 없어도 조금이나마 더 보기 좋게 줄바꿈을 해주었습니다.)
+전체적으로 배포할 때의 코드 형태였습니다.
+
+이런 이유로 next-mdx-remote보다 mdx-bundler의 결과물 크기가 훨씬 적었던 것입니다.
+
+## 또 무슨 차이가 있지?
+
+이 둘은 그냥 컴파일러라고 생각했지만 [mdx-bundler의 README](https://github.com/kentcdodds/mdx-bundler/blob/main/README.md)를
+읽어보니 mdx-bundler는 단순히 컴파일러가 아니었습니다.
+이름에도 적혀있다시피 **mdx-bundler는 컴파일러겸 번들러**였습니다. 그래서 next-mdx-remote에서 불가능한
+mdx 파일 내에서 component를 직접 import하여 사용하는 것이 가능했습니다.^[번들러란 의존성이 있는 모듈들을 하나의 파일로 만들어
+주는 도구입니다. 그래서 mdx에서 component를 import해도 하나의 파일로 만들어주기 때문에 번들러인 mdx-bundler에서는
+import가 가능합니다.] 아래처럼요.
+
+```mdxjs
+---
+title: Example Post
+published: 2021-02-13
+description: This is some description
+---
+
+# Wahoo
+
+import Demo from './demo'
+
+Here's a **neat** demo:
+
+<Demo />
+```
+
+## 결론
+
+그래서 저는 next-mdx-remote 보다는 mdx-bundler를 사용하는 것이 좋다고 생각합니다.
+컴파일 결과가 더 적을뿐만 아니라 원하는 컴포넌트를 맘대로 import해서 사용할 수 있는 점 또한 큰 장점이라고 생각하기 때문입니다.
+next-mdx-remote가 더 좋은 점이 있다면 댓글로 알려주세요!
