@@ -18,7 +18,7 @@ const siteMetadata = {
   linkedin: '',
   locale: 'ko-KR',
   analytics: {
-    googleAnalyticsId: '', // e.g. UA-000000-2 or G-XXXXXXX
+    googleAnalyticsId: 'G-KM9ZTPVMSC', // e.g. UA-000000-2 or G-XXXXXXX
   },
   newsletter: {
     // supports mailchimp, buttondown, convertkit, klaviyo, revue
