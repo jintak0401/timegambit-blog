@@ -5,7 +5,7 @@ const siteMetadata = {
   description: 'Time Gambit의 블로그',
   language: 'ko-KR',
   theme: 'system', // system, dark or light
-  siteUrl: 'http://localhost:3000',
+  siteUrl: 'https://timegambit.com',
   siteRepo: 'https://github.com/jintak/timegambit-blog',
   siteLogo: '/static/images/logo.png',
   image: '/static/images/avatar.png',
