@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "yarn db:generate && next build",
+    "build": "yarn db:generate && next build && yarn postbuild",
     "db:generate": "yarn pnpify prisma generate",
     "postbuild": "yarn sitemap && yarn rss",
     "sitemap": "cross-env NODE_OPTIONS='--experimental-json-modules' node ./scripts/generate-sitemap.mjs",
