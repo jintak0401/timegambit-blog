@@ -112,6 +112,10 @@ code[class*=language-] ::selection, code[class*=language-]::selection, pre[class
     color: var(--orange);
 }
 
+.token.interpolation-punctuation {
+    color: #5b62ca;
+}
+
 .namespace {
     color: #e2777a;
 }
@@ -127,10 +131,6 @@ code[class*=language-] ::selection, code[class*=language-]::selection, pre[class
 .token.important
 {
     color: var(--pink);
-}
-
-.token.operator {
-    color: rgba(139, 233, 253, 1);
 }
 
 .token.boolean,
@@ -167,7 +167,9 @@ code[class*=language-] ::selection, code[class*=language-]::selection, pre[class
 .token.attr-value,
 .language-css .token.url,
 .token.string,
-.token.regex
+.token.regex,
+.token.script-punctuation,
+.token.attr-equals
 {
     color: var(--yellow);
 }
@@ -178,7 +180,9 @@ code[class*=language-] ::selection, code[class*=language-]::selection, pre[class
 
 
 .token.arrow,
-.token.script {
+.token.script,
+.token.operator
+{
     color: var(--foreground);
 }
 

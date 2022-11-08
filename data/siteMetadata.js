@@ -5,7 +5,7 @@ const siteMetadata = {
   description: 'Time Gambit의 블로그',
   language: 'ko-KR',
   theme: 'system', // system, dark or light
-  siteUrl: 'http://localhost:3000',
+  siteUrl: 'https://timegambit.com',
   siteRepo: 'https://github.com/jintak/timegambit-blog',
   siteLogo: '/static/images/logo.png',
   image: '/static/images/avatar.png',
@@ -18,7 +18,7 @@ const siteMetadata = {
   linkedin: '',
   locale: 'ko-KR',
   analytics: {
-    googleAnalyticsId: '', // e.g. UA-000000-2 or G-XXXXXXX
+    googleAnalyticsId: 'G-KM9ZTPVMSC', // e.g. UA-000000-2 or G-XXXXXXX
   },
   newsletter: {
     // supports mailchimp, buttondown, convertkit, klaviyo, revue

@@ -2,6 +2,7 @@ import { allBlogs } from 'contentlayer/generated';
 import { InferGetStaticPropsType } from 'next';
 
 import { pick, sortedBlogPost } from '@/lib/contentlayer';
+import { PostListItem } from '@/lib/types';
 
 import phrases from '@/data/phrases';
 import siteMetadata from '@/data/siteMetadata';
@@ -9,7 +10,6 @@ import siteMetadata from '@/data/siteMetadata';
 import { PageSEO } from '@/components/SEO';
 
 import ListLayout from '@/layouts/ListLayout';
-import { PostListItem } from '@/lib/types';
 
 export const getStaticProps = async () => {
   const posts = sortedBlogPost(allBlogs)
