@@ -1,7 +1,5 @@
 import type { Blog, DocumentTypes } from 'contentlayer/generated';
 
-import kebabCase from './kebabCase';
-
 export function dateSortDesc(a: string, b: string) {
   if (a > b) return -1;
   if (a < b) return 1;
@@ -54,23 +52,4 @@ export function coreContent<T extends DocumentTypes>(content: T) {
 
 export function allCoreContent<T extends DocumentTypes>(contents: T[]) {
   return contents.map((c) => coreContent(c));
-}
-
-// TODO: refactor into contentlayer once compute over all docs is enabled
-const tagCount: Record<string, number> = {};
-export async function getAllTags(allBlogs: Blog[]) {
-  if (Object.keys(tagCount).length) return tagCount;
-  allBlogs.forEach((file) => {
-    if (file.tags && file.draft !== true) {
-      file.tags.forEach((tag: string) => {
-        const formattedTag = kebabCase(tag);
-        if (formattedTag in tagCount) {
-          tagCount[formattedTag] += 1;
-        } else {
-          tagCount[formattedTag] = 1;
-        }
-      });
-    }
-  });
-  return tagCount;
 }

@@ -6,8 +6,8 @@
     "dev": "next dev",
     "build": "yarn db:generate && next build",
     "db:generate": "yarn pnpify prisma generate",
-    "postbuild": "npm run sitemap",
-    "sitemap": "cross-env node scripts/generate-sitemap.js",
+    "postbuild": "yarn sitemap && yarn rss",
+    "sitemap": "cross-env NODE_OPTIONS='--experimental-json-modules' node ./scripts/generate-sitemap.mjs",
     "rss": "cross-env NODE_OPTIONS='--experimental-json-modules' node ./scripts/generate-rss.mjs",
     "start": "next start",
     "lint": "next lint"
