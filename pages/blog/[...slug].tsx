@@ -22,6 +22,7 @@ export const getStaticProps = async ({
 }) => {
   const slug = params.slug.join('/');
   const post: Blog = allBlogs.find((p) => p.slug === slug) as Blog;
+  post.body.raw = '';
 
   // If post is included in category, sortedPosts are category posts
   const sortedPosts = sortedBlogPost(
