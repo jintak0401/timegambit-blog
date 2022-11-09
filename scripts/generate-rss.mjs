@@ -5,7 +5,7 @@ import path from "path";
 import { escape } from "./htmlEscaper.mjs";
 import { allBlogs } from "../.contentlayer/generated/Blog/_index.mjs";
 import siteMetadata from "../data/siteMetadata.js";
-import { getAllCategories, getAllTags } from "../lib/getBlogInfo.mjs";
+import { getAllSeries, getAllTags } from "../lib/getBlogInfo.mjs";
 
 const generateRssItem = (post) => `
   <item>
@@ -64,7 +64,7 @@ const generateRss = (posts, page = "feed.xml") => `
 
   // RSS for categories
   if (allBlogs.length > 0) {
-    const categories = await getAllCategories();
+    const categories = await getAllSeries();
     for (const category of categories) {
       const filteredPosts = allBlogs.filter(
         (post) =>
