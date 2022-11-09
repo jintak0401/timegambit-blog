@@ -5,7 +5,7 @@ import path from "path";
 import { escape } from "./htmlEscaper.mjs";
 import { allBlogs } from "../.contentlayer/generated/Blog/_index.mjs";
 import siteMetadata from "../data/siteMetadata.js";
-import { getAllCategories, getAllTags } from "../lib/getBlogInfo.mjs";
+import { getAllSeries, getAllTags } from "../lib/getBlogInfo.mjs";
 
 const generateRssItem = (post) => `
   <item>
@@ -64,14 +64,14 @@ const generateRss = (posts, page = "feed.xml") => `
 
   // RSS for categories
   if (allBlogs.length > 0) {
-    const categories = await getAllCategories();
-    for (const category of categories) {
+    const series = await getAllSeries();
+    for (const aSeries of series) {
       const filteredPosts = allBlogs.filter(
         (post) =>
-          post.draft !== true && GithubSlugger.slug(post.category) === category
+          post.draft !== true && GithubSlugger.slug(post.series) === aSeries
       );
-      const rss = generateRss(filteredPosts, `categories/${category}/feed.xml`);
-      const rssPath = path.join("public", "categories", category);
+      const rss = generateRss(filteredPosts, `series/${aSeries}/feed.xml`);
+      const rssPath = path.join("public", "series", aSeries);
       mkdirSync(rssPath, { recursive: true });
       writeFileSync(path.join(rssPath, "feed.xml"), rss);
     }

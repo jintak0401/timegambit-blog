@@ -6,10 +6,10 @@ import useFormattedDate from '@/hooks/useFormattedDate';
 
 import siteMetadata from '@/data/siteMetadata';
 
-import CategoryList from '@/components/CategoryList';
 import Comments from '@/components/comments';
 import Link from '@/components/Link';
 import PageTitle from '@/components/PageTitle';
+import PostListInSeries from '@/components/PostListInSeries';
 import ScrollIndicator from '@/components/ScrollIndicator';
 import ScrollTopAndComment from '@/components/ScrollTopAndComment';
 import SectionContainer from '@/components/SectionContainer';
@@ -22,7 +22,7 @@ interface Props {
   next?: { slug: string; title: string };
   prev?: { slug: string; title: string };
   series?: { slug: string; title: string }[];
-  categoryTitle?: string;
+  seriesTitle?: string;
 }
 
 export default function PostLayout({
@@ -30,7 +30,7 @@ export default function PostLayout({
   next,
   prev,
   series,
-  categoryTitle,
+  seriesTitle,
   children,
 }: Props) {
   const { slug, date, title } = content;
@@ -64,8 +64,8 @@ export default function PostLayout({
             style={{ gridTemplateRows: 'auto 1fr' }}
           >
             <div className="relative divide-gray-200 dark:divide-gray-700 xl:col-span-3 xl:row-span-2 xl:pb-0">
-              {categoryTitle && series && (
-                <CategoryList categoryTitle={categoryTitle} series={series} />
+              {seriesTitle && series && (
+                <PostListInSeries seriesTitle={seriesTitle} series={series} />
               )}
               <div className="prose max-w-none pt-10 pb-8 dark:prose-dark">
                 {children}

@@ -28,8 +28,9 @@ const phrases = {
     search: '어떤 글을 찾으시나요?',
   },
   Post: {
-    openCategory: '목록 보기',
-    closeCategory: '숨기기',
+    openSeries: '목록 보기',
+    closeSeries: '숨기기',
+    loadComments: '댓글 불러오기',
   },
   SignIn: {
     title: 'Time Gambit 블로그에 어서오세요! 다음으로 로그인 해주세요.',
