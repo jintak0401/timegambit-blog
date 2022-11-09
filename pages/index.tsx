@@ -17,7 +17,7 @@ export const getStaticProps: GetStaticProps = async () => {
   const posts = sortedBlogPost(allBlogs)
     .slice(0, HOME_POST_LENGTH)
     .map((post) =>
-      pick(post, ['title', 'slug', 'date', 'tags', 'summary', 'images'])
+      pick(post, ['title', 'slug', 'date', 'tags', 'summary', 'image'])
     );
   return {
     props: { posts },
