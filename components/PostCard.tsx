@@ -13,17 +13,17 @@ interface Props {
 }
 
 const PostCard = ({ post }: Props) => {
-  const { title, summary, tags, image, slug, date } = post;
+  const { title, summary, tags, images, slug, date } = post;
   return (
     <article className="basic-text my-10 box-border max-w-full gap-4 space-y-2 duration-300 hover:bg-gray-100 dark:hover:bg-gray-800 xl:grid xl:grid-cols-3 xl:items-center xl:space-y-0">
       <Link href={`/blog/${slug}`}>
         <a>
           <Image
             alt={title}
-            src={image}
+            src={images[0]}
             className="rounded-md object-cover"
             placeholder="blur"
-            blurDataURL={`/_next/image?url=${image}&w=16&q=1`}
+            blurDataURL={`/_next/image?url=${images[0]}&w=16&q=1`}
             layout="responsive"
             width={16}
             height={9}
