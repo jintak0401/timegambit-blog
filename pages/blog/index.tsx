@@ -15,7 +15,7 @@ export const getStaticProps = async () => {
   const posts = sortedBlogPost(allBlogs)
     .filter(({ draft }) => !draft)
     .map((post) =>
-      pick(post, ['title', 'slug', 'date', 'tags', 'summary', 'images'])
+      pick(post, ['title', 'slug', 'date', 'tags', 'summary', 'image'])
     );
 
   return {
