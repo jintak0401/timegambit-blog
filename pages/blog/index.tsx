@@ -1,7 +1,7 @@
 import { allBlogs } from 'contentlayer/generated';
 import { InferGetStaticPropsType } from 'next';
 
-import { pick, sortedBlogPost } from '@/lib/contentlayer';
+import { pickBlogItem, sortedBlogPost } from '@/lib/contentlayer';
 import { PostListItem } from '@/lib/types';
 
 import phrases from '@/data/phrases';
@@ -14,9 +14,7 @@ import ListLayout from '@/layouts/ListLayout';
 export const getStaticProps = async () => {
   const posts = sortedBlogPost(allBlogs)
     .filter(({ draft }) => !draft)
-    .map((post) =>
-      pick(post, ['title', 'slug', 'date', 'tags', 'summary', 'images'])
-    );
+    .map(pickBlogItem);
 
   return {
     props: {
