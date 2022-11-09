@@ -14,7 +14,7 @@ export type PostListItem = ConvertPick<{
   title: string;
   slug: string;
   date: string;
-  images: string[];
+  image: string;
   summary?: string;
   tags?: string[];
 }>;
