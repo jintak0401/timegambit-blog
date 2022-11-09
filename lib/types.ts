@@ -28,7 +28,7 @@ export interface PostFrontMatter {
   slug: string;
   views?: string;
 
-  category?: string;
+  series?: string;
   tags?: string[];
 }
 
