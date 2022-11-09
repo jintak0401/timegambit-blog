@@ -13,7 +13,7 @@ import siteMetadata from '../data/siteMetadata.js';
   const pages = await globby([
     'pages/*.{js|tsx}',
     'public/tags/**/*.xml',
-    'public/categories/**/*.xml',
+    'public/series/**/*.xml',
     '!pages/_*.{js|tsx}',
     '!pages/api',
     '!pages/404.{js|tsx}',
