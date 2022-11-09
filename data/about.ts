@@ -1,4 +1,5 @@
 const about = {
+  Selfie: '/static/images/selfie.webp',
   Contact: {
     Email: 'jintak0401@naver.com',
     GitHub: 'https://github.com/jintak0401',
