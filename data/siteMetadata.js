@@ -8,7 +8,7 @@ const siteMetadata = {
   siteUrl: 'https://timegambit.com',
   siteRepo: 'https://github.com/jintak/timegambit-blog',
   siteLogo: '/static/images/logo.png',
-  image: '/static/images/avatar.png',
+  image: '/static/images/logo.png',
   socialBanner: '/static/images/twitter-card.png',
   email: 'jintak0401@naver.com',
   github: 'https://github.com/jintak0401',
