@@ -2,6 +2,7 @@ import { useTheme } from 'next-themes';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import siteMetadata from '@/data/siteMetadata';
+import phrases from '@/data/phrases';
 
 const Giscus = () => {
   const [enableLoadComments, setEnabledLoadComments] = useState(true);
@@ -64,7 +65,9 @@ const Giscus = () => {
   return (
     <div className="pt-6 pb-6 text-center text-gray-700 dark:text-gray-300">
       {enableLoadComments && (
-        <button onClick={LoadComments}>Load Comments</button>
+        <button onClick={LoadComments} className="hover:underline">
+          {phrases.Post.loadComments}
+        </button>
       )}
       <div className="giscus" id={COMMENTS_ID} />
     </div>
