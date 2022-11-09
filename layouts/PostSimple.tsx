@@ -6,10 +6,10 @@ import useFormattedDate from '@/hooks/useFormattedDate';
 
 import siteMetadata from '@/data/siteMetadata';
 
-import PostListInSeries from '@/components/PostListInSeries';
 import Comments from '@/components/comments';
 import Link from '@/components/Link';
 import PageTitle from '@/components/PageTitle';
+import PostListInSeries from '@/components/PostListInSeries';
 import ScrollIndicator from '@/components/ScrollIndicator';
 import ScrollTopAndComment from '@/components/ScrollTopAndComment';
 import SectionContainer from '@/components/SectionContainer';

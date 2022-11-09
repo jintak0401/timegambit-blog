@@ -53,3 +53,7 @@ export function coreContent<T extends DocumentTypes>(content: T) {
 export function allCoreContent<T extends DocumentTypes>(contents: T[]) {
   return contents.map((c) => coreContent(c));
 }
+
+export function pickBlogItem(blog: Blog) {
+  return pick(blog, ['title', 'slug', 'date', 'tags', 'summary', 'images']);
+}
