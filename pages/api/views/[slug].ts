@@ -22,7 +22,7 @@ export default async function handler(
   try {
     const queryMap = {
       GET: queries.CREATE_VIEW_COUNT_IF_NOT_EXIST,
-      POST: queries.CREATE_VIEW_COUNT_IF_NOT_EXIST,
+      POST: queries.UPDATE_VIEW_COUNT,
     };
 
     connection = await db.getConnection();
