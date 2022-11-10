@@ -2,6 +2,7 @@ import type { Blog } from 'contentlayer/generated';
 import { ReactNode } from 'react';
 
 import { CoreContent } from '@/lib/contentlayer';
+import { isProd } from '@/lib/isProduction';
 import useFormattedDate from '@/hooks/useFormattedDate';
 
 import siteMetadata from '@/data/siteMetadata';
@@ -15,6 +16,7 @@ import ScrollTopAndComment from '@/components/ScrollTopAndComment';
 import SectionContainer from '@/components/SectionContainer';
 import { BlogSEO } from '@/components/SEO';
 import TOC from '@/components/TOC';
+import ViewCounter from '@/components/ViewCounter';
 
 interface Props {
   content: CoreContent<Blog>;
@@ -56,6 +58,7 @@ export default function PostLayout({
               </dl>
               <div>
                 <PageTitle>{title}</PageTitle>
+                {isProd && <ViewCounter slug={slug} />}
               </div>
             </div>
           </header>
