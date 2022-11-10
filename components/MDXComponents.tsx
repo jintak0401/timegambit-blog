@@ -1,4 +1,3 @@
-/* eslint-disable react/display-name */
 import type { Authors, Blog } from 'contentlayer/generated';
 import { ComponentMap } from 'mdx-bundler/client';
 import { useMDXComponent } from 'next-contentlayer/hooks';
@@ -15,11 +14,6 @@ import TOCInline from './TOCInline';
 interface MDXLayout {
   layout: string;
   content: Blog | Authors;
-  [key: string]: unknown;
-}
-
-interface Wrapper {
-  layout: string;
   [key: string]: unknown;
 }
 
