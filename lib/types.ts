@@ -16,16 +16,8 @@ export interface Heading extends Parent {
   depth: 1 | 2 | 3 | 4 | 5 | 6;
 }
 
-export type Toc = {
-  value: string;
-  depth: number;
-  url: string;
-}[];
-
 export interface TocElement {
   id: string;
   nodeName: string;
   textContent: string;
 }
-
-export type FileType = 'blog' | 'page';
