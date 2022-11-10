@@ -17,14 +17,12 @@ import remarkMath from 'remark-math';
 import remarkCodeTitles from './lib/remark/remark-code-title';
 import remarkExtractFrontmatter from './lib/remark/remark-extract-frontmatter';
 import remarkImgToJsx from './lib/remark/remark-img-to-jsx';
-import { extractTocHeadings } from './lib/remark/remark-toc-headings';
 
 const computedFields: ComputedFields = {
   slug: {
     type: 'string',
     resolve: (doc) => doc._raw.flattenedPath.replace(/^.+?(\/)/, ''),
   },
-  toc: { type: 'string', resolve: (doc) => extractTocHeadings(doc.body.raw) },
 };
 
 export const Blog = defineDocumentType(() => ({
@@ -39,7 +37,6 @@ export const Blog = defineDocumentType(() => ({
     draft: { type: 'boolean' },
     summary: { type: 'string' },
     images: { type: 'list', of: { type: 'string' } },
-    authors: { type: 'list', of: { type: 'string' } },
     layout: { type: 'string' },
     series: { type: 'string' },
     bibliography: { type: 'string' },
@@ -48,27 +45,9 @@ export const Blog = defineDocumentType(() => ({
   computedFields,
 }));
 
-export const Authors = defineDocumentType(() => ({
-  name: 'Authors',
-  filePathPattern: 'authors/**/*.mdx',
-  contentType: 'mdx',
-  fields: {
-    name: { type: 'string', required: true },
-    avatar: { type: 'string' },
-    occupation: { type: 'string' },
-    company: { type: 'string' },
-    email: { type: 'string' },
-    twitter: { type: 'string' },
-    linkedin: { type: 'string' },
-    github: { type: 'string' },
-    layout: { type: 'string' },
-  },
-  computedFields,
-}));
-
 export default makeSource({
   contentDirPath: 'data',
-  documentTypes: [Blog, Authors],
+  documentTypes: [Blog],
   mdx: {
     cwd: process.cwd(),
     remarkPlugins: [
