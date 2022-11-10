@@ -57,7 +57,7 @@ const PostCard = ({ post }: Props) => {
           <p className="bold">-</p>
           <dt className="sr-only">조회수</dt>
           <dd>
-            <ViewCounter slug={slug} type={'GET'} />
+            <ViewCounter slug={slug} type={'GET'} shown={true} />
           </dd>
         </dl>
       </div>
