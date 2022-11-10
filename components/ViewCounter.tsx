@@ -18,12 +18,12 @@ const ViewCounter = ({ slug, type = 'POST', shown = false }: Props) => {
     const fetching = fetch(`/api/views/${slug}`, {
       method: type,
     });
-    if (type === 'GET') {
+    if (shown) {
       fetching
         .then((res) => res.json())
         .then(({ viewCount }: Views) => setCount(viewCount));
     }
-  }, [slug, type]);
+  }, [slug, type, shown]);
 
   if (shown) {
     return count > 0 ? (
