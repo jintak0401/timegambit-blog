@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { PostListItem } from '@/lib/types';
@@ -5,8 +6,6 @@ import useFormattedDate from '@/hooks/useFormattedDate';
 
 import Tag from '@/components/Tag';
 import ViewCounter from '@/components/ViewCounter';
-
-import Image from './Image';
 
 interface Props {
   post: PostListItem;
@@ -27,6 +26,7 @@ const PostCard = ({ post }: Props) => {
             layout="responsive"
             width={16}
             height={9}
+            loading="lazy"
           />
         </a>
       </Link>
