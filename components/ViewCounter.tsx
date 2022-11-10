@@ -3,6 +3,7 @@ import { BsEye } from 'react-icons/bs';
 
 interface Props {
   slug: string;
+  shown?: boolean;
   type?: 'POST' | 'GET';
 }
 
@@ -10,7 +11,7 @@ interface Views {
   viewCount: number;
 }
 
-const ViewCounter = ({ slug, type = 'POST' }: Props) => {
+const ViewCounter = ({ slug, type = 'POST', shown = false }: Props) => {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
@@ -24,7 +25,7 @@ const ViewCounter = ({ slug, type = 'POST' }: Props) => {
     }
   }, [slug, type]);
 
-  if (type === 'GET') {
+  if (shown) {
     return count > 0 ? (
       <div className="flex items-center gap-1.5">
         <BsEye size="1.2em" />
