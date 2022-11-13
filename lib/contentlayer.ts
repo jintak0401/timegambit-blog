@@ -2,14 +2,14 @@ import type { Blog, DocumentTypes } from 'contentlayer/generated';
 
 import kebabCase from './kebabCase';
 
-export function dateSortDesc(a: string, b: string) {
-  if (a > b) return -1;
-  if (a < b) return 1;
+export function dateSortDesc(a: string, b: string, reverse: boolean) {
+  if (a > b) return reverse ? 1 : -1;
+  if (a < b) return reverse ? -1 : 1;
   return 0;
 }
 
-export function sortedBlogPost(allBlogs: Blog[]) {
-  return allBlogs.sort((a, b) => dateSortDesc(a.date, b.date));
+export function sortedBlogPost(allBlogs: Blog[], reverse = false) {
+  return allBlogs.sort((a, b) => dateSortDesc(a.date, b.date, reverse));
 }
 
 type ConvertUndefined<T> = OrNull<{

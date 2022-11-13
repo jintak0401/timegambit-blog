@@ -22,20 +22,22 @@ export const getStaticProps = async ({
 }) => {
   const slug = params.slug.join('/');
   const post: Blog = allBlogs.find((p) => p.slug === slug) as Blog;
+  post.body.raw = '';
 
   // If post is included in category, sortedPosts are category posts
   const sortedPosts = sortedBlogPost(
-    post?.category
-      ? allBlogs.filter((p) => p.category === post.category)
-      : allBlogs.filter((p) => !p.category)
+    post?.series
+      ? allBlogs.filter((p) => p.series === post.series)
+      : allBlogs.filter((p) => !p.series),
+    true
   );
-  const series = post.category
+  const series = post.series
     ? sortedPosts
         .filter((p) => !p.draft)
         .map((p) => ({ title: p.title, slug: p.slug }))
     : null;
 
-  const categoryTitle = post.category ?? null;
+  const seriesTitle = post.series ?? null;
 
   // prev and next will be a post which draft === false
   const postIndex = sortedPosts.findIndex((p) => p.slug === slug);
@@ -64,7 +66,7 @@ export const getStaticProps = async ({
       prev,
       next,
       series,
-      categoryTitle,
+      seriesTitle,
     },
   };
 };
@@ -74,7 +76,7 @@ export default function BlogPost({
   prev,
   next,
   series,
-  categoryTitle,
+  seriesTitle,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>
@@ -85,7 +87,7 @@ export default function BlogPost({
           content={post}
           prev={prev}
           next={next}
-          categoryTitle={categoryTitle}
+          seriesTitle={seriesTitle}
           series={series}
         />
       ) : (
