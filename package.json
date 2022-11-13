@@ -1,21 +1,20 @@
 {
   "name": "timegambit-blog",
-  "version": "0.1.0",
+  "version": "0.4.5",
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "yarn db:generate && next build",
-    "db:generate": "yarn pnpify prisma generate",
-    "postbuild": "npm run sitemap",
-    "sitemap": "cross-env node scripts/generate-sitemap.js",
-    "rss": "cross-env NODE_OPTIONS='--experimental-json-modules' node ./scripts/generate-rss.mjs",
+    "build": "next build && yarn postbuild",
+    "postbuild": "yarn sitemap && yarn rss",
+    "sitemap": "cross-env node ./scripts/generate-sitemap.mjs",
+    "rss": "cross-env node ./scripts/generate-rss.mjs",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "blog": "cross-env node scripts/generate-blog.js"
   },
   "dependencies": {
     "@effect-ts/core": "^0.60.4",
     "@fontsource/dejavu-mono": "^4.5.4",
-    "@prisma/client": "^4.5.0",
     "@types/github-slugger": "^1.3.0",
     "@types/unist": "^2.0.6",
     "contentlayer": "^0.2.8",
@@ -25,6 +24,7 @@
     "js-yaml": "^4.1.0",
     "mdast-util-to-string": "^3.1.0",
     "mdx-bundler": "^9.0.1",
+    "mysql2": "^2.3.3",
     "next": "12.3.1",
     "next-contentlayer": "^0.2.8",
     "next-themes": "^0.2.1",
@@ -40,7 +40,7 @@
     "remark-footnotes": "^4.0.1",
     "remark-gfm": "^3.0.1",
     "remark-math": "^5.1.1",
-    "swr": "^1.3.0",
+    "sharp": "^0.31.2",
     "unist-util-visit": "^4.1.1"
   },
   "devDependencies": {
@@ -56,9 +56,9 @@
     "@typescript-eslint/eslint-plugin": "^5.38.1",
     "@typescript-eslint/parser": "^5.38.1",
     "@yarnpkg/esbuild-plugin-pnp": "^3.0.0-rc.15",
-    "@yarnpkg/pnpify": "^4.0.0-rc.27",
     "autoprefixer": "^10.4.12",
     "cross-env": "^7.0.3",
+    "dedent": "^0.7.0",
     "esbuild": "^0.15.10",
     "eslint": "8.22.0",
     "eslint-config-next": "12.3.1",
@@ -67,20 +67,12 @@
     "eslint-plugin-simple-import-sort": "^8.0.0",
     "eslint-plugin-unused-imports": "^2.0.0",
     "globby": "11.0.3",
+    "inquirer": "8.0.0",
     "postcss": "^8.4.17",
     "prettier": "^2.7.1",
     "prettier-plugin-tailwindcss": "^0.1.13",
-    "prisma": "^4.5.0",
     "tailwindcss": "^3.1.8",
     "typescript": "4.8.3"
   },
-  "packageManager": "yarn@3.2.3",
-  "dependenciesMeta": {
-    "@prisma/client@4.5.0": {
-      "unplugged": true
-    },
-    "prisma@4.5.0": {
-      "unplugged": true
-    }
-  }
+  "packageManager": "yarn@3.2.3"
 }

@@ -1,8 +1,7 @@
-import { allBlogs } from 'contentlayer/generated';
+import slugger from 'github-slugger';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 
-import { getAllTags } from '@/lib/contentlayer';
-import kebabCase from '@/lib/kebabCase';
+import { getAllTags } from '@/lib/getBlogInfo.mjs';
 
 import siteMetadata from '@/data/siteMetadata';
 
@@ -14,12 +13,12 @@ import Tag from '@/components/Tag';
 export const getStaticProps: GetStaticProps<{
   tags: Record<string, number>;
 }> = async () => {
-  const tags = await getAllTags(allBlogs);
+  const tags = (await getAllTags()) as Record<string, number>;
 
   return { props: { tags } };
 };
 
-export default function Tags({
+export default function TagListPage({
   tags,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const sortedTags = Object.keys(tags).sort((a, b) => tags[b] - tags[a]);
@@ -42,7 +41,7 @@ export default function Tags({
               <div key={t} className="mt-2 mb-2 mr-5">
                 <Tag text={t} />
                 <Link
-                  href={`/tags/${kebabCase(t)}`}
+                  href={`/tags/${slugger.slug(t)}`}
                   className="-ml-2 text-sm font-semibold uppercase text-gray-600 duration-500 dark:text-gray-300"
                 >
                   {` (${tags[t]})`}
