@@ -3,7 +3,7 @@ import about from '@/data/about';
 import AboutCard from '@/components/AboutCard';
 
 interface Props {
-  sectionName: Exclude<keyof typeof about, 'Contact' | 'Selfie'>;
+  sectionName: Exclude<keyof typeof about, 'Contact'>;
 }
 
 const AboutList = ({ sectionName }: Props) => {
