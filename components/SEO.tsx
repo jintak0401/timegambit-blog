@@ -1,4 +1,4 @@
-import type { Blog } from 'contentlayer/generated';
+import type { Authors, Blog } from 'contentlayer/generated';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
@@ -110,10 +110,12 @@ export const TagSEO = ({ title, description }: PageSEOProps) => {
 };
 
 interface BlogSeoProps extends CoreContent<Blog> {
+  authorDetails?: CoreContent<Authors>[];
   url: string;
 }
 
 export const BlogSEO = ({
+  authorDetails,
   title,
   summary,
   date,
@@ -138,6 +140,21 @@ export const BlogSEO = ({
     };
   });
 
+  let authorList;
+  if (authorDetails) {
+    authorList = authorDetails.map((author) => {
+      return {
+        '@type': 'Person',
+        name: author.name,
+      };
+    });
+  } else {
+    authorList = {
+      '@type': 'Person',
+      name: siteMetadata.author,
+    };
+  }
+
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -149,6 +166,7 @@ export const BlogSEO = ({
     image: featuredImages,
     datePublished: publishedAt,
     dateModified: modifiedAt,
+    author: authorList,
     publisher: {
       '@type': 'Organization',
       name: siteMetadata.author,
