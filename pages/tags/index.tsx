@@ -18,7 +18,7 @@ export const getStaticProps: GetStaticProps<{
   return { props: { tags } };
 };
 
-export default function Tags({
+export default function TagListPage({
   tags,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const sortedTags = Object.keys(tags).sort((a, b) => tags[b] - tags[a]);
