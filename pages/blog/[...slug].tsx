@@ -28,8 +28,7 @@ export const getStaticProps = async ({
   const sortedPosts = sortedBlogPost(
     post?.series
       ? allBlogs.filter((p) => p.series === post.series)
-      : allBlogs.filter((p) => !p.series),
-    true
+      : allBlogs.filter((p) => !p.series)
   );
   const series = post.series
     ? sortedPosts

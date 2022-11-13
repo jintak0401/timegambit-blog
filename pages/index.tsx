@@ -2,7 +2,7 @@ import { allBlogs } from 'contentlayer/generated';
 import type { GetStaticProps, InferGetStaticPropsType } from 'next';
 import Link from 'next/link';
 
-import { pick, sortedBlogPost } from '@/lib/contentlayer';
+import { pickBlogItem, sortedBlogPost } from '@/lib/contentlayer';
 
 import phrases from '@/data/phrases';
 import siteMetadata from '@/data/siteMetadata';
@@ -16,9 +16,7 @@ const HOME_POST_LENGTH = 3;
 export const getStaticProps: GetStaticProps = async () => {
   const posts = sortedBlogPost(allBlogs)
     .slice(0, HOME_POST_LENGTH)
-    .map((post) =>
-      pick(post, ['title', 'slug', 'date', 'tags', 'summary', 'images'])
-    );
+    .map(pickBlogItem);
   return {
     props: { posts },
   };
