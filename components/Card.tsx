@@ -1,5 +1,5 @@
-import Image from './Image';
-import Link from './Link';
+import Image from 'next/image';
+import Link from 'next/link';
 
 interface Props {
   title: string;
