@@ -25,6 +25,7 @@ export interface TocElement {
 export interface SeriesListItem {
   title: string;
   length: number;
-  lastUpdate: Date;
+  lastmod: string;
   image: string;
+  href: string;
 }
