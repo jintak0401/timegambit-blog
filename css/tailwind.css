@@ -35,8 +35,7 @@ input:-webkit-autofill:focus {
         font-family: "Pretendard", sans-serif;
     }
 
-    ::selection
-    {
+    ::selection {
         @apply bg-primary-100 text-primary-500 dark:bg-primary-800 dark:text-primary-200;
     }
 
@@ -46,6 +45,27 @@ input:-webkit-autofill:focus {
 }
 
 @layer components {
+
+    .auto-image-wrapper {
+        width: 100%;
+    }
+
+    .auto-image-wrapper > span {
+        position: unset !important;
+    }
+
+    .strong-text {
+        @apply text-gray-900 dark:text-gray-100;
+    }
+
+    .middle-text {
+        @apply text-gray-500 dark:text-gray-400;
+    }
+
+    .weak-text {
+        @apply text-gray-400 dark:text-gray-500;
+    }
+
     .w-section {
         @apply mx-auto max-w-3xl px-4 sm:px-6 xl:max-w-5xl xl:px-0;
     }

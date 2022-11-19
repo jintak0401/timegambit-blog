@@ -1,5 +1,5 @@
-import Image from './Image';
-import Link from './Link';
+import Image from 'next/image';
+import Link from 'next/link';
 
 interface Props {
   title: string;
@@ -18,13 +18,15 @@ const Card = ({ title, description, imgSrc, href }: Props) => (
       {imgSrc &&
         (href ? (
           <Link href={href} aria-label={`Link to ${title}`}>
-            <Image
-              alt={title}
-              src={imgSrc}
-              className="object-cover object-center md:h-36 lg:h-48"
-              width={544}
-              height={306}
-            />
+            <a>
+              <Image
+                alt={title}
+                src={imgSrc}
+                className="object-cover object-center md:h-36 lg:h-48"
+                width={544}
+                height={306}
+              />
+            </a>
           </Link>
         ) : (
           <Image
@@ -49,12 +51,10 @@ const Card = ({ title, description, imgSrc, href }: Props) => (
           {description}
         </p>
         {href && (
-          <Link
-            href={href}
-            className="text-base font-medium leading-6 text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-            aria-label={`Link to ${title}`}
-          >
-            Learn more &rarr;
+          <Link href={href} aria-label={`Link to ${title}`}>
+            <a className="text-base font-medium leading-6 text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
+              Learn more &rarr;
+            </a>
           </Link>
         )}
       </div>
