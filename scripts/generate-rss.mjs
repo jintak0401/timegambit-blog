@@ -65,10 +65,10 @@ const generateRss = (posts, page = "feed.xml") => `
   // RSS for categories
   if (allBlogs.length > 0) {
     const series = await getAllSeries();
-    for (const aSeries of series) {
+    for (const aSeries of Object.keys(series)) {
       const filteredPosts = allBlogs.filter(
         (post) =>
-          post.draft !== true && GithubSlugger.slug(post.series) === aSeries
+          post.draft !== true && post.series === aSeries
       );
       const rss = generateRss(filteredPosts, `series/${aSeries}/feed.xml`);
       const rssPath = path.join("public", "series", aSeries);
