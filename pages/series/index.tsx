@@ -21,7 +21,7 @@ export default function SeriesPage({
   return (
     <>
       <PageSEO
-        title={`Projects - ${siteMetadata.author}`}
+        title={`Series - ${siteMetadata.author}`}
         description={siteMetadata.description}
       />
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -33,21 +33,8 @@ export default function SeriesPage({
             {phrases.Series.description}
           </p>
         </div>
-        <div className="container py-12">
-          <div className="-m-4 flex flex-wrap">
-            <SeriesList series={series} />
-            {/*
-            {projectsData.map((d) => (
-              <Card
-                key={d.title}
-                title={d.title}
-                description={d.description}
-                imgSrc={d.imgSrc}
-                href={d.href}
-              />
-            ))}
-*/}
-          </div>
+        <div className="py-12">
+          <SeriesList series={series} />
         </div>
       </div>
     </>
