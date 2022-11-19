@@ -4,9 +4,8 @@ import { InferGetStaticPropsType } from 'next';
 
 import { pickBlogItem, sortedBlogPost } from '@/lib/contentlayer';
 import { getAllSeries } from '@/lib/getBlogInfo.mjs';
-import { PostListItem } from '@/lib/types';
+import { PostListItem, SeriesListItem } from '@/lib/types';
 
-import phrases from '@/data/phrases';
 import siteMetadata from '@/data/siteMetadata';
 
 import { PageSEO } from '@/components/SEO';
@@ -36,27 +35,27 @@ export const getStaticProps = async ({
     ({ series, draft }) =>
       !draft && series && slugger.slug(series) === seriesTitle
   );
+  const allSeries = await getAllSeries();
+  const series: SeriesListItem =
+    allSeries[posts[0].series as keyof typeof allSeries];
 
   return {
-    props: { posts: posts.map(pickBlogItem), seriesTitle: posts[0].series },
+    props: { posts: posts.map(pickBlogItem), series },
   };
 };
 
 export default function SeriesPost({
-  seriesTitle,
+  series,
   posts,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>
       <PageSEO
-        title={`Series - ${siteMetadata.author}`}
+        title={`Series | ${series['title']} - ${siteMetadata.author}`}
         description={siteMetadata.description}
+        image={siteMetadata.siteUrl + series['image']}
       />
-      <ListLayout
-        posts={posts as PostListItem[]}
-        title={seriesTitle}
-        description={phrases.Series.description}
-      />
+      <ListLayout posts={posts as PostListItem[]} title={series['title']} />
     </>
   );
 }
