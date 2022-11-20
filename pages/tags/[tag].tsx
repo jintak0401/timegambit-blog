@@ -1,4 +1,5 @@
 import { allBlogs } from 'contentlayer/generated';
+import slugger from 'github-slugger';
 import { InferGetStaticPropsType } from 'next';
 
 import { pickBlogItem, sortedBlogPost } from '@/lib/contentlayer';
@@ -28,10 +29,16 @@ export const getStaticProps = async ({
 }: {
   params: { tag: string };
 }) => {
-  const tag = params.tag;
+  const tagSlug = params.tag;
   const posts = sortedBlogPost(allBlogs)
-    .filter(({ tags, draft }) => !draft && (tags ?? []).includes(tag))
+    .filter(
+      ({ tags, draft }) =>
+        !draft && (tags ?? []).map((t) => slugger.slug(t)).includes(tagSlug)
+    )
     .map(pickBlogItem);
+
+  const tag =
+    posts[0].tags?.find((t) => slugger.slug(t) === tagSlug) || tagSlug;
 
   return { props: { posts, tag } };
 };
@@ -40,14 +47,13 @@ export default function TagPostListPage({
   posts,
   tag,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  const title = (tag as string).split(' ').join('-');
   return (
     <>
       <TagSEO
         title={`${tag} - ${siteMetadata.title}`}
         description={`${tag} tags - ${siteMetadata.author}`}
       />
-      <ListLayout posts={posts} title={title} />
+      <ListLayout posts={posts} title={tag} />
     </>
   );
 }
