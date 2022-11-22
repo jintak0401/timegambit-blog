@@ -22,7 +22,7 @@ const phrases = {
     allPosts: 'ALL POSTS',
   },
   Blog: {
-    title: 'Posts',
+    title: 'Blog',
     description: '학습한 내용과 지식들을 공유 및 정리합니다.',
     noPost: '포스트를 찾을 수 없네요...',
     search: '어떤 글을 찾으시나요?',
@@ -53,19 +53,28 @@ const phrases = {
     guestbookDesc: '게스트북',
   },
   Guestbook: {
+    title: 'Guestbook',
     description:
       '아무 이야기나 써주세요! 블로그 피드백이나 잡담도 상관없습니다',
+    loginDescription:
+      '이메일은 노출되지 않습니다! 닉네임과 프로필 사진만 노출됩니다 😀',
     success: '로그인에 성공했어요!',
     error: '메시지를 입력해주세요',
     guestbook: 'Guestbook',
     signInGuestbook: 'Guestbook 로그인',
-    signIn: '로그인',
     placeholder: '여기에 메시지를 입력해주세요',
     message: '메시지',
     sign: '메시지 등록',
     tip: '아바타랑 이름만 보여집니다',
     signOut: '로그아웃',
     deleteModalTitle: '메시지 삭제',
+
+    login: {
+      kakao: '카카오 로그인',
+      naver: '네이버 로그인',
+      google: 'Google 로그인',
+      github: 'GitHub 로그인',
+    },
   },
   About: {
     title: '한진탁 | Time Gambit',
