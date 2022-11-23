@@ -9,6 +9,10 @@ const nextConfig = withContentlayer(
     reactStrictMode: true,
     swcMinify: true,
 
+    images: {
+      domains: ['lh3.googleusercontent.com'],
+    },
+
     pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
     eslint: {
       dirs: ['pages', 'components', 'lib', 'layouts'],
