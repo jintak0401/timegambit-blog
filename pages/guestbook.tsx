@@ -1,21 +1,25 @@
-import { RowDataPacket } from 'mysql2';
-import { GetStaticProps } from 'next';
+import { GetStaticProps, InferGetStaticPropsType } from 'next';
+import { useSession } from 'next-auth/react';
 
 import { db } from '@/lib/db';
+import { GuestbookEntryType } from '@/lib/types';
 
 import phrases from '@/data/phrases';
 import siteMetadata from '@/data/siteMetadata';
 
-import Guestbook from '@/components/Guestbook';
+import GuestbookEntries from '@/components/Guestbook/GuestbookEntries';
+import GuestbookInput from '@/components/Guestbook/GuestbookInput';
+import GuestbookSignIn from '@/components/Guestbook/GuestbookSignIn';
 import { PageSEO } from '@/components/SEO';
 
 import queries from '@/pages/api/queries';
 
 export const getStaticProps: GetStaticProps = async () => {
   let connection = null;
+  let fallbackData: GuestbookEntryType[] = [];
   try {
     connection = await db.getConnection();
-    const [result] = await connection.query<RowDataPacket[]>(
+    [fallbackData] = await connection.query<GuestbookEntryType[]>(
       queries.READ_ALL_GUESTBOOK
     );
   } catch (e) {
@@ -25,12 +29,15 @@ export const getStaticProps: GetStaticProps = async () => {
   }
 
   return {
-    props: {},
+    props: { fallbackData },
   };
 };
 
-export default function GuestbookPage() {
+export default function GuestbookPage({
+  fallbackData,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   const { title, description } = phrases.Guestbook;
+  const { data: session } = useSession();
   return (
     <>
       <PageSEO
@@ -44,7 +51,12 @@ export default function GuestbookPage() {
               {title}
             </h1>
             {description && <p className="text-gray-500">{description}</p>}
-            <Guestbook />
+            {session ? (
+              <GuestbookInput session={session} />
+            ) : (
+              <GuestbookSignIn />
+            )}
+            <GuestbookEntries fallbackData={fallbackData} />
           </div>
         </div>
       </>
