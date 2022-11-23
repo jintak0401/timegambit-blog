@@ -5,6 +5,7 @@ import React from 'react';
 
 import { coreContent } from '@/lib/contentlayer';
 
+import Alert from './Alert';
 import Image from './Image';
 import CustomLink from './Link';
 import { BlogNewsletterForm } from './NewsletterForm';
@@ -27,6 +28,7 @@ export const MDXComponents: ComponentMap = {
   pre: Pre,
   wrapper: Wrapper,
   BlogNewsletterForm,
+  Alert,
 };
 
 export const MDXLayoutRenderer = ({ layout, content, ...rest }: MDXLayout) => {

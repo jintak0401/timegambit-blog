@@ -6,7 +6,7 @@ tags: ['블로그','mdx','스타일링','라이브러리 비교']
 draft: false
 series: 블로그 제작일지
 summary: mdx의 코드블럭을 파싱해주는 라이브러리인 rehype-highlight, rehype-prism-plus를 비교해보았습니다.
-images: [/static/images/blog/make-blog-log/코드파싱-라이브러리-비교/cover.webp]
+images: [/static/images/blog/블로그-제작일지/코드파싱-라이브러리-비교/cover.webp]
 layout: PostLayout
 ---
 
@@ -24,7 +24,7 @@ layout: PostLayout
 적용하기 위해서는 mdx를 파싱하고 html로 바꿔줄 때, mdx내 코드블럭들을 브라우저에서 스타일링 할 수
 있도록 `const`, `class`, `function`과 같은 키워드들마다 적절한 class를 붙여주면서 html로 바꿔주어야합니다.
 
-![파싱된 코드](/static/images/blog/make-blog-log/코드파싱-라이브러리-비교/parsed-code.webp)
+![파싱된 코드](/static/images/blog/블로그-제작일지/코드파싱-라이브러리-비교/parsed-code.webp)
 
 이렇게 적절한 class를 붙여주며 파싱해주는 라이브러리들이 rehype-highlight, rehype-prism-plus입니다.
 이 글은 이 2개의 라이브러리가 어떻게 다른지 비교하는 글입니다.
@@ -59,9 +59,9 @@ export default Tag;
 첫 번째는 [rehype-highlight](https://www.npmjs.com/package/rehype-highlight)입니다.
 백문이 불여일견 결과를 보시죠.
 
-![rehype-highlight 파싱 결과](/static/images/blog/make-blog-log/코드파싱-라이브러리-비교/highlight-result.webp)
+![rehype-highlight 파싱 결과](/static/images/blog/블로그-제작일지/코드파싱-라이브러리-비교/highlight-result.webp)
 
-![rehype-highlight html 결과](/static/images/blog/make-blog-log/코드파싱-라이브러리-비교/highlight-html.webp)
+![rehype-highlight html 결과](/static/images/blog/블로그-제작일지/코드파싱-라이브러리-비교/highlight-html.webp)
 
 rehype-highlight가 글을 파싱한 결과는 26.7kB였습니다. 그리고 html을 보니 `hljs-*`로 class 이름들이 정해지네요.
 
@@ -69,9 +69,9 @@ rehype-highlight가 글을 파싱한 결과는 26.7kB였습니다. 그리고 htm
 
 두 번째는 [rehype-prism-plus](https://www.npmjs.com/package/rehype-prism-plus)입니다.
 
-![rehype-prism-plus 파싱 결과](/static/images/blog/make-blog-log/코드파싱-라이브러리-비교/prism-plus-result.webp)
+![rehype-prism-plus 파싱 결과](/static/images/blog/블로그-제작일지/코드파싱-라이브러리-비교/prism-plus-result.webp)
 
-![rehype-prism-plus html 결과](/static/images/blog/make-blog-log/코드파싱-라이브러리-비교/prism-plus-html.webp)
+![rehype-prism-plus html 결과](/static/images/blog/블로그-제작일지/코드파싱-라이브러리-비교/prism-plus-html.webp)
 
 rehype-prism-plus는 글을 파싱한 결과는 84.2kB였습니다.
 html 결과를 보니 `token`은 거의 기본적으로 가지고 있으며 그 외 추가 class를 가지고 있네요.

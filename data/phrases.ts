@@ -39,10 +39,12 @@ const phrases = {
     title: 'Projects',
     description: '사이드 & 토이 프로젝트를 기록합니다.',
   },
-  Tooltip: {
-    darkmode: '다크모드',
-    lightmode: '라이트모드',
-    search: '검색',
+  Series: {
+    title: '시리즈',
+    description: '시리즈로 작성된 포스트들을 모았습니다.',
+    lastUpdate: '마지막 업데이트',
+    seriesLength: '?개의 포스트', // put '?' mark at the position of number(length)
+    noSeries: '시리즈로 작성된 글이 없습니다!',
   },
   Seo: {
     defaultDesc: 'Time Gambit의 블로그',
