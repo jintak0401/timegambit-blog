@@ -1,3 +1,4 @@
+import { RowDataPacket } from 'mysql2';
 import { Parent } from 'unist';
 
 import { ConvertPick } from '@/lib/contentlayer';
@@ -28,4 +29,12 @@ export interface SeriesListItem {
   lastmod: string;
   image: string;
   href: string;
+}
+
+export interface GuestbookEntryType extends RowDataPacket {
+  id: number;
+  name: string;
+  image: string;
+  body: string;
+  updated_at: string;
 }
