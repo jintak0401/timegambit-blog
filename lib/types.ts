@@ -21,3 +21,11 @@ export interface TocElement {
   nodeName: string;
   textContent: string;
 }
+
+export interface SeriesListItem {
+  title: string;
+  length: number;
+  lastmod: string;
+  image: string;
+  href: string;
+}
