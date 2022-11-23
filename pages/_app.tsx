@@ -3,8 +3,10 @@ import Head from 'next/head';
 import { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 import { ThemeProvider } from 'next-themes';
+import { ToastContainer } from 'react-toastify';
 import '@fontsource/dejavu-mono';
 
+import 'react-toastify/dist/ReactToastify.css';
 import '@/css/tailwind.css';
 import '@/css/prism.css';
 import '@/css/katex.css';
@@ -29,6 +31,7 @@ export default function App({
           <Component {...pageProps} />
         </SessionProvider>
       </LayoutWrapper>
+      <ToastContainer />
     </ThemeProvider>
   );
 }
