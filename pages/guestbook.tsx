@@ -1,5 +1,4 @@
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
-import { useSession } from 'next-auth/react';
 
 import { db } from '@/lib/db';
 import { GuestbookEntryType } from '@/lib/types';
@@ -7,9 +6,8 @@ import { GuestbookEntryType } from '@/lib/types';
 import phrases from '@/data/phrases';
 import siteMetadata from '@/data/siteMetadata';
 
+import Guestbook from '@/components/Guestbook/Guestbook';
 import GuestbookEntries from '@/components/Guestbook/GuestbookEntries';
-import GuestbookInput from '@/components/Guestbook/GuestbookInput';
-import GuestbookSignIn from '@/components/Guestbook/GuestbookSignIn';
 import { PageSEO } from '@/components/SEO';
 
 import queries from '@/pages/api/queries';
@@ -36,8 +34,6 @@ export const getStaticProps: GetStaticProps = async () => {
 export default function GuestbookPage({
   fallbackData,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  const { title, description } = phrases.Guestbook;
-  const { data: session } = useSession();
   return (
     <>
       <PageSEO
@@ -48,15 +44,15 @@ export default function GuestbookPage({
         <div className="divide-y">
           <div className="space-y-2 pt-6 pb-8 md:space-y-5">
             <h1 className="basic-text text-3xl font-extrabold leading-9 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
-              {title}
+              {phrases.Guestbook.title}
             </h1>
-            {description && <p className="text-gray-500">{description}</p>}
-            {session ? (
-              <GuestbookInput session={session} />
-            ) : (
-              <GuestbookSignIn />
-            )}
-            <GuestbookEntries fallbackData={fallbackData} />
+            <p className="middle-text text-lg leading-7">
+              {phrases.Guestbook.description}
+            </p>
+            <div className="py-12">
+              <Guestbook />
+              <GuestbookEntries fallbackData={fallbackData} />
+            </div>
           </div>
         </div>
       </>
