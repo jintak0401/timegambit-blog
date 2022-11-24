@@ -28,7 +28,7 @@ const GuestbookEntry = ({ entry, session }: Props) => {
   };
 
   return (
-    <div className="my-4 flex items-start gap-6 rounded-md border px-6 py-4">
+    <div className="my-4 flex items-start gap-6 rounded-md border px-4 md:px-10 py-4">
       <Image
         src={entry.image}
         alt="프로필 사진"
@@ -46,7 +46,7 @@ const GuestbookEntry = ({ entry, session }: Props) => {
           </div>
           {session?.user?.email === entry.email && (
             <button
-              className="h-fit rounded-md border-2 border-primary-200 px-3 py-1 text-lg duration-300 hover:bg-primary-200 dark:border-primary-700 dark:hover:bg-primary-700"
+              className="h-fit rounded-md border-2 border-primary-200 px-3 py-1 duration-300 hover:bg-primary-200 dark:border-primary-700 dark:hover:bg-primary-700"
               onClick={deleteEntry}
             >
               {phrases.Guestbook.delete}
