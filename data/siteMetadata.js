@@ -17,6 +17,9 @@ const siteMetadata = {
   youtube: '',
   linkedin: '',
   locale: 'ko-KR',
+  oauth: {
+    providers: ['google', 'github', 'naver', 'kakao'],
+  },
   analytics: {
     googleAnalyticsId: 'G-KM9ZTPVMSC', // e.g. UA-000000-2 or G-XXXXXXX
   },
