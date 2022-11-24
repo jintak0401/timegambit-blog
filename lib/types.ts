@@ -33,8 +33,15 @@ export interface SeriesListItem {
 
 export interface GuestbookEntryType extends RowDataPacket {
   id: number;
+  email: string;
   name: string;
   image: string;
   body: string;
-  updated_at: string;
+  updatedAt: string;
+}
+
+export interface UserType {
+  email: string;
+  name: string;
+  image: string;
 }
