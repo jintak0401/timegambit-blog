@@ -1,0 +1,9 @@
+User-Agent: *
+Disallow: /
+
+User-Agent: Googlebot
+User-Agent: Yeti
+User-Agent: Daumoa
+Allow: /
+
+#DaumWebMasterTool:ce47f94a3d5993c9830c0406e22d099b684960743362c014950e1ae87d93d542:d/Foo/jdd3mile3QAxEoaw==
