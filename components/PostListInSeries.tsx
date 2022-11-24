@@ -1,10 +1,11 @@
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useState } from 'react';
-import { GoTriangleDown } from 'react-icons/go';
-import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
+import slugger from "github-slugger";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { GoTriangleDown } from "react-icons/go";
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 
-import phrases from '@/data/phrases';
+import phrases from "@/data/phrases";
 
 interface Props {
   seriesTitle: string;
@@ -14,11 +15,11 @@ interface Props {
 const PostListInSeries = ({ seriesTitle, series }: Props) => {
   const router = useRouter();
   const [disclosure, setDisclosure] = useState(
-    router.query.disclosure === 'true'
+    router.query.disclosure === "true"
   );
 
   const curSlug = decodeURI(
-    (router.asPath.split('/').at(-1) as string).split('#')[0]
+    (router.asPath.split("/").at(-1) as string).split("#")[0]
   );
 
   const idx = series.map(({ slug }) => slug).indexOf(curSlug as string) + 1;
@@ -29,28 +30,28 @@ const PostListInSeries = ({ seriesTitle, series }: Props) => {
         {
           Icon: MdKeyboardArrowLeft,
           isDisabled: idx === 1,
-          nextIdx: idx - 2,
+          nextIdx: idx - 2
         },
         {
           Icon: MdKeyboardArrowRight,
           isDisabled: idx === series.length,
-          nextIdx: idx,
-        },
+          nextIdx: idx
+        }
       ].map(({ Icon, isDisabled, nextIdx }, index) => (
         <button
           className={`rounded-full bg-white dark:bg-gray-700 ${
             isDisabled
-              ? 'opacity-40'
-              : 'hover:bg-primary-100 hover:dark:bg-primary-900'
+              ? "opacity-40"
+              : "hover:bg-primary-100 hover:dark:bg-primary-900"
           }`}
           key={index}
           onClick={() =>
             router.push(
               {
-                pathname: '/blog/[...slug]',
+                pathname: "/blog/[...slug]",
                 query: {
-                  disclosure,
-                },
+                  disclosure
+                }
               },
               `/blog/${series[nextIdx].slug}`
             )
@@ -74,30 +75,32 @@ const PostListInSeries = ({ seriesTitle, series }: Props) => {
         <path fill="currentColor" d="M32 0H0v48h.163l16-16L32 47.836V0z" />
       </svg>
       <header>
-        <Link href={`/series/${seriesTitle}`}>
-          <a className="mb-7 block inline-block text-xl font-semibold text-gray-700 hover:text-gray-500 hover:underline dark:text-gray-200 hover:dark:text-gray-400 md:text-3xl">
+        <Link href={`/series/${slugger.slug(seriesTitle)}`}>
+          <a
+            className="mb-7 block inline-block text-xl font-semibold text-gray-700 hover:text-gray-500 hover:underline dark:text-gray-200 hover:dark:text-gray-400 md:text-3xl">
             {seriesTitle}
           </a>
         </Link>
       </header>
       {disclosure && (
-        <ol className="list-inside list-decimal space-y-1 marker:italic marker:text-gray-400 marker:before:mr-1 marker:dark:text-gray-500">
+        <ol
+          className="list-inside list-decimal space-y-1 marker:italic marker:text-gray-400 marker:before:mr-1 marker:dark:text-gray-500">
           {series.map(({ slug, title }) => (
             <li key={slug}>
               <Link
                 href={{
-                  pathname: '/blog/[...slug]',
-                  query: { disclosure },
+                  pathname: "/blog/[...slug]",
+                  query: { disclosure }
                 }}
                 as={`/blog/${slug}`}
               >
                 <a
                   className={`hover:underline
                 ${
-                  slug === curSlug
-                    ? 'font-semibold text-primary-500'
-                    : 'text-gray-700 hover:text-gray-900 dark:text-gray-300 hover:dark:text-gray-200'
-                }`}
+                    slug === curSlug
+                      ? "font-semibold text-primary-500"
+                      : "text-gray-700 hover:text-gray-900 dark:text-gray-300 hover:dark:text-gray-200"
+                  }`}
                 >
                   {title}
                 </a>
@@ -111,7 +114,7 @@ const PostListInSeries = ({ seriesTitle, series }: Props) => {
           className="my-5 flex items-center justify-center text-gray-700 hover:text-gray-900 dark:text-gray-300"
           onClick={() => setDisclosure((prev) => !prev)}
         >
-          <GoTriangleDown className={`mr-2 ${disclosure && 'rotate-180'}`} />
+          <GoTriangleDown className={`mr-2 ${disclosure && "rotate-180"}`} />
           {disclosure ? phrases.Post.closeSeries : phrases.Post.openSeries}
         </button>
         <span className="flex items-center justify-center space-x-5">

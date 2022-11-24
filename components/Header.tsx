@@ -10,7 +10,7 @@ import siteMetadata from '@/data/siteMetadata';
 import MobileNav from '@/components/MobileNav';
 import ThemeSwitch from '@/components/ThemeSwitch';
 
-const BOUND_INDEX = 2;
+const BOUND_INDEX = 3;
 
 export default function Header() {
   const scrollDirection = useScrollDirection();
@@ -24,7 +24,7 @@ export default function Header() {
           <li
             key={idx}
             className={`transition-all hover:scale-110 ${
-              idx > BOUND_INDEX ? 'hidden lg:inline-block' : ''
+              idx > BOUND_INDEX ? 'hidden xl:inline-block' : ''
             }`}
           >
             <Link href={href}>
@@ -56,7 +56,7 @@ export default function Header() {
             <Logo className="h-7 w-7 fill-current text-primary-500 dark:text-primary-300" />
           </div>
           {typeof siteMetadata.headerTitle === 'string' ? (
-            <div className="hidden h-6 text-2xl font-semibold sm:block">
+            <div className="hidden h-6 text-2xl font-semibold md:block">
               {siteMetadata.headerTitle}
             </div>
           ) : (
