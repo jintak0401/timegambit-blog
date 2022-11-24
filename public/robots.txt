@@ -6,4 +6,4 @@ User-Agent: Yeti
 User-Agent: Daumoa
 Allow: /
 
-#DaumWebMasterTool:ce47f94a3d5993c9830c0406e22d099b684960743362c014950e1ae87d93d542:d/Foo/jdd3mile3QAxEoaw==
+#DaumWebMasterTool:82b7b83860579d43bc86ed13498e46f8c484808bb07d6a852dd2b781d5782895:d/Foo/jdd3mile3QAxEoaw==
