@@ -18,7 +18,8 @@ const ViewCounter = ({ slug, type = 'POST', shown = false }: Props) => {
 
   useEffect(() => {
     if (type === 'POST' && localStorage.getItem(LAST_POST) === slug) return;
-    localStorage.setItem(LAST_POST, slug);
+
+    type === 'POST' && localStorage.setItem(LAST_POST, slug);
 
     const fetching = fetch(`/api/views/${slug}`, {
       method: type,
