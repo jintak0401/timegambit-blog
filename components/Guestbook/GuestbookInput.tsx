@@ -10,17 +10,22 @@ import phrases from '@/data/phrases';
 
 interface Props {
   user: UserType;
+  setLoading: (loading: boolean) => void;
 }
 
-const GuestbookInput = ({ user }: Props) => {
+const GuestbookInput = ({ setLoading, user }: Props) => {
   const ref = useRef<HTMLInputElement | null>(null);
 
   const onSubmitEntry = async () => {
+    setLoading(true);
+
     const res = await fetch('/api/guestbook', {
       body: JSON.stringify({ body: ref.current?.value }),
       headers: { 'Content-Type': 'application/json' },
       method: 'POST',
     });
+
+    setLoading(false);
 
     const { error } = await res.json();
 

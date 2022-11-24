@@ -31,7 +31,15 @@ const iconMap = {
   },
 };
 
-const GuestbookLogin = () => {
+interface Props {
+  setLoading: (loading: boolean) => void;
+}
+
+const GuestbookLogin = ({setLoading}: Props) => {
+  const onLogin = (provider: string) => {
+    setLoading(true);
+    signIn(provider);
+  }
   return (
     <>
       <div className="text-lg">{phrases.Guestbook.loginDescription}</div>
@@ -46,7 +54,7 @@ const GuestbookLogin = () => {
             <button
               key={provider}
               className={`${style} flex h-12 items-center justify-between rounded-xl px-5 py-2 text-xl`}
-              onClick={() => signIn(provider)}
+              onClick={() => onLogin(provider)}
             >
               <Icon className={`${iconStyle} h-5 w-7`} />
               <span className="flex-1 text-center">
