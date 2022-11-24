@@ -10,7 +10,11 @@ const nextConfig = withContentlayer(
     swcMinify: true,
 
     images: {
-      domains: ['lh3.googleusercontent.com'],
+      domains: [
+        'lh3.googleusercontent.com',
+        'k.kakaocdn.net',
+        'avatars.githubusercontent.com',
+      ],
     },
 
     pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
