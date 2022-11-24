@@ -31,12 +31,9 @@ const iconMap = {
   },
 };
 
-const GuestbookSignIn = () => {
+const GuestbookLogin = () => {
   return (
-    <div className="space-y-6 rounded-md border-2 p-4">
-      <h2 className="text-3xl font-semibold">
-        {phrases.Guestbook.signInGuestbook}
-      </h2>
+    <>
       <div className="text-lg">{phrases.Guestbook.loginDescription}</div>
       <div className="grid grid-cols-1 gap-x-5 gap-y-3 md:grid-cols-2 xl:grid-cols-4">
         {siteMetadata.oauth.providers.map((provider) => {
@@ -59,8 +56,8 @@ const GuestbookSignIn = () => {
           );
         })}
       </div>
-    </div>
+    </>
   );
 };
 
-export default GuestbookSignIn;
+export default GuestbookLogin;
