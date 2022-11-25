@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { useSession } from 'next-auth/react';
+import { useState } from 'react';
 
 import { UserType } from '@/lib/types';
 
@@ -7,7 +7,7 @@ import phrases from '@/data/phrases';
 
 import GuestbookInput from '@/components/Guestbook/GuestbookInput';
 import GuestbookLogin from '@/components/Guestbook/GuestbookLogin';
-import Spinner from "@/components/Spinner";
+import Spinner from '@/components/Spinner';
 
 const Guestbook = () => {
   const { data: session } = useSession();
@@ -15,7 +15,7 @@ const Guestbook = () => {
 
   return (
     <div className="strong-text space-y-6 rounded-md border-2 p-4 md:p-10">
-      <header className="flex gap-4 justify-start items-center">
+      <header className="flex items-center justify-start gap-4">
         <h2 className="text-2xl font-semibold md:text-3xl">
           {session
             ? phrases.Guestbook.messageGuestbook
@@ -24,7 +24,10 @@ const Guestbook = () => {
         {loading && <Spinner />}
       </header>
       {session?.user ? (
-        <GuestbookInput user={session.user as UserType} setLoading={setLoading} />
+        <GuestbookInput
+          user={session.user as UserType}
+          setLoading={setLoading}
+        />
       ) : (
         <GuestbookLogin setLoading={setLoading} />
       )}

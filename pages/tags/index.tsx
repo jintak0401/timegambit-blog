@@ -1,4 +1,4 @@
-import slugger from 'github-slugger';
+import { slug } from 'github-slugger';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 
 import { getAllTags } from '@/lib/getBlogInfo.mjs';
@@ -41,7 +41,7 @@ export default function TagListPage({
               <div key={t} className="mt-2 mb-2 mr-5">
                 <Tag text={t} />
                 <Link
-                  href={`/tags/${slugger.slug(t)}`}
+                  href={`/tags/${slug(t)}`}
                   className="-ml-2 text-sm font-semibold uppercase text-gray-600 duration-500 dark:text-gray-300"
                 >
                   {` (${tags[t]})`}
