@@ -1,4 +1,4 @@
-import slugger from 'github-slugger';
+import { slug } from 'github-slugger';
 import Link from 'next/link';
 
 import { SeriesListItem } from '@/lib/types';
@@ -16,10 +16,7 @@ const SeriesCard = ({ series }: Props) => {
   const { title, image, length, lastmod } = series;
   return (
     <article className="rounded-md border-2 shadow-md transition-all hover:-translate-y-2 hover:shadow-xl dark:border-gray-600 dark:shadow-none">
-      <Link
-        href={`/series/${slugger.slug(title)}`}
-        aria-label={`Link to ${title}`}
-      >
+      <Link href={`/series/${slug(title)}`} aria-label={`Link to ${title}`}>
         <a>
           <AutoImage src={image} alt={title} className={'rounded-md'} />
           <div className="px-2 py-3">
