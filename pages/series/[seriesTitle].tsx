@@ -1,5 +1,5 @@
 import { allBlogs } from 'contentlayer/generated';
-import slugger from 'github-slugger';
+import { slug } from 'github-slugger';
 import { InferGetStaticPropsType } from 'next';
 
 import { pickBlogItem, sortedBlogPost } from '@/lib/contentlayer';
@@ -18,7 +18,7 @@ export async function getStaticPaths() {
   return {
     paths: Object.keys(series).map((seriesTitle) => ({
       params: {
-        seriesTitle: slugger.slug(seriesTitle),
+        seriesTitle: slug(seriesTitle),
       },
     })),
     fallback: false,
@@ -32,8 +32,7 @@ export const getStaticProps = async ({
 }) => {
   const seriesTitle = params.seriesTitle;
   const posts = sortedBlogPost(allBlogs).filter(
-    ({ series, draft }) =>
-      !draft && series && slugger.slug(series) === seriesTitle
+    ({ series, draft }) => !draft && series && slug(series) === seriesTitle
   );
   const allSeries = await getAllSeries();
   const series: SeriesListItem =

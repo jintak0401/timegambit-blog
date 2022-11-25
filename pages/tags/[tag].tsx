@@ -1,5 +1,5 @@
 import { allBlogs } from 'contentlayer/generated';
-import slugger from 'github-slugger';
+import { slug } from 'github-slugger';
 import { InferGetStaticPropsType } from 'next';
 
 import { pickBlogItem, sortedBlogPost } from '@/lib/contentlayer';
@@ -33,12 +33,11 @@ export const getStaticProps = async ({
   const posts = sortedBlogPost(allBlogs)
     .filter(
       ({ tags, draft }) =>
-        !draft && (tags ?? []).map((t) => slugger.slug(t)).includes(tagSlug)
+        !draft && (tags ?? []).map((t) => slug(t)).includes(tagSlug)
     )
     .map(pickBlogItem);
 
-  const tag =
-    posts[0].tags?.find((t) => slugger.slug(t) === tagSlug) || tagSlug;
+  const tag = posts[0].tags?.find((t) => slug(t) === tagSlug) || tagSlug;
 
   return { props: { posts, tag } };
 };
