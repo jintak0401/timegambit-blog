@@ -70,7 +70,7 @@
     "eslint-plugin-simple-import-sort": "^8.0.0",
     "eslint-plugin-unused-imports": "^2.0.0",
     "globby": "^13.1.2",
-    "inquirer": "^9.1.4",
+    "inquirer": "8.0.0",
     "postcss": "^8.4.19",
     "prettier": "^2.8.0",
     "prettier-plugin-tailwindcss": "^0.1.13",
