@@ -1,0 +1,485 @@
+---
+title: "[Axios] interceptor 톺아보기"
+date: '2022-11-28'
+lastmod: '2022-11-28'
+tags: ['톺아보기','axios']
+draft: false
+series: 톺아보기
+summary: axios 라이브러리의 소스코드를 분석해봤습니다.
+images: [/static/images/blog/톺아보기/digging-axios-01/cover.webp]
+layout: PostLayout
+---
+
+## Axios 톺아보기
+
+톺아보기 시리즈는 라이브러리의 사용법을 작성한 글이 아닙니다. 라이브러리의 소스코드를 분석하고, 라이브러리가
+제공하는 기능이 어떻게 구현되었는지 알아보는 글입니다. 이번 글은 Axios에서 제공하는 timeout과 interceptor들이
+어떻게 동작하는지 분석해보았습니다. 사용법을 알기 위해 오셨다면 아마 원하는 내용을 찾기 힘드실 겁니다.
+그래도 무작정 Axios를 사용하기 보다는 원리를 알고 사용해보는 것은 어떨까요?
+
+## Axios는 왜 쓸까?
+
+자바스크립트를 이용해 웹앱을 개발하는 사람들을 보면, 저를 포함한 많은 사람들이 axios를 이용해 개발하고는 합니다.
+그런데 왜 axios를 쓰는 것일까요? fetch API도 있는데 굳이 axios 라이브러리를 쓰는 이유는 무엇일까요?
+
+| axios | fetch |
+| :----: | :---:|
+| 다양한 브라우저 지원 | 미지원 브라우저 존재 |
+| CSRF 공격 방어기능 제공 | CSRF 공격 방어기능 없음 |
+| 데이터 JSON 자동 변환 | 직접 JSON으로 변환 필요 |
+| Request 취소 및 timeout 설정 가능 | 해당 기능 없음 |
+| Download Progress 지원 | 해당 기능 없음 |
+
+이런 이유들이 있습니다. 하지만 저는 이 모든 이유들 때문에 axios를 써왔던 것은 아닙니다.
+저는 interceptor, timeout, 요청 취소 기능 때문에 axios를 써왔습니다. 다른 이유들이 중요하지 않다는 것은 아닙니다.
+단순히 제가 개발하면서 이 3가지 기능들이 fetch에 비해 편리해서 axios를 써왔다는 뜻이니 오해하지 말아주세요.
+
+그래서 이 글은 단순히 axios를 쓰는 것에서 벗어나 어떤 코드가 이 기능들을 제공해주는지 분석하는 글입니다.
+(axios 1.2.0 버전을 기준으로 작성되었습니다.)
+
+## Axios의 폴더 구조
+
+```bash
+axios/lib
+  ├── adapters
+  │     └── http.js
+  ├── cancel
+  │     └── CancelToken.js
+  └── core
+        ├── InterceptorManager.js
+        └── Axios.js
+```
+
+axios 라이브러리는 위와 같은 폴더구조로 되어 있습니다. 위에 적혀있는 폴더와 파일들 외에도 `mergeConfig.js, dispatchRequest.js` 등
+많이 있습니다만, 제가 설명드릴 주요 코드파일들은 위의 파일들입니다. 그러면 이제 본격적으로 분석해봅시다!
+
+
+## Interceptor 등록
+
+```js
+// 요청 인터셉터 추가
+const myInterceptor = axios.interceptors.request.use(
+  function (config) {
+    // 요청을 보내기 전에 수행할 일
+    // ...
+    return config;
+  },
+  function (error) {
+    // 오류 요청을 보내기전 수행할 일
+    // ...
+    return Promise.reject(error);
+  });
+
+// 응답 인터셉터 추가
+axios.interceptors.response.use(
+  function (response) {
+    // 응답 데이터를 가공
+    // ...
+    return response;
+  },
+  function (error) {
+    // 오류 응답을 처리
+    // ...
+    return Promise.reject(error);
+  });
+
+// 인터셉터 제거
+axios.interceptors.request.eject(myInterceptor);
+```
+
+axios의 interceptor를 사용할 때는 위와 같이 사용합니다. axios의 interceptors의 request/response의 use함수의 인자로
+콜백함수들을 넣어주어 인터셉터를 설정할 수 있습니다. `axios.interceptors.response.use`를 통해
+'axios 객체에 interceptors 객체가 있고, 그 객체에 response 객체가 있고, response 객체 안에 use 함수가 있지 않을까?'
+라고 생각할 수 있습니다.
+
+```js:Axios.js
+class Axios {
+  constructor(instanceConfig) {
+    this.defaults = instanceConfig;
+    this.interceptors = {
+      request: new InterceptorManager(),
+      response: new InterceptorManager()
+    };
+  }
+  ...
+}
+```
+Axios 생성자에서 interceptors 객체가 선언되고 request와 response의 값으로 InterceptorManager 객체가 생성되네요.
+저희의 추측이 맞아 떨어져가는 것 같죠? 그러면 interceptorManager 클래스가 어떻게 정의되었는지도 보도록 합시다.
+
+```js:InterceptorManager.js
+class InterceptorManager {
+  constructor() {
+    this.handlers = [];
+  }
+
+  use(fulfilled, rejected, options) {
+    this.handlers.push({
+      fulfilled,
+      rejected,
+      synchronous: options ? options.synchronous : false,
+      runWhen: options ? options.runWhen : null
+    });
+    return this.handlers.length - 1;
+  }
+
+  eject(id) {
+    if (this.handlers[id]) {
+      this.handlers[id] = null;
+    }
+  }
+  ...
+}
+```
+
+`use`함수의 인자로 함수 2개를 넣어줄 수 있었습니다. 각 함수들은 fulfilled, rejected되었을 때의
+함수들이었네요. 인터셉터 함수들이 담길 `this.handlers` 리스트에 각 함수들과 `synchronous, runWhen`을 함께 객체로 만들어 추가하네요.
+그리고 해당 객체의 index를 return해주어 eject할 때 해당 index로 접근해서 인터셉터 함수를 제거해줍니다.
+
+<Alert type="info">
+  위에서 `synchronous`는 `fulfilled, rejected` 함수들의 async 함수 여부를 나타내는 속성입니다.
+  (synchronous: true일 경우 async 함수가 아니라는 것입니다.)
+  뒤에서 이 값에 따라 동작이 어떻게 달라지는지 설명하겠습니다. 지금은 이 속성이 있다는 것만 기억해주세요.
+</Alert>
+
+## Interceptor 실행
+
+방금까지 우리는 request/response 인터셉터 함수들이 어떻게 등록되는지 알아보았습니다.
+이번에는 등록했던 인터셉터 함수들이 어떻게 실행되는지 알아봅시다.
+
+<Alert type="warning">
+  아래 설명에서 메소드는 GET, POST, PUT, DELETE 등과 같은 HTTP의 메소드들을 지칭합니다.
+  클래스에 정의된 함수들은 메소드가 아닌 함수로 지칭합니다.
+</Alert>
+
+### Axios 각 메소드 정의
+
+코드를 분석하면서 꽤 인상깊게 본 부분이 있습니다.
+
+```js
+const res = await axios.get('https://some-domain/path');
+
+// or
+
+const axiosInstance = new axios.create({
+  baseURL: 'https://some-domain',
+  ...
+});
+const res = await axiosInstance.get('path');
+```
+
+저는 보통 이렇게 axios를 사용했습니다. 그래서 GET, POST 등과 같은 메소드들이 클래스 내에
+정의되어 있을 것이라고 생각했습니다.
+
+```js:Axios.js showLineNumbers {2, 25-26}
+utils.forEach(['delete', 'get', 'head', 'options'], function forEachMethodNoData(method) {
+  Axios.prototype[method] = function(url, config) {
+    return this.request(mergeConfig(config || {}, {
+      method,
+      url,
+      data: (config || {}).data
+    }));
+  };
+});
+
+utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
+  function generateHTTPMethod(isForm) {
+    return function httpMethod(url, data, config) {
+      return this.request(mergeConfig(config || {}, {
+        method,
+        headers: isForm ? {
+          'Content-Type': 'multipart/form-data'
+        } : {},
+        url,
+        data
+      }));
+    };
+  }
+
+  Axios.prototype[method] = generateHTTPMethod();
+  Axios.prototype[method + 'Form'] = generateHTTPMethod(true);
+});
+```
+
+Axios 클래스 내에 각 메소드들의 동작이 각각 정의되어 있는 것이 아닌, `request` 함수 하나만 정의되어 있고,
+각 메소드들의 동작들은 Axios prototype에 `request` 함수를 이용해 정의되는 방식으로 구현되어 있었습니다.
+
+생각해보면 클래스 내부 함수로 정의되는 것보다 이 방법이 2가지 부분에서 훨씬 효율적이네요.
+
+* request 단 1개의 함수를 이용해서 모든 메소드를 수행함으로써, 각 메소드를 담당하는 7개 함수를 모두 정의하지 않고 1개의 함수만 정의하면 됩니다.
+* prototype으로 각 메소드 동작을 정의함으로써, axios 객체를 아무리 생성해도, 각 메소드의 동작을 수행하는 함수는 항상 7개만 존재합니다.
+
+<Alert type="info">
+  **Q. 클래스 내부에 각 메소드의 함수를 static으로 정의하면 안될까요? 이렇게 정의해도 prototype으로 정의하는 것처럼 7개만 존재하게되지 않나요?**
+
+  static 함수로 정의하게되면 객체를 생성하지 않아도 쓸 수 있도록, 객체가 고유하게 갖고 있는 값에는 접근할 수 없게 됩니다.
+  Axios 클래스의 생성자에서 `this.defaults`에 객체의 고유한 설정을 저장합니다. 그리고 이 설정을
+  `request` 함수에서 사용합니다.
+
+  만약 static 함수로 각 메소드 함수를 정의하게 되면, axios 객체를 생성할 때 넣어준 고유한 설정값인 `this.defaults`에
+  접근할 수 없게 됩니다.^[static 함수는 객체를 생성하지 않아도 사용할 수 있도록 static 변수와 static 함수만 사용할 수 있습니다. 즉,
+  생성된 객체마다 가지고 있는 고유한 값에는 접근할 수 없습니다.]
+  예를 들어 axios1, axios2 객체 각각에 timeout을 1000, 2000으로 주었다고 하더라도
+  static 함수 내에서는 각 timeout인 1000과 2000을 가져올 수 없게 됩니다. 그래서 axios에서는
+  static이 아닌 prototype을 이용하는 것 같습니다.
+</Alert>
+
+### Axios request 함수
+
+```js:Axios.js
+class Axios {
+  request(configOrUrl, config) {
+    ...
+
+    /****** 1번 ******/
+    const requestInterceptorChain = [];
+    let synchronousRequestInterceptors = true;
+    this.interceptors.request.forEach(function unshiftRequestInterceptors(interceptor) {
+      if (typeof interceptor.runWhen === 'function' && interceptor.runWhen(config) === false) {
+        return;
+      }
+
+      synchronousRequestInterceptors = synchronousRequestInterceptors && interceptor.synchronous;
+
+      requestInterceptorChain.unshift(interceptor.fulfilled, interceptor.rejected);
+    });
+
+    const responseInterceptorChain = [];
+    this.interceptors.response.forEach(function pushResponseInterceptors(interceptor) {
+      responseInterceptorChain.push(interceptor.fulfilled, interceptor.rejected);
+    });
+    /****** 1번 ******/
+
+    /****** 2번 ******/
+    let promise;
+    let i = 0;
+    let len;
+
+    if (!synchronousRequestInterceptors) {
+      const chain = [dispatchRequest.bind(this), undefined];
+      chain.unshift.apply(chain, requestInterceptorChain);
+      chain.push.apply(chain, responseInterceptorChain);
+      len = chain.length;
+
+      promise = Promise.resolve(config);
+
+      while (i < len) {
+        promise = promise.then(chain[i++], chain[i++]);
+      }
+
+      return promise;
+    }
+    /****** 2번 ******/
+
+    /****** 3번 ******/
+    len = requestInterceptorChain.length;
+
+    let newConfig = config;
+
+    i = 0;
+
+    while (i < len) {
+      const onFulfilled = requestInterceptorChain[i++];
+      const onRejected = requestInterceptorChain[i++];
+      try {
+        newConfig = onFulfilled(newConfig);
+      } catch (error) {
+        onRejected.call(this, error);
+        break;
+      }
+    }
+
+    try {
+      promise = dispatchRequest.call(this, newConfig);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+
+    i = 0;
+    len = responseInterceptorChain.length;
+
+    while (i < len) {
+      promise = promise.then(responseInterceptorChain[i++], responseInterceptorChain[i++]);
+    }
+
+    return promise;
+    /****** 3번 ******/
+  }
+  ...
+}
+```
+
+좀 길죠...? 길지만 끊지 않은 이유는 제 설명을 듣기 전 어떻게 동작하는지 한 번 생각해보셨으면 좋겠어서
+그대로 가져왔습니다. 한 번 쭉 읽어보시면서 어떻게 동작하는지 생각해보세요.
+만약 코드를 읽다가 '`chain.unshift.apply`? `chain.push.apply`? 이게 뭐지?' 하실 때 [이 글](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Function/apply#%EB%B0%B0%EC%97%B4%EC%97%90_%EB%B0%B0%EC%97%B4%EC%9D%84_%EB%B6%99%EC%9D%B4%EA%B8%B0_%EC%9C%84%ED%95%B4_apply_%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0)을
+읽으시면 도움이 되실 것 같아요. (저는 이렇게 사용할 수 있다는 사실을 몰랐습니다... 😀)
+
+#### 1번 코드
+
+1번 코드는 request와 response 인터셉터 함수들을 각각 `requestInterceptorChain`, `responseInterceptorChain`에 넣어줍니다.
+눈여겨 볼 부분은 2군데입니다.
+
+1. requestInterceptorChain 리스트에 `unshift`로 인터셉터 함수들을 넣어준다.
+2. `interceptor.synchronous`가 하나라도 false(하나라도 async 함수)일 경우 `synchronousRequestInterceptors`는 false입니다.
+
+```js
+axios.interceptors.request.use(onReqFulfilled1, onReqRejected1); // ⓐ
+
+axios.interceptors.request.use(onReqFulfilled2, onReqRejected2, { synchronous: true }); // ⓑ
+
+axios.interceptors.request.use(onResFulfilled1, onResRejected1);
+
+axios.interceptors.request.use(onResFulfilled2, onResRejected2);
+```
+
+예를들어 위와 같이 인터셉터들을 설정해주었다고 하겠습니다. 1번 코드를 수행하면 아래와 같은 결과가 될 것입니다.
+
+```js
+requestInterceptorChain = [
+  onReqFulfilled2, onReqFulfilled2,
+  onReqFulfilled1, onReqFulfilled1
+]
+
+responseInterceptorChain = [
+  onResFulfilled1, onResFulfilled1,
+  onResFulfilled2, onResFulfilled2
+]
+
+synchronousRequestInterceptors === false
+```
+
+unshift로 requestInterceptorChain에 넣어주었으므로 인터셉터 함수들이 1 → 2 순서가 아닌 2 → 1 순서로 들어가있습니다.
+requestInterceptorChain에는 1 → 2 순서로 들어가있습니다. 또, ⓑ에서 `synchronous: true`를
+해주었지만 ⓐ에서는 따로 설정해주지 않았기 때문에 기본값인 `synchronous: false`가 설정되었고,
+하나라도 false이기 때문에 `synchronousRequestInterceptors`는 false입니다. 이 값이 어떻게 쓰이는지는 바로 뒤에서 설명하겠습니다!
+
+#### 2번 코드
+
+Axios.js 코드에서 가장 핵심이 무엇이냐라고 묻는다면 저는 2번 코드라고 답할 것입니다.
+2번 코드를 이해하면 3번 코드는 쉽게 이해할 수도 있고, Promise에 대한 이해를 높여주기 때문입니다.
+
+```js:2번코드 {14} showLineNumbers
+let promise;
+let i = 0;
+let len;
+
+if (!synchronousRequestInterceptors) {
+  const chain = [dispatchRequest.bind(this), undefined];
+  chain.unshift.apply(chain, requestInterceptorChain);
+  chain.push.apply(chain, responseInterceptorChain);
+  len = chain.length;
+
+  promise = Promise.resolve(config);
+
+  while (i < len) {
+    promise = promise.then(chain[i++], chain[i++]);
+  }
+
+  return promise;
+}
+```
+
+`dispatchRequest`는 HTTP 요청을 보내주는 함수입니다. 7번 라인에서
+dispatchRequest 함수의 앞에 request 인터셉터 함수들을, 8번 라인에서 dispatchRequest 함수 뒤쪽에
+response 인터셉터 함수들을 위치시킵니다. 위의 예제를 수행하게 되면 다음과 같은 결과가 될 것입니다.
+
+```js
+chain = [
+  onReqFulfilled2, onReqFulfilled2,
+  onReqFulfilled1, onReqFulfilled1
+  dispatchRequest.bind(this), undefined,
+  onResFulfilled1, onResFulfilled1,
+  onResFulfilled2, onResFulfilled2
+]
+```
+
+Promise.resolve(config)로 선언된 promise가 while문을 돌면서 재귀적으로 뒤 쪽에 then이 붙어집니다.
+while문을 모두 수행하면 promise는 다음과 같아집니다.
+
+```js
+promise = Promise.resolve(config)
+             .then(onReqFulfilled2, onReqFulfilled2)
+             .then(onReqFulfilled1, onReqFulfilled1)
+             .then(dispatchRequest.bind(this), undefined)
+             .then(onResFulfilled1, onResFulfilled1)
+             .then(onResFulfilled2, onResFulfilled2)
+```
+
+<Alert type="info">
+  **Q. Promise의 then에 함수가 왜 2개가 들어가죠? 원래 1개만 있어야 하는 것 아닌가요?**
+
+  then함수에 함수가 2개 들어갈 수 있습니다. 앞쪽의 함수는 resolve함수, 뒤쪽의 함수는 reject함수입니다.
+  catch의 역할을 then에서 해준다고 할 수 있죠. 단, 동일한 then에서 발생한 에러는 뒤 쪽의 reject 함수가 잡아주지는 않습니다.
+  위의 경우, onReqFulfilled2에서 에러가 발생하면 onReqFulfilled2가 아닌 onReqFulfilled1에서 잡아줍니다.
+</Alert>
+
+그렇다면 promise는 어떻게 동작하게 될까요? interceptor를 수행하기 전 설정인 config로 시작해서
+onReqFulfilled2, onReqFulfilled1을 거쳐가며 설정이 추가되고, dispatchRequest를 통해 HTTP 요청을 하고 응답이 오면,
+onResFulfilled1, onResFulfilled2를 거쳐가며 응답이 가공될 것입니다.
+
+**Axios.request**는 이런 동작을 하는 Promise를 return해주는 것이죠.
+
+#### 3번 코드
+
+그러면 3번 코드는 뭘까요? 3번 코드는 `synchronousRequestInterceptors`가 true일 때 수행됩니다.
+이 값이 true라는 것은 request 인터셉터 함수들은 모두 async 함수가 아닌 동기 함수들입니다. 즉,
+굳이 Promise로 다루지 않고 그냥 수행해도 된다는 뜻이죠.
+
+```js:3번코드 showLineNumbers
+len = requestInterceptorChain.length;
+
+let newConfig = config;
+
+i = 0;
+
+while (i < len) {
+  const onFulfilled = requestInterceptorChain[i++];
+  const onRejected = requestInterceptorChain[i++];
+  try {
+    newConfig = onFulfilled(newConfig);
+  } catch (error) {
+    onRejected.call(this, error);
+    break;
+  }
+}
+
+try {
+  promise = dispatchRequest.call(this, newConfig);
+} catch (error) {
+  return Promise.reject(error);
+}
+
+i = 0;
+len = responseInterceptorChain.length;
+
+while (i < len) {
+  promise = promise.then(responseInterceptorChain[i++], responseInterceptorChain[i++]);
+}
+
+return promise;
+```
+
+이 코드가 에러없이 수행되고 반환되는 promise는 다음과 같을 것입니다.
+
+```js
+newConfig = onReqFulfilled1(onReqFulfilled2(config))
+
+promise = dispatchRequest.call(this, newConfig)
+             .then(onResFulfilled1, onResFulfilled1)
+             .then(onResFulfilled2, onResFulfilled2)
+```
+
+Promise로 다루지 않을 뿐 2번 코드와 별반 다르지 않죠? 결국 3번 코드도 request 인터셉터 함수들을 역순으로 실행시켜 설정을 변경하고,
+HTTP 요청을 보내고 돌아온 응답을 response 인터셉터 함수들을 순서대로 실행하며 가공해주는 Promise를
+반환해줍니다.
+
+## 글을 마치며
+
+소스코드를 분석한다는게 쉬운 일은 아닌 것 같습니다. 어디서부터 코드를 보아야하는지, 어떤 코드들이 주요한
+기능을 담당하는 코드인지, 주요 코드의 동작 로직을 파악하기 등 꽤 어려운 점들이 많았습니다.
+
+하지만 그만큼 얻는 것도 많았습니다. Promise를 어떻게 다루는지, prototype을 이용해 효율적으로
+구현하는 법 등을 알게 되었습니다. 앞으로도 라이브러리들의 소스코드를 뜯어가며 공부하고, *톺아보기* 시리즈로 글을 작성하려고 합니다.
+다음 글에서는 이번에 다루지 못한 timeout이나 요청취소 기능을 다루도록 하겠습니다.
+
+**오타 및 오류 지적은 언제나 환영입니다!**

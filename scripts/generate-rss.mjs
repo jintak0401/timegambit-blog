@@ -1,5 +1,5 @@
 import { mkdirSync, writeFileSync } from "fs";
-import GithubSlugger from "github-slugger";
+import { slug } from "github-slugger";
 import path from "path";
 
 import { escape } from "./htmlEscaper.mjs";
@@ -53,7 +53,7 @@ const generateRss = (posts, page = "feed.xml") => `
       const filteredPosts = allBlogs.filter(
         (post) =>
           post.draft !== true &&
-          post.tags.map((t) => GithubSlugger.slug(t)).includes(tag)
+          post.tags.map((t) => slug(t)).includes(tag)
       );
       const rss = generateRss(filteredPosts, `tags/${tag}/feed.xml`);
       const rssPath = path.join("public", "tags", tag);
@@ -70,7 +70,7 @@ const generateRss = (posts, page = "feed.xml") => `
         (post) =>
           post.draft !== true && post.series === aSeries
       );
-      const rss = generateRss(filteredPosts, `series/${aSeries}/feed.xml`);
+      const rss = generateRss(filteredPosts, `series/${slug(aSeries)}/feed.xml`);
       const rssPath = path.join("public", "series", aSeries);
       mkdirSync(rssPath, { recursive: true });
       writeFileSync(path.join(rssPath, "feed.xml"), rss);

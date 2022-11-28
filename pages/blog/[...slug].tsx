@@ -83,7 +83,6 @@ export default function BlogPost({
       {'draft' in post && post['draft'] !== true ? (
         <MDXLayoutRenderer
           layout={post['layout'] || DEFAULT_LAYOUT}
-          toc={post['toc']}
           content={post}
           prev={prev}
           next={next}
