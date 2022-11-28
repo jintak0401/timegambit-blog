@@ -14,6 +14,8 @@ const nextConfig = withContentlayer(
         'lh3.googleusercontent.com',
         'k.kakaocdn.net',
         'avatars.githubusercontent.com',
+        'ssl.pstatic.net',
+        'phinf.pstatic.net',
       ],
     },
 
