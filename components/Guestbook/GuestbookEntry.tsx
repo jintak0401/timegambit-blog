@@ -36,7 +36,7 @@ const GuestbookEntry = ({ entry, session }: Props) => {
         loading="lazy"
         width="40"
         height="40"
-        objectFit="contain"
+        objectFit="cover"
       />
       <div className="flex-1">
         <div className="flex items-center justify-between">

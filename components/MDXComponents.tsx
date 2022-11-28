@@ -1,5 +1,6 @@
 import type { Blog } from 'contentlayer/generated';
 import { ComponentMap } from 'mdx-bundler/client';
+import dynamic from 'next/dynamic';
 import { useMDXComponent } from 'next-contentlayer/hooks';
 import React from 'react';
 
@@ -17,8 +18,13 @@ interface MDXLayout {
   [key: string]: unknown;
 }
 
+interface LayoutProps {
+  content: Blog;
+  [key: string]: unknown;
+}
+
 const Wrapper = ({ layout, content, ...rest }: MDXLayout) => {
-  const Layout = require(`../layouts/${layout}`).default;
+  const Layout = dynamic<LayoutProps>(() => import(`../layouts/${layout}`));
   return <Layout content={content} {...rest} />;
 };
 
