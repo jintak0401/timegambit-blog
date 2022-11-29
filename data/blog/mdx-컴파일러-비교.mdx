@@ -2,11 +2,11 @@
 title: 'next-mdx-remote vs mdx-bundler'
 date: 2022-11-06T14:07:19.674Z
 lastmod: 2022-11-07T14:07:19.674Z
-tags: ['블로그', 'mdx']
+tags: ['블로그', 'mdx', '라이브러리 비교']
 draft: false
 series: 블로그 제작일지
 summary: 블로그를 제작하면서 next-mdx-remote와 mdx-bundler 중 무엇을 사용할 것인지 고민했었는데, 이 두 라이브러리를 비교한 글입니다.
-images: [/static/images/blog/블로그-제작일지/mdx-컴파일러-비교/cover.webp]
+images: [https://i.imgur.com/W6wPxGm.png]
 layout: PostLayout
 ---
 
@@ -32,7 +32,7 @@ Next.js로 개발한 제 블로그는 mdx 형식으로 글을 작성합니다. �
 
 ### next-mdx-remote 컴파일 결과
 
-![next-mdx-remote](/static/images/blog/블로그-제작일지/mdx-컴파일러-비교/next-mdx-remote-log.webp)
+![next-mdx-remote](https://i.imgur.com/WA3HUow.png)
 
 위 사진에서 `Show more (150 kB)`가 보이시나요? 길게 작성되어 있는 mdx 파일을 next-mdx-remote로 컴파일한 코드의
 크기가 **150KB**였습니다. 아무리 길다고 하지만 이건 너무하다고 생각이 들었습니다. 어떻게하면 이 크기를 줄일 수 있을까
@@ -40,7 +40,7 @@ Next.js로 개발한 제 블로그는 mdx 형식으로 글을 작성합니다. �
 
 ### mdx-bundler 컴파일 결과
 
-![next-mdx-remote](/static/images/blog/블로그-제작일지/mdx-컴파일러-비교/mdx-bundler-log.webp)
+![next-mdx-remote](https://i.imgur.com/KMf8EvK.png)
 
 mdx-bundler를 사용하여 컴파일한 결과에서는 **83.3KB**였습니다. next-mdx-remote의 150KB보다 훨씬 적었습니다.
 (참고로 19.4KB는 컴파일되기 전 mdx 파일입니다.) 둘의 컴파일 결과가 어떻게 다르길래 용량차이가 나는 것이었을까요?

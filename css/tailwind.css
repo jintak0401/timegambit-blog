@@ -47,6 +47,7 @@ input:-webkit-autofill:focus {
 @layer components {
 
     .auto-image-wrapper {
+        position: relative;
         width: 100%;
     }
 
