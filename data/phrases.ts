@@ -97,6 +97,6 @@ const phrases = {
     description: '서버가 요청을 받지 못하고 있어요... 곧 해결할게요!',
     button: '새로고침',
   },
-};
+} as const;
 
 export default phrases;
