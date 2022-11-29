@@ -1,21 +1,19 @@
-import Image from 'next/image';
+import Image, { ImageProps } from 'next/image';
 
-interface Props {
-  src: string;
-  alt?: string;
+interface Props extends ImageProps {
   className?: string;
 }
 
-const AutoImage = ({ src, alt, className }: Props) => {
+const AutoImage = ({ src, alt, className, ...rest }: Props) => {
   return (
     <div className="auto-image-wrapper">
       <Image
         alt={alt || ''}
         src={src}
-        className={`${className} !relative !h-auto !object-contain`}
+        className={`${className} !relative !h-auto`}
         blurDataURL={`/_next/image?url=${src}&w=16&q=1`}
         layout="fill"
-        loading="lazy"
+        {...rest}
       />
     </div>
   );
