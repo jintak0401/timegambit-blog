@@ -40,6 +40,6 @@ const about = {
       info: ['소프트웨어 전공', '학점 4.24 / 4.5'],
     },
   ],
-} as const;
+};
 
 export default about;

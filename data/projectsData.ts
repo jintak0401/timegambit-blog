@@ -11,6 +11,6 @@ const projectsData = [
     imgSrc: 'https://i.imgur.com/TXvd8r1.png',
     href: 'https://grape-simulation.vercel.app/',
   },
-] as const;
+];
 
 export default projectsData;
