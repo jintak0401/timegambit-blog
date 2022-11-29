@@ -16,6 +16,8 @@ const nextConfig = withContentlayer(
         'avatars.githubusercontent.com',
         'ssl.pstatic.net',
         'phinf.pstatic.net',
+        'imgur.com',
+        'i.imgur.com',
       ],
     },
 
