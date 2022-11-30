@@ -8,4 +8,4 @@ const seriesData = {
   '블로그 제작일지': 'https://i.imgur.com/AQGmxni.png',
 };
 
-export default seriesData;
+module.exports = seriesData;
