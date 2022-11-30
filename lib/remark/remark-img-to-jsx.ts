@@ -1,7 +1,5 @@
-import fs from "fs";
-import sizeOf from "image-size";
-import { Literal, Node, Parent } from "unist";
-import { visit } from "unist-util-visit";
+import { Literal, Node, Parent } from 'unist';
+import { visit } from 'unist-util-visit';
 
 interface ImageNode extends Parent {
   url: string;
@@ -16,38 +14,15 @@ export default function remarkImgToJsx() {
       tree,
       // only visit p tags that contain an img element
       (node): node is Parent =>
-        node.type === "paragraph" &&
-        (node as Parent).children.some((n) => n.type === "image"),
+        node.type === 'paragraph' &&
+        (node as Parent).children.some((n) => n.type === 'image'),
       (node) => {
         const imageNode = (node as Parent).children.find(
-          (n) => n.type === "image"
+          (n) => n.type === 'image'
         ) as ImageNode;
 
-        // only local files
-        if (fs.existsSync(`${process.cwd()}/public${imageNode.url}`)) {
-          const dimensions = sizeOf(`${process.cwd()}/public${imageNode.url}`);
-          // Convert original node to next/image
-          (imageNode.type = "mdxJsxFlowElement"),
-            (imageNode.name = "Image"),
-            (imageNode.attributes = [
-              { type: "mdxJsxAttribute", name: "alt", value: imageNode.alt },
-              { type: "mdxJsxAttribute", name: "src", value: imageNode.url },
-              {
-                type: "mdxJsxAttribute",
-                name: "width",
-                value: dimensions.width
-              },
-              {
-                type: "mdxJsxAttribute",
-                name: "height",
-                value: dimensions.height
-              }
-            ]);
-
-          // Change node type from p to div to avoid nesting error
-          (node as Parent).type = "div";
-          (node as Parent).children = [imageNode];
-        }
+        (node as Parent).type = 'div';
+        (node as Parent).children = [imageNode];
       }
     );
   };

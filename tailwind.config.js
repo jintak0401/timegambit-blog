@@ -41,10 +41,13 @@ module.exports = {
             color: theme('colors.gray.700'),
             a: {
               color: theme('colors.primary.500'),
+              wordBreak: 'break-all',
               '&:hover': {
                 color: `${theme('colors.primary.600')} !important`,
               },
-              code: { color: theme('colors.primary.400') },
+              code: {
+                color: theme('colors.primary.400'),
+              },
             },
             h1: {
               fontWeight: '700',
@@ -74,6 +77,8 @@ module.exports = {
               paddingTop: '2px',
               paddingBottom: '2px',
               borderRadius: '0.25rem',
+              wordBreak: 'break-all',
+              fontFamily: 'Consolas',
             },
             'code::before': {
               content: 'none',
@@ -90,6 +95,9 @@ module.exports = {
               borderRadius: '0.25rem',
             },
             hr: { borderColor: theme('colors.gray.200') },
+            li: {
+              wordBreak: 'break-all',
+            },
             'ol li::marker': {
               fontWeight: '600',
               color: theme('colors.gray.500'),

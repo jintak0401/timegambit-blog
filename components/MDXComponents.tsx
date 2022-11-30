@@ -29,7 +29,7 @@ const Wrapper = ({ layout, content, ...rest }: MDXLayout) => {
 };
 
 export const MDXComponents: ComponentMap = {
-  Image,
+  img: Image,
   a: CustomLink,
   pre: Pre,
   wrapper: Wrapper,

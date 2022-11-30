@@ -18,7 +18,12 @@ const SeriesCard = ({ series }: Props) => {
     <article className="rounded-md border-2 shadow-md transition-all hover:-translate-y-2 hover:shadow-xl dark:border-gray-600 dark:shadow-none">
       <Link href={`/series/${slug(title)}`} aria-label={`Link to ${title}`}>
         <a>
-          <AutoImage src={image} alt={title} className={'rounded-md'} />
+          <AutoImage
+            src={image}
+            alt={title}
+            className={'rounded-md'}
+            priority={true}
+          />
           <div className="px-2 py-3">
             <h2 className="strong-text mt-3 mb-1 text-lg font-semibold">
               {title}
