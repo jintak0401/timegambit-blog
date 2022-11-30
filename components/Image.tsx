@@ -1,12 +1,15 @@
-import { ImageProps } from 'next/image';
-
 import AutoImage from '@/components/AutoImage';
 
-const Image = ({ ...rest }: ImageProps) => {
+interface Props {
+  src: string;
+  alt: string;
+}
+
+const Image = ({ src, alt }: Props) => {
   return (
     <div className="mb-6 space-y-2 md:space-y-3">
-      <AutoImage loading="lazy" {...rest} />
-      <div className="middle-text text-center italic">{rest.alt}</div>
+      <AutoImage loading="lazy" src={src} alt={alt} />
+      <div className="middle-text text-center italic">{alt}</div>
     </div>
   );
 };
