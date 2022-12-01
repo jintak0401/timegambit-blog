@@ -7,7 +7,7 @@ import { PostListItem } from '@/lib/types';
 import phrases from '@/data/phrases';
 import siteMetadata from '@/data/siteMetadata';
 
-import { PageSEO } from '@/components/SEO';
+import { PageSEO } from '@/components/common/SEO';
 
 import ListLayout from '@/layouts/ListLayout';
 

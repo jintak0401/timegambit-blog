@@ -9,7 +9,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const slug = req.query.slug?.toString();
+  const slug = (req.query.slug as string[]).join('/');
+
   const method = req.method;
   if (slug === undefined) {
     return res.status(400).json({ message: `There is no post "${slug}"` });

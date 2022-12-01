@@ -2,7 +2,7 @@ import { PostListItem } from '@/lib/types';
 
 import phrases from '@/data/phrases';
 
-import PostCard from '@/components/PostCard';
+import PostCard from '@/components/card-and-list/PostCard';
 
 interface Props {
   posts: PostListItem[];

@@ -3,9 +3,9 @@ import Link from 'next/link';
 import { PostListItem } from '@/lib/types';
 import useFormattedDate from '@/hooks/useFormattedDate';
 
-import ImageWithFallback from '@/components/ImageWithFallback';
+import ViewCounter from '@/components/blog/ViewCounter';
+import ImageWithFallback from '@/components/Image/ImageWithFallback';
 import Tag from '@/components/Tag';
-import ViewCounter from '@/components/ViewCounter';
 
 interface Props {
   post: PostListItem;

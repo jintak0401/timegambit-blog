@@ -33,8 +33,8 @@ import siteMetadata from '../data/siteMetadata.js';
                   .replace('.md', '')
                   .replace('/feed.xml', '');
                 const route = path === '/index' ? '' : path;
-                const [_, urlPath, slug] = route.split('/');
-                const lastmod = urlPath === 'blog' ? allBlogs.find(p => p.slug === slug).lastmod : '';
+                const [_, urlPath, ...slug] = route.split('/');
+                const lastmod = urlPath === 'blog' ? allBlogs.find(p => p.slug === slug.join('/')).lastmod : '';
                 return `
                         <url>
                             <loc>${siteMetadata.siteUrl}${route}</loc>

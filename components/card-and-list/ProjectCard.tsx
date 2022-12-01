@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import ImageWithFallback from '@/components/ImageWithFallback';
+import ImageWithFallback from '@/components/Image/ImageWithFallback';
 
 interface Props {
   title: string;
@@ -9,7 +9,7 @@ interface Props {
   href: string;
 }
 
-const Card = ({ title, description, imgSrc, href }: Props) => {
+const ProjectCard = ({ title, description, imgSrc, href }: Props) => {
   const CardImage = () => (
     <ImageWithFallback
       src={imgSrc}
@@ -63,4 +63,4 @@ const Card = ({ title, description, imgSrc, href }: Props) => {
   );
 };
 
-export default Card;
+export default ProjectCard;

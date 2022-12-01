@@ -1,4 +1,3 @@
-import { slug } from 'github-slugger';
 import Link from 'next/link';
 
 import { SeriesListItem } from '@/lib/types';
@@ -6,17 +5,17 @@ import useFormattedDate from '@/hooks/useFormattedDate';
 
 import phrases from '@/data/phrases';
 
-import AutoImage from '@/components/AutoImage';
+import AutoImage from '@/components/Image/AutoImage';
 
 interface Props {
   series: SeriesListItem;
 }
 
 const SeriesCard = ({ series }: Props) => {
-  const { title, image, length, lastmod } = series;
+  const { title, image, length, lastmod, href } = series;
   return (
     <article className="rounded-md border-2 shadow-md transition-all hover:-translate-y-2 hover:shadow-xl dark:border-gray-600 dark:shadow-none">
-      <Link href={`/series/${slug(title)}`} aria-label={`Link to ${title}`}>
+      <Link href={`/series/${href}`} aria-label={`Link to ${title}`}>
         <a>
           <AutoImage
             src={image}
