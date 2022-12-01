@@ -7,9 +7,9 @@ import { pickBlogItem, sortedBlogPost } from '@/lib/contentlayer';
 import phrases from '@/data/phrases';
 import siteMetadata from '@/data/siteMetadata';
 
+import PostList from '@/components/card-and-list/PostList';
+import { PageSEO } from '@/components/common/SEO';
 import Introduction from '@/components/Introduction';
-import PostList from '@/components/PostList';
-import { PageSEO } from '@/components/SEO';
 
 const HOME_POST_LENGTH = 3;
 

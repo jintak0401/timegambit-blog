@@ -1,6 +1,6 @@
 import { ImageProps } from 'next/image';
 
-import ImageWithFallback from '@/components/ImageWithFallback';
+import ImageWithFallback from '@/components/Image/ImageWithFallback';
 
 interface Props extends ImageProps {
   className?: string;

@@ -6,9 +6,9 @@ import { GuestbookEntryType } from '@/lib/types';
 import phrases from '@/data/phrases';
 import siteMetadata from '@/data/siteMetadata';
 
+import { PageSEO } from '@/components/common/SEO';
 import Guestbook from '@/components/Guestbook/Guestbook';
 import GuestbookEntries from '@/components/Guestbook/GuestbookEntries';
-import { PageSEO } from '@/components/SEO';
 
 import queries from '@/pages/api/queries';
 

@@ -2,8 +2,8 @@ import phrases from '@/data/phrases';
 import projectsData from '@/data/projectsData';
 import siteMetadata from '@/data/siteMetadata';
 
-import Card from '@/components/Card';
-import { PageSEO } from '@/components/SEO';
+import ProjectCard from '@/components/card-and-list/ProjectCard';
+import { PageSEO } from '@/components/common/SEO';
 
 export default function ProjectsPage() {
   return (
@@ -24,7 +24,7 @@ export default function ProjectsPage() {
         <div className="container py-12">
           <div className="-m-4 flex flex-wrap">
             {projectsData.map((d) => (
-              <Card
+              <ProjectCard
                 key={d.title}
                 title={d.title}
                 description={d.description}

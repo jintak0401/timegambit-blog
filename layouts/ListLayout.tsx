@@ -4,7 +4,7 @@ import { PostListItem } from '@/lib/types';
 
 import phrases from '@/data/phrases';
 
-import PostList from '@/components/PostList';
+import PostList from '@/components/card-and-list/PostList';
 
 interface Props {
   posts: PostListItem[];
