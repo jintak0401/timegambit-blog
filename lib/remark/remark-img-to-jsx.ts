@@ -21,6 +21,10 @@ export default function remarkImgToJsx() {
           (n) => n.type === 'image'
         ) as ImageNode;
 
+        imageNode.attributes = [
+          { type: 'mdxJsxAttribute', name: 'alt', value: imageNode.alt },
+          { type: 'mdxJsxAttribute', name: 'src', value: imageNode.url },
+        ];
         (node as Parent).type = 'div';
         (node as Parent).children = [imageNode];
       }
