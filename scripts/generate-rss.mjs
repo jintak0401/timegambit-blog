@@ -6,6 +6,7 @@ import { escape } from "./htmlEscaper.mjs";
 import { allBlogs } from "../.contentlayer/generated/Blog/_index.mjs";
 import siteMetadata from "../data/siteMetadata.js";
 import { getAllSeries, getAllTags } from "../lib/getBlogInfo.mjs";
+import seriesData from "../data/seriesData.js";
 
 const generateRssItem = (post) => `
   <item>
@@ -62,7 +63,7 @@ const generateRss = (posts, page = "feed.xml") => `
     }
   }
 
-  // RSS for categories
+  // RSS for series
   if (allBlogs.length > 0) {
     const series = await getAllSeries();
     for (const aSeries of Object.keys(series)) {
@@ -70,8 +71,9 @@ const generateRss = (posts, page = "feed.xml") => `
         (post) =>
           post.draft !== true && post.series === aSeries
       );
-      const rss = generateRss(filteredPosts, `series/${slug(aSeries)}/feed.xml`);
-      const rssPath = path.join("public", "series", aSeries);
+      const seriesSlug = slug(seriesData[aSeries]?.slug || aSeries)
+      const rss = generateRss(filteredPosts, `series/${seriesSlug}/feed.xml`);
+      const rssPath = path.join("public", "series", seriesSlug);
       mkdirSync(rssPath, { recursive: true });
       writeFileSync(path.join(rssPath, "feed.xml"), rss);
     }

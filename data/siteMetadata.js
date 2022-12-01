@@ -22,7 +22,7 @@ const siteMetadata = {
     providers: ['google', 'github', 'naver', 'kakao'],
   },
   analytics: {
-    googleAnalyticsId: 'G-KM9ZTPVMSC', // e.g. UA-000000-2 or G-XXXXXXX
+    googleAnalyticsId: 'G-W3YPJJJVS7', // e.g. UA-000000-2 or G-XXXXXXX
   },
   newsletter: {
     // supports mailchimp, buttondown, convertkit, klaviyo, revue
