@@ -5,8 +5,8 @@ import { getAllSeries } from '@/lib/getBlogInfo.mjs';
 import phrases from '@/data/phrases';
 import siteMetadata from '@/data/siteMetadata';
 
-import { PageSEO } from '@/components/SEO';
-import SeriesList from '@/components/SeriesList';
+import SeriesList from '@/components/card-and-list/SeriesList';
+import { PageSEO } from '@/components/common/SEO';
 
 export const getStaticProps: GetStaticProps = async () => {
   const series = Object.values(await getAllSeries());

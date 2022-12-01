@@ -7,17 +7,17 @@ import useFormattedDate from '@/hooks/useFormattedDate';
 
 import siteMetadata from '@/data/siteMetadata';
 
+import PageTitle from '@/components/blog/PageTitle';
+import PostListInSeries from '@/components/blog/PostListInSeries';
+import ScrollIndicator from '@/components/blog/ScrollIndicator';
+import ScrollTopAndComment from '@/components/blog/ScrollTopAndComment';
+import ViewCounter from '@/components/blog/ViewCounter';
 import Comments from '@/components/comments';
-import LargeWidthTOC from '@/components/LargeWidthTOC';
-import Link from '@/components/Link';
-import PageTitle from '@/components/PageTitle';
-import PostListInSeries from '@/components/PostListInSeries';
-import ScrollIndicator from '@/components/ScrollIndicator';
-import ScrollTopAndComment from '@/components/ScrollTopAndComment';
-import SectionContainer from '@/components/SectionContainer';
-import { BlogSEO } from '@/components/SEO';
-import SmallWidthTOC from '@/components/SmallWidthTOC';
-import ViewCounter from '@/components/ViewCounter';
+import SectionContainer from '@/components/common/SectionContainer';
+import { BlogSEO } from '@/components/common/SEO';
+import Link from '@/components/mdxComponents/CustomLink';
+import LargeWidthTOC from '@/components/TOC/LargeWidthTOC';
+import SmallWidthTOC from '@/components/TOC/SmallWidthTOC';
 
 interface Props {
   content: CoreContent<Blog>;

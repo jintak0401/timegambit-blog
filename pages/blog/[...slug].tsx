@@ -3,8 +3,8 @@ import { InferGetStaticPropsType } from 'next';
 
 import { coreContent, sortedBlogPost } from '@/lib/contentlayer';
 
-import { MDXLayoutRenderer } from '@/components/MDXComponents';
-import PageTitle from '@/components/PageTitle';
+import PageTitle from '@/components/blog/PageTitle';
+import { MDXLayoutRenderer } from '@/components/mdxComponents/MDXComponents';
 
 const DEFAULT_LAYOUT = 'PostLayout';
 

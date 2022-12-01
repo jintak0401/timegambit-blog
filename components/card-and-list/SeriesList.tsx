@@ -2,7 +2,7 @@ import { SeriesListItem } from '@/lib/types';
 
 import phrases from '@/data/phrases';
 
-import SeriesCard from '@/components/SeriesCard';
+import SeriesCard from '@/components/card-and-list/SeriesCard';
 
 interface Props {
   series: SeriesListItem[];
