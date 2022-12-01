@@ -7,8 +7,8 @@ import Logo from '@/data/logo.svg';
 import navLinks from '@/data/navLinks';
 import siteMetadata from '@/data/siteMetadata';
 
-import MobileNav from '@/components/MobileNav';
-import ThemeSwitch from '@/components/ThemeSwitch';
+import MobileNav from '@/components/common/MobileNav';
+import ThemeSwitch from '@/components/common/ThemeSwitch';
 
 const BOUND_INDEX = 3;
 

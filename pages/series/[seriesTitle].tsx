@@ -8,7 +8,7 @@ import { PostListItem, SeriesListItem } from '@/lib/types';
 
 import siteMetadata from '@/data/siteMetadata';
 
-import { PageSEO } from '@/components/SEO';
+import { PageSEO } from '@/components/common/SEO';
 
 import ListLayout from '@/layouts/ListLayout';
 

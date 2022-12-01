@@ -5,8 +5,8 @@ import about from '@/data/about';
 import phrases from '@/data/phrases';
 import siteMetadata from '@/data/siteMetadata';
 
-import AboutList from '@/components/AboutList';
-import { PageSEO } from '@/components/SEO';
+import AboutList from '@/components/card-and-list/AboutList';
+import { PageSEO } from '@/components/common/SEO';
 
 export default function AboutPage() {
   const { title, description } = phrases.About;

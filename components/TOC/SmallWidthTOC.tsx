@@ -3,7 +3,7 @@ import { IoCloseSharp } from 'react-icons/io5';
 
 import { useScrollDirection } from '@/hooks/useScrollDirection';
 
-import TOCList from '@/components/TOCList';
+import TOCList from '@/components/TOC/TOCList';
 
 const SmallWidthTOC = () => {
   const scrollDirection = useScrollDirection();

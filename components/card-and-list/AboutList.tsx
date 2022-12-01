@@ -1,6 +1,6 @@
 import about from '@/data/about';
 
-import AboutCard from '@/components/AboutCard';
+import AboutCard from '@/components/card-and-list/AboutCard';
 
 interface Props {
   sectionName: Exclude<keyof typeof about, 'Contact' | 'Selfie'>;

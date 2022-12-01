@@ -5,9 +5,9 @@ import { UserType } from '@/lib/types';
 
 import phrases from '@/data/phrases';
 
+import Spinner from '@/components/common/Spinner';
 import GuestbookInput from '@/components/Guestbook/GuestbookInput';
 import GuestbookLogin from '@/components/Guestbook/GuestbookLogin';
-import Spinner from '@/components/Spinner';
 
 const Guestbook = () => {
   const { data: session } = useSession();

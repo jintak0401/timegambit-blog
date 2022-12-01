@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import Header from '@/components/Header';
+import Header from '@/components/common/Header';
 
 import Footer from './Footer';
 import SectionContainer from './SectionContainer';

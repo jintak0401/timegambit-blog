@@ -6,7 +6,7 @@ import useFormattedDate from '@/hooks/useFormattedDate';
 
 import phrases from '@/data/phrases';
 
-import AutoImage from '@/components/AutoImage';
+import AutoImage from '@/components/Image/AutoImage';
 
 interface Props {
   series: SeriesListItem;

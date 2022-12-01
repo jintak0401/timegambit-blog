@@ -7,8 +7,8 @@ import React from 'react';
 import { coreContent } from '@/lib/contentlayer';
 
 import Alert from './Alert';
-import Image from './Image';
-import CustomLink from './Link';
+import CustomImage from './CustomImage';
+import CustomLink from './CustomLink';
 import { BlogNewsletterForm } from './NewsletterForm';
 import Pre from './Pre';
 
@@ -24,12 +24,12 @@ interface LayoutProps {
 }
 
 const Wrapper = ({ layout, content, ...rest }: MDXLayout) => {
-  const Layout = dynamic<LayoutProps>(() => import(`../layouts/${layout}`));
+  const Layout = dynamic<LayoutProps>(() => import(`@/layouts/${layout}`));
   return <Layout content={content} {...rest} />;
 };
 
 export const MDXComponents: ComponentMap = {
-  img: Image,
+  img: CustomImage,
   a: CustomLink,
   pre: Pre,
   wrapper: Wrapper,
