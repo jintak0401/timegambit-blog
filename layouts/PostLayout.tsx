@@ -8,6 +8,7 @@ import useFormattedDate from '@/hooks/useFormattedDate';
 import siteMetadata from '@/data/siteMetadata';
 
 import Comments from '@/components/comments';
+import LargeWidthTOC from '@/components/LargeWidthTOC';
 import Link from '@/components/Link';
 import PageTitle from '@/components/PageTitle';
 import PostListInSeries from '@/components/PostListInSeries';
@@ -15,7 +16,7 @@ import ScrollIndicator from '@/components/ScrollIndicator';
 import ScrollTopAndComment from '@/components/ScrollTopAndComment';
 import SectionContainer from '@/components/SectionContainer';
 import { BlogSEO } from '@/components/SEO';
-import TOC from '@/components/TOC';
+import SmallWidthTOC from '@/components/SmallWidthTOC';
 import ViewCounter from '@/components/ViewCounter';
 
 interface Props {
@@ -73,7 +74,8 @@ export default function PostLayout({
               <div className="prose max-w-none pt-10 pb-8 dark:prose-dark">
                 {children}
               </div>
-              <TOC />
+              <LargeWidthTOC />
+              <SmallWidthTOC />
             </div>
             <footer>
               <div className="flex flex-col text-sm font-medium sm:flex-row sm:justify-between sm:text-base">
