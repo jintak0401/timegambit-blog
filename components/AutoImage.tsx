@@ -1,4 +1,6 @@
-import Image, { ImageProps } from 'next/image';
+import { ImageProps } from 'next/image';
+
+import ImageWithFallback from '@/components/ImageWithFallback';
 
 interface Props extends ImageProps {
   className?: string;
@@ -7,11 +9,10 @@ interface Props extends ImageProps {
 const AutoImage = ({ src, alt, className, ...rest }: Props) => {
   return (
     <div className="auto-image-wrapper">
-      <Image
-        alt={alt || ''}
+      <ImageWithFallback
         src={src}
+        alt={alt}
         className={`${className} !relative !h-auto`}
-        blurDataURL={`/_next/image?url=${src}&w=16&q=1`}
         layout="fill"
         {...rest}
       />
