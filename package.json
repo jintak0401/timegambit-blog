@@ -1,11 +1,11 @@
 {
   "name": "timegambit-blog",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build && yarn postbuild",
-    "postbuild": "yarn sitemap && yarn rss",
+    "postbuild": "yarn rss && yarn sitemap",
     "sitemap": "cross-env node ./scripts/generate-sitemap.mjs",
     "rss": "cross-env node ./scripts/generate-rss.mjs",
     "start": "next start",

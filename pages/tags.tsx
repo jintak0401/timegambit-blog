@@ -9,7 +9,6 @@ import { PageSEO } from '@/components/common/SEO';
 import Link from '@/components/mdxComponents/CustomLink';
 import Tag from '@/components/Tag';
 
-// TODO: refactor into contentlayer once compute over all docs is enabled
 export const getStaticProps: GetStaticProps<{
   tags: Record<string, number>;
 }> = async () => {
