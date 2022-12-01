@@ -10,6 +10,7 @@ const siteMetadata = {
   siteLogo: '/static/images/logo.png',
   image: '/static/images/logo.png',
   socialBanner: '/static/images/twitter-card.png',
+  fallbackImage: '/static/images/fallback.webp',
   email: 'jintak0401@naver.com',
   github: 'https://github.com/jintak0401',
   twitter: '',
