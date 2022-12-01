@@ -86,6 +86,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["remark-math", "npm:5.1.1"],\
             ["sharp", "npm:0.31.2"],\
             ["swr", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:1.3.0"],\
+            ["tailwind-scrollbar-hide", "npm:1.1.7"],\
             ["tailwindcss", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:3.2.4"],\
             ["typescript", "patch:typescript@npm%3A4.9.3#~builtin<compat/typescript>::version=4.9.3&hash=d73830"],\
             ["unist-util-visit", "npm:4.1.1"]\
@@ -12824,6 +12825,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["tailwind-scrollbar-hide", [\
+        ["npm:1.1.7", {\
+          "packageLocation": "./.yarn/cache/tailwind-scrollbar-hide-npm-1.1.7-537baa5b75-2434a1db7a.zip/node_modules/tailwind-scrollbar-hide/",\
+          "packageDependencies": [\
+            ["tailwind-scrollbar-hide", "npm:1.1.7"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["tailwindcss", [\
         ["npm:3.2.4", {\
           "packageLocation": "./.yarn/cache/tailwindcss-npm-3.2.4-5ba810eab4-ec187d180c.zip/node_modules/tailwindcss/",\
@@ -12991,6 +13001,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["remark-math", "npm:5.1.1"],\
             ["sharp", "npm:0.31.2"],\
             ["swr", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:1.3.0"],\
+            ["tailwind-scrollbar-hide", "npm:1.1.7"],\
             ["tailwindcss", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:3.2.4"],\
             ["typescript", "patch:typescript@npm%3A4.9.3#~builtin<compat/typescript>::version=4.9.3&hash=d73830"],\
             ["unist-util-visit", "npm:4.1.1"]\
