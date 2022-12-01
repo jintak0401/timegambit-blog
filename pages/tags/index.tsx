@@ -5,8 +5,8 @@ import { getAllTags } from '@/lib/getBlogInfo.mjs';
 
 import siteMetadata from '@/data/siteMetadata';
 
-import Link from '@/components/Link';
-import { PageSEO } from '@/components/SEO';
+import { PageSEO } from '@/components/common/SEO';
+import Link from '@/components/mdxComponents/CustomLink';
 import Tag from '@/components/Tag';
 
 // TODO: refactor into contentlayer once compute over all docs is enabled

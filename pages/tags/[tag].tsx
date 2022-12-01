@@ -7,7 +7,7 @@ import { getAllTags } from '@/lib/getBlogInfo.mjs';
 
 import siteMetadata from '@/data/siteMetadata';
 
-import { TagSEO } from '@/components/SEO';
+import { TagSEO } from '@/components/common/SEO';
 
 import ListLayout from '@/layouts/ListLayout';
 

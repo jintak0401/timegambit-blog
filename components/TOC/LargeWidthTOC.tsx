@@ -1,4 +1,4 @@
-import TOCList from '@/components/TOCList';
+import TOCList from '@/components/TOC/TOCList';
 
 const LargeWidthTOC = () => {
   return (

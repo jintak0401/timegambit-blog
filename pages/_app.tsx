@@ -14,7 +14,7 @@ import '@/css/katex.css';
 import siteMetadata from '@/data/siteMetadata';
 
 import Analytics from '@/components/analytics';
-import LayoutWrapper from '@/components/LayoutWrapper';
+import LayoutWrapper from '@/components/common/LayoutWrapper';
 
 export default function App({
   Component,

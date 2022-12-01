@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import navLinks from '@/data/navLinks';
 
-import Link from './Link';
+import Link from '../mdxComponents/CustomLink';
 
 const MobileNav = () => {
   const [navShow, setNavShow] = useState(false);
