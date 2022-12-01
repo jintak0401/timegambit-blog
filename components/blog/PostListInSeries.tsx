@@ -19,7 +19,7 @@ const PostListInSeries = ({ seriesTitle, series }: Props) => {
   );
 
   const curSlug = decodeURI(
-    (router.asPath.split('/').at(-1) as string).split('#')[0]
+    router.asPath.split('/').slice(2).join('/').split('#')[0]
   );
 
   const idx = series.map(({ slug }) => slug).indexOf(curSlug as string) + 1;
