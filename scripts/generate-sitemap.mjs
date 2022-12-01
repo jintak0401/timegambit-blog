@@ -11,12 +11,12 @@ import siteMetadata from '../data/siteMetadata.js';
     .map((x) => `/${x._raw.flattenedPath}`)
     .filter((x) => !x.draft && !x.canonicalUrl);
   const pages = await globby([
-    'pages/*.{js|tsx}',
+    'pages/*.tsx',
     'public/tags/**/*.xml',
     'public/series/**/*.xml',
-    '!pages/_*.{js|tsx}',
+    '!pages/_*.tsx',
     '!pages/api',
-    '!pages/404.{js|tsx}',
+    '!pages/404.tsx',
   ]);
 
   const sitemap = `
@@ -28,19 +28,15 @@ import siteMetadata from '../data/siteMetadata.js';
                 const path = page
                   .replace('pages/', '/')
                   .replace('public/', '/')
-                  .replace('.js', '')
+                  .replace('.tsx', '')
                   .replace('.mdx', '')
                   .replace('.md', '')
                   .replace('/feed.xml', '');
                 const route = path === '/index' ? '' : path;
-                const [_, urlPath, ...slug] = route.split('/');
-                const lastmod = urlPath === 'blog' ? allBlogs.find(p => p.slug === slug.join('/')).lastmod : '';
-                return `
-                        <url>
+                return `<url>
                             <loc>${siteMetadata.siteUrl}${route}</loc>
-                            ${lastmod && `<lastmod>${lastmod}</lastmod>`}
                         </url>
-                    `;
+                        `;
               })
               .join('')}
         </urlset>
