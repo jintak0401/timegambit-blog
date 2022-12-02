@@ -4,7 +4,7 @@
  */
 const seriesData = {
   톺아보기: {
-    image: 'https://i.imgur.com/lHudFGu.png',
+    image: 'https://i.imgur.com/qP0A2eD.png',
     slug: 'digging',
   },
   'HTTP 완벽 가이드': {
