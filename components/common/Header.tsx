@@ -47,7 +47,7 @@ export default function Header() {
   return (
     <header
       className={`w-section fixed left-0 right-0 z-10 flex items-center justify-between border-b-2 bg-white py-2 transition-all duration-500 dark:bg-gray-900 ${
-        scrollDirection === 'down' ? '-top-24' : 'top-0'
+        scrollDirection === 'down' ? '-top-[60px] sm:-top-14' : 'top-0'
       }`}
     >
       <Link href="/" aria-label={siteMetadata.headerTitle}>
