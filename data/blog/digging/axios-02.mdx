@@ -1,0 +1,298 @@
+---
+title: "[Axios] timeout 톺아보기"
+date: '2022-12-02'
+lastmod: '2022-12-02'
+tags: ['톺아보기','axios']
+draft: false
+series: 톺아보기
+summary: axios 라이브러리의 timeout 기능을 분석해봤습니다.
+images: [https://i.imgur.com/RUIWbRe.png]
+layout: PostLayout
+---
+
+## 분석하기 앞서
+
+이 포스트는 axios의 timeout을 어떻게 사용하는지를 적은 글이 아닙니다. axios의 timeout 기능이 어떻게 구현되어 있는지
+소스코드를 분석한 글입니다.
+
+```bash
+axios/lib
+  ├── adapters
+  │     ├── adapters.js
+  │     └── http.js
+  └── core
+        └── dispatchRequest.js
+
+follow-redirects
+  └── index.js
+```
+
+이번 글에서 주요한 코드들이 있는 파일들입니다. [follow-redirects](https://www.npmjs.com/package/follow-redirects)는 axios
+내에서 통신을 위해 쓰이고 있는 라이브러리입니다. 이 라이브러리의 `setTimeout` 함수를 이용하여
+axios의 timeout 기능을 제공하고 있습니다. 자세한 내용은 뒤에서 소개하겠습니다.
+
+## axios의 통신요청
+
+### dispatchRequest
+
+```js:dispatchRequest.js
+import adapters from "../adapters/adapters.js";
+
+export default function dispatchRequest(config) {
+  ...
+  const adapter = adapters.getAdapter(config.adapter || defaults.adapter);
+
+  return adapter(config).then(function onAdapterResolution(response) {
+    ...
+    return response;
+  }, function onAdapterRejection(reason) {
+    ...
+    return Promise.reject(reason);
+  });
+}
+```
+
+저번 글에서 `dispatchRequest` 함수가 HTTP 요청을 보내주는 함수라고 했습니다. 위 코드는 이 함수에서 중요한 부분들만
+남기고 제거한 코드입니다. `adapter`라는 변수가 있네요. 그리고 return문을 보니 `adapter(config).then(fn1, fn2)`꼴을
+return해주고 있습니다. then이 있는 것을 보니 `adapter(config)`는 Promise라는 것을 알 수 있습니다.
+즉, adapter는 config를 인자로 넣어주면 Promise를 리턴하는 함수를 담고 있는 변수입니다. 그렇다면 adapter에 이런 함수를 넣어주는
+`adapters.getAdapter(config.adapter || defaults.adapter)`를 안 볼 수가 없겠죠?
+
+### adapters
+
+```js:adapters.js showLineNumbers {4,17-18}
+import httpAdapter from './http.js';
+
+const knownAdapters = {
+  http: httpAdapter,
+  xhr: xhrAdapter
+}
+
+export default {
+  getAdapter: (adapters) => {
+    adapters = utils.isArray(adapters) ? adapters : [adapters];
+
+    const {length} = adapters;
+    let nameOrAdapter;
+    let adapter;
+
+    for (let i = 0; i < length; i++) {
+      nameOrAdapter = adapters[i];
+      if((adapter = utils.isString(nameOrAdapter) ? knownAdapters[nameOrAdapter.toLowerCase()] : nameOrAdapter)) {
+        break;
+      }
+    }
+    ...
+    return adapter;
+  },
+  ...
+}
+```
+
+`getAdapter` 함수에 들어온 `adapters` 인자가 무엇인지에 따라 adapter에 `httpAdapter` 혹은 `xhrAdapter`가 들어가겠네요.
+저희는 이 중 httpAdapter를 집중해서 보도록 하겠습니다.
+
+<Alert type="info">
+  Q. 어떻게 adapters에 'http'가 들어갈 수가 있죠?
+
+  A. dispatchRequest 코드에서 getAdapter 함수의 인자로 `config.adapter || defaults.adapter`를 넣어주고 있습니다.
+  defaults.adapter가 무엇인지 봐보도록 하겠습니다.
+
+  ```js:axios/lib/defaults/index.js
+  const defaults = {
+    ...
+    adapter: ['xhr', 'http'],
+    ...
+  }
+  ```
+  기본적인 adapter로 'xhr'과 'http'를 가지고 있습니다. 그래서 getAdapters의 인자로 'http'가 들어갈 수 있습니다.
+</Alert>
+
+## timeout 기능 코드
+
+### httpAdapter
+
+지금까지 분석한 것들을 잠시 정리해보겠습니다.
+
+1. adapters.getAdapter 함수는 `httpAdapter`라는 것을 return해주었습니다.
+2. dispatchRequest 함수는 adapters.getAdapter 함수를 호출하여 `adapter` 변수에 담았습니다.
+3. dispatchRequest 함수는 adapter(config).then(...)을 return 하였습니다.
+4. 1~3을 통해 `httpAdapter`는 config를 인자로 받아 Promise를 return해주는 함수라고 추측했습니다.
+
+4번이 올바른 추측인지 확인을 해봅시다.
+
+```js:http.js showLineNumbers {3, 8, 10, 17}
+import followRedirects from 'follow-redirects';
+
+const {http: httpFollow, https: httpsFollow} = followRedirects;
+
+function httpAdapter(config) {
+  return new Promise(function dispatchHttpRequest(resolvePromise, rejectPromise) {
+    ...
+    transport = isHttpsRequest ? httpsFollow : httpFollow;
+    ...
+    req = transport.request(options, function handleResponse(res) {
+      ...
+    });
+
+    if (config.timeout) {
+      const timeout = parseInt(config.timeout, 10);
+      ...
+      req.setTimeout(timeout, function handleRequestTimeout() {
+        if (isDone) return;
+        let timeoutErrorMessage = config.timeout ? 'timeout of ' + config.timeout + 'ms exceeded' : 'timeout exceeded';
+        const transitional = config.transitional || transitionalDefaults;
+        if (config.timeoutErrorMessage) {
+          timeoutErrorMessage = config.timeoutErrorMessage;
+        }
+        reject(new AxiosError(
+          timeoutErrorMessage,
+          transitional.clarifyTimeoutError ? AxiosError.ETIMEDOUT : AxiosError.ECONNABORTED,
+          config,
+          req
+        ));
+        abort();
+      });
+    }
+  });
+}
+```
+
+오, 맞네요! 5~6 라인을 통해 4번 추측이 맞다는 사실이 밝혀졌습니다. 하지만 이것보다 더 중요한 것이 남아있습니다.
+어떻게 timeout 기능을 구현하고 있는지를 살펴봅시다.
+
+17번 라인을 보니 config에 timeout 속성이 있다면 `req`라는 변수의 setTimeout함수를 호출하고 있습니다.
+callback 함수인 handleRequestTimeout을 보면 `isDone`이 true일 때, return 해주고 있네요. 코드의 다른 부분에서
+요청이 성공하였을 때 isDone을 true로 만들어 주어서, 설정한 시간이 다 되기 전에 응답을 받았다면 뒤 쪽 코드를 실행하지
+않도록 했습니다. 나머지 코드는 timeout이 되었을 때 Error 메시지를 reject하는 코드들이네요.
+
+`req`가 뭘까요? 10번 라인을 보니 `transport`라는 변수의 request를 호출해서 만든 변수네요. transport는 또 뭘까요?
+8번 라인을 보니 `httpsFollow` 혹은 `httpFollow` 입니다. 아마 http이냐 https이냐에 따라 약간 달라지지만 거의 비슷한 역할을 해주는
+것들이라고 추측할 수 있습니다. 1, 3번 라인을 보니 httpsFollow와 httpFollow의 출처는 `follow-redirects`라는 라이브러리임을 알 수 있습니다.
+17 → 10 → 8 → 3 → 1 번 라인들을 거쳐가며, 저희가 봐야할 것은 follow-redirects가 제공해주는 setTimeout 함수라는 것을 알게되었습니다.
+마지막으로 이 함수를 보도록하겠습니다.
+
+### follow-redirects
+
+들어가기에 앞서 2가지 개념을 추가적으로 설명드리겠습니다. 이 개념은 소켓통신에서 자주 쓰이는 개념들이므로 알아두시면
+좋습니다.
+
+* emit: 이벤트 발생 (dispatchEvent)
+* on: 이벤트 수신 (addEventListener)
+
+```js
+socket.on('someEvent', () => console.log('이벤트 발생'));
+socket.emit('someEvent');
+
+// result
+이벤트 발생
+```
+
+크게 어려운 개념은 아닙니다. 기존에 이벤트를 다루기 위해 짰던 코드들과 별반 다르지 않습니다. 그냥 명칭이 다를 뿐이라고 생각하시면 편합니다.
+`on`함수에 이벤트 이름과 콜백함수를 넣어주고, `emit` 함수에 이벤트 이름을 넣어 호출하면 on의 콜백함수가 호출됩니다. 어렵지 않죠?
+그러면 진짜로 `setTimeout` 함수를 보도록 합시다.
+
+```js:follow-redirects/index.js showLineNumbers {10-13, 28, 33}
+// callback은 axios/lib/http/http.js의 handleRequestTimeout 함수
+RedirectableRequest.prototype.setTimeout = function (msecs, callback) {
+  var self = this;
+  ...
+  // timeout 이벤트를 발생시키는 타이머 세팅
+  function startTimer(socket) {
+    if (self._timeout) {
+      clearTimeout(self._timeout);
+    }
+    self._timeout = setTimeout(function () {
+      self.emit("timeout");
+      clearTimer();
+    }, msecs);
+    ...
+  }
+
+  // 타이머 제거
+  function clearTimer() {
+    if (self._timeout) {
+      clearTimeout(self._timeout);
+      self._timeout = null;
+    }
+    ...
+  }
+
+  // 이벤트 리스너
+  if (callback) {
+    this.on("timeout", callback);
+  }
+
+  // 타이머 시작
+  if (this.socket) {
+    startTimer(this.socket);
+  }
+  ...
+  return this;
+};
+```
+
+`RedirectableRequest`의 prototype에 `setTimeout`을 만들어주고 있습니다.(RedirectableRequest는
+Writable Stream 클래스라고만 알고계셔도 무방합니다.) 이 setTimeout이 axios의 http.js에서
+`req.setTimeout`으로 호출하는 함수입니다. axios에서는 callback으로 handleRequestTimeout 함수를 넣어주고 있습니다.
+
+이 함수 내에 `startTimer`, `clearTimer`를 정의하고 있네요. 또, 28번 라인에서 `on`으로 "timeout"이라는 이벤트가 발생했을 때
+callback(handleRequestTimeout)이 호출되도록 해주었습니다. 33번 라인에서 startTimer를 호출해주어, setTimeout을 통해 인자로 넣어준
+`msecs` 이후에 11~12번 라인이 실행되도록 해주고 있습니다. 특히 11번 라인에서 `emit`으로 "timeout" 이벤트를 발생시켜서,
+28번 라인에서 붙여준 callback이 실행되도록 코드가 짜여있다는 것이 중요합니다.
+
+### 부록: RedirectableRequest
+
+위에서 Writable Stream 클래스로만 알고 계셔도 무방하다고 했지만 궁금해하실 분이 계실 것 같아 적습니다.
+크게 중요하다고는 생각되지 않으므로 궁금하지 않으신 분들은 읽지 않으셔도 됩니다.
+
+```js:follow-redirects/index.js showLineNumbers {14,16}
+var http = require("http");
+var https = require("https");
+var Writable = require("stream").Writable;
+
+function RedirectableRequest(options, responseCallback) {
+  Writable.call(this);
+  ...
+}
+
+function wrap(protocols) {
+  ...
+  Object.keys(protocols).forEach(function (scheme) {
+    // Executes a request, following redirects
+    function request(input, options, callback) {
+      ...
+      return new RedirectableRequest(options, callback);
+    }
+  ...
+}
+
+module.exports = wrap({ http: http, https: https });
+module.exports.wrap = wrap;
+```
+
+위에서 axios/lib/http/http.js에 `req = transport.request(...)`라는 코드가 있었습니다.
+이 request가 14번 라인의 `request`입니다. 그리고 이 함수는 `RedirectableRequest` 객체를 return해주고 있습니다.
+그리고 RedirectableRequest 함수에서는 `Writable.call(this)`를 해주고 있죠. 즉, RedirectableRequest 객체에서
+Writable에 정의된 함수들을 사용할 수 있습니다.
+
+```ts:node/stream.d.ts
+class Writable extends Stream implements NodeJS.WritableStream {
+  ...
+  emit(event: string | symbol, ...args: any[]): boolean;
+  on(event: string | symbol, listener: (...args: any[]) => void): this;
+  ...
+}
+```
+
+그리고 node에 정의되어 있는 Writable 클래스에는 `emit`과 `on`함수가 있습니다. 이 덕분에 RedirectableRequest 내에
+emit과 on이 정의되어 있지 않지만 `this.on('timeout')`과 `this.emit('timeout')`을 할 수 있던 것입니다.
+
+## 마무리
+
+글은 꽤 길었지만 결국 node의 Writable 클래스를 이용한 follow-redirects 라이브러리를 이용해,
+axios는 timeout 기능을 제공한다는 사실을 알게되었습니다.
+
+다음 포스트에서는 개인적으로 axios 분석의 꽃(feat. Promise)이라고 생각하는 요청취소 기능을 다루도록 하겠습니다.
+
+**오타 및 오류 지적은 언제나 환영입니다!**
