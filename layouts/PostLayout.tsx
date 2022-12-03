@@ -13,7 +13,6 @@ import ScrollIndicator from '@/components/blog/ScrollIndicator';
 import ScrollTopAndComment from '@/components/blog/ScrollTopAndComment';
 import ViewCounter from '@/components/blog/ViewCounter';
 import Comments from '@/components/comments';
-import SectionContainer from '@/components/common/SectionContainer';
 import { BlogSEO } from '@/components/common/SEO';
 import Link from '@/components/mdxComponents/CustomLink';
 import LargeWidthTOC from '@/components/TOC/LargeWidthTOC';
@@ -39,7 +38,7 @@ export default function PostLayout({
   const { slug, date, title } = content;
 
   return (
-    <SectionContainer>
+    <>
       <ScrollIndicator />
       <BlogSEO url={`${siteMetadata.siteUrl}/blog/${slug}`} {...content} />
       <ScrollTopAndComment />
@@ -105,6 +104,6 @@ export default function PostLayout({
           </div>
         </div>
       </article>
-    </SectionContainer>
+    </>
   );
 }
