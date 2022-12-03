@@ -51,7 +51,7 @@ export default function Header() {
       }`}
     >
       <Link href="/" aria-label={siteMetadata.headerTitle}>
-        <div className="flex cursor-pointer items-center justify-between">
+        <a className="flex cursor-pointer items-center justify-between">
           <div className="mr-3">
             <Logo className="h-7 w-7 fill-current text-primary-500 dark:text-primary-300" />
           </div>
@@ -62,7 +62,7 @@ export default function Header() {
           ) : (
             siteMetadata.headerTitle
           )}
-        </div>
+        </a>
       </Link>
       <div className="flex items-center text-base leading-5">
         <div className="hidden sm:block">{navItems}</div>

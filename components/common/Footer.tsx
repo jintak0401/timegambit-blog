@@ -7,7 +7,7 @@ const ICON_SIZE = 5;
 export const Footer = () => {
   return (
     <footer>
-      <div className="my-16 flex flex-col items-center">
+      <div className="my-5 flex flex-col items-center sm:my-10">
         <div className="mb-4 text-lg text-gray-500 dark:text-gray-400">
           {siteMetadata.description}
         </div>

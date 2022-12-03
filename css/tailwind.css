@@ -68,7 +68,7 @@ input:-webkit-autofill:focus {
     }
 
     .w-section {
-        @apply mx-auto max-w-3xl px-4 sm:px-6 xl:max-w-5xl xl:px-0;
+        @apply mx-auto max-w-3xl px-4 xl:max-w-5xl xl:px-0;
     }
 
     .card {

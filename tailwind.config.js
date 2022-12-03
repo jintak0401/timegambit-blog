@@ -35,6 +35,18 @@ module.exports = {
         primary: colors.teal,
         gray: colors.neutral,
       },
+      keyframes: {
+        bounceLeft: {
+          '50%': { transform: 'translateX(-7px)' },
+        },
+        bounceRight: {
+          '50%': { transform: 'translateX(7px)' },
+        },
+      },
+      animation: {
+        'bounce-left': 'bounceLeft 0.5s ease-in-out',
+        'bounce-right': 'bounceRight 0.5s ease-in-out',
+      },
       typography: (theme) => ({
         DEFAULT: {
           css: {
