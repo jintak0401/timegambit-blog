@@ -65,7 +65,7 @@ const Giscus = () => {
   return (
     <div className="pt-6 pb-6 text-center text-gray-700 dark:text-gray-300">
       {enableLoadComments && (
-        <button onClick={LoadComments} className="hover:underline">
+        <button onClick={LoadComments} className="hover:underline md:text-lg">
           {phrases.Post.loadComments}
         </button>
       )}
