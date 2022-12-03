@@ -11,6 +11,7 @@ import PageTitle from '@/components/blog/PageTitle';
 import PostListInSeries from '@/components/blog/PostListInSeries';
 import ScrollIndicator from '@/components/blog/ScrollIndicator';
 import ScrollTopAndComment from '@/components/blog/ScrollTopAndComment';
+import TagInPost from '@/components/blog/TagInPost';
 import ViewCounter from '@/components/blog/ViewCounter';
 import Comments from '@/components/comments';
 import { BlogSEO } from '@/components/common/SEO';
@@ -35,7 +36,7 @@ export default function PostLayout({
   seriesTitle,
   children,
 }: Props) {
-  const { slug, date, title } = content;
+  const { slug, date, title, tags } = content;
 
   return (
     <>
@@ -63,18 +64,23 @@ export default function PostLayout({
             </div>
           </header>
           <div
-            className="divide-y divide-gray-200 pb-8 dark:divide-gray-700 xl:divide-y-0 "
+            className="divide-y divide-gray-200 pb-8 dark:divide-gray-700 xl:divide-y-0"
             style={{ gridTemplateRows: 'auto 1fr' }}
           >
-            <div className="relative divide-gray-200 dark:divide-gray-700 xl:col-span-3 xl:row-span-2 xl:pb-0">
+            <div className="relative divide-gray-200 pb-5 dark:divide-gray-700 xl:col-span-3 xl:row-span-2 xl:pb-0">
               {seriesTitle && series && (
                 <PostListInSeries seriesTitle={seriesTitle} series={series} />
               )}
-              <div className="prose max-w-none pt-10 pb-8 dark:prose-dark">
+              <div className="prose max-w-none pb-10 pt-10 dark:prose-dark sm:pb-12 xl:pb-20">
                 {children}
               </div>
               <LargeWidthTOC />
               <SmallWidthTOC />
+              <div className="flex gap-3">
+                {tags?.map((tag) => (
+                  <TagInPost key={tag} title={tag} />
+                ))}
+              </div>
             </div>
             <footer>
               <div className="flex flex-col text-sm font-medium sm:flex-row sm:justify-between sm:text-base">
