@@ -9,13 +9,13 @@ import siteMetadata from '@/data/siteMetadata';
 
 import PageTitle from '@/components/blog/PageTitle';
 import PostListInSeries from '@/components/blog/PostListInSeries';
+import RoutePostBtn from '@/components/blog/RoutePostBtn';
 import ScrollIndicator from '@/components/blog/ScrollIndicator';
 import ScrollTopAndComment from '@/components/blog/ScrollTopAndComment';
 import TagInPost from '@/components/blog/TagInPost';
 import ViewCounter from '@/components/blog/ViewCounter';
 import Comments from '@/components/comments';
 import { BlogSEO } from '@/components/common/SEO';
-import Link from '@/components/mdxComponents/CustomLink';
 import LargeWidthTOC from '@/components/TOC/LargeWidthTOC';
 import SmallWidthTOC from '@/components/TOC/SmallWidthTOC';
 
@@ -64,10 +64,10 @@ export default function PostLayout({
             </div>
           </header>
           <div
-            className="divide-y divide-gray-200 pb-8 dark:divide-gray-700 xl:divide-y-0"
+            className="divide-y divide-gray-200 pb-2 dark:divide-gray-700"
             style={{ gridTemplateRows: 'auto 1fr' }}
           >
-            <div className="relative divide-gray-200 pb-5 dark:divide-gray-700 xl:col-span-3 xl:row-span-2 xl:pb-0">
+            <div className="relative divide-gray-200 pb-5 dark:divide-gray-700 xl:col-span-3 xl:row-span-2">
               {seriesTitle && series && (
                 <PostListInSeries seriesTitle={seriesTitle} series={series} />
               )}
@@ -82,31 +82,23 @@ export default function PostLayout({
                 ))}
               </div>
             </div>
-            <footer>
-              <div className="flex flex-col text-sm font-medium sm:flex-row sm:justify-between sm:text-base">
-                {prev && (
-                  <div className="pt-4 xl:pt-8">
-                    <Link
-                      href={`/blog/${prev.slug}`}
-                      className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-                    >
-                      &larr; {prev.title}
-                    </Link>
-                  </div>
-                )}
-                {next && (
-                  <div className="pt-4 xl:pt-8">
-                    <Link
-                      href={`/blog/${next.slug}`}
-                      className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-                    >
-                      {next.title} &rarr;
-                    </Link>
-                  </div>
-                )}
+            <footer className="space-y-2 pt-5 md:space-y-4">
+              <div className="flex w-full flex-col-reverse gap-2 md:flex-row">
+                <RoutePostBtn
+                  title={prev?.title}
+                  slug={prev?.slug}
+                  direction={'prev'}
+                  empty={!prev}
+                />
+                <RoutePostBtn
+                  title={next?.title}
+                  slug={next?.slug}
+                  direction={'next'}
+                  empty={!next}
+                />
               </div>
+              <Comments frontMatter={content} />
             </footer>
-            <Comments frontMatter={content} />
           </div>
         </div>
       </article>
