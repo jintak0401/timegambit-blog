@@ -26,6 +26,8 @@ const phrases = {
     description: '학습한 내용과 지식들을 공유 및 정리합니다.',
     noPost: '포스트를 찾을 수 없네요...',
     search: '어떤 글을 찾으시나요?',
+    prev: '이전 포스트',
+    next: '다음 포스트',
   },
   Post: {
     openSeries: '목록 보기',
@@ -87,10 +89,9 @@ const phrases = {
     description: '',
   },
   _404: {
-    title: '잘못된 주소입니다!',
-    description:
-      '이 페이지는 삭제 혹은 다른 주소로 변경되었거나, 잘못된 주소입니다.',
-    button: '홈으로 갈게요!',
+    title: '페이지를 찾을 수 없습니다 😢',
+    description: '주소를 잘못 입력하셨거나 다른 주소로 옮겨진 페이지입니다',
+    goToMain: '홈으로 갈게요!',
   },
   _500: {
     title: '서버가 이상하네요...',

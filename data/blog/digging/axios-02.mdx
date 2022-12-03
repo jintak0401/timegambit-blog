@@ -1,7 +1,7 @@
 ---
 title: "[Axios] timeout 톺아보기"
 date: '2022-12-02'
-lastmod: '2022-12-02'
+lastmod: '2022-12-04'
 tags: ['톺아보기','axios']
 draft: false
 series: 톺아보기
@@ -193,7 +193,7 @@ socket.emit('someEvent');
 그러면 진짜로 `setTimeout` 함수를 보도록 합시다.
 
 ```js:follow-redirects/index.js showLineNumbers {10-13, 28, 33}
-// callback은 axios/lib/http/http.js의 handleRequestTimeout 함수
+// callback은 axios/lib/adapters/http.js의 handleRequestTimeout 함수
 RedirectableRequest.prototype.setTimeout = function (msecs, callback) {
   var self = this;
   ...
@@ -271,7 +271,7 @@ module.exports = wrap({ http: http, https: https });
 module.exports.wrap = wrap;
 ```
 
-위에서 axios/lib/http/http.js에 `req = transport.request(...)`라는 코드가 있었습니다.
+위에서 axios/lib/adapters/http.js에 `req = transport.request(...)`라는 코드가 있었습니다.
 이 request가 14번 라인의 `request`입니다. 그리고 이 함수는 `RedirectableRequest` 객체를 return해주고 있습니다.
 그리고 RedirectableRequest 함수에서는 `Writable.call(this)`를 해주고 있죠. 즉, RedirectableRequest 객체에서
 Writable에 정의된 함수들을 사용할 수 있습니다.
