@@ -11,11 +11,11 @@ import PageTitle from '@/components/blog/PageTitle';
 import PostListInSeries from '@/components/blog/PostListInSeries';
 import ScrollIndicator from '@/components/blog/ScrollIndicator';
 import ScrollTopAndComment from '@/components/blog/ScrollTopAndComment';
+import TagInPost from '@/components/blog/TagInPost';
 import ViewCounter from '@/components/blog/ViewCounter';
 import Comments from '@/components/comments';
 import { BlogSEO } from '@/components/common/SEO';
 import Link from '@/components/mdxComponents/CustomLink';
-import TagInPost from '@/components/TagInPost';
 import LargeWidthTOC from '@/components/TOC/LargeWidthTOC';
 import SmallWidthTOC from '@/components/TOC/SmallWidthTOC';
 
