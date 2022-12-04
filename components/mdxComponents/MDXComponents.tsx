@@ -6,11 +6,11 @@ import React from 'react';
 
 import { coreContent } from '@/lib/contentlayer';
 
-import Alert from './Alert';
-import CustomImage from './CustomImage';
-import CustomLink from './CustomLink';
-import { BlogNewsletterForm } from './NewsletterForm';
-import Pre from './Pre';
+const Alert = dynamic(() => import('./Alert'));
+const CustomImage = dynamic(() => import('./CustomImage'));
+const CustomLink = dynamic(() => import('./CustomLink'));
+const Pre = dynamic(() => import('./Pre'));
+const BlogNewsletterForm = dynamic(() => import('./NewsletterForm'));
 
 interface MDXLayout {
   layout: string;
@@ -29,12 +29,12 @@ const Wrapper = ({ layout, content, ...rest }: MDXLayout) => {
 };
 
 export const MDXComponents: ComponentMap = {
+  wrapper: Wrapper,
   img: CustomImage,
   a: CustomLink,
   pre: Pre,
-  wrapper: Wrapper,
-  BlogNewsletterForm,
   Alert,
+  BlogNewsletterForm,
 };
 
 export const MDXLayoutRenderer = ({ layout, content, ...rest }: MDXLayout) => {

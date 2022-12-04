@@ -1,5 +1,7 @@
+import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
-import { BsEye } from 'react-icons/bs';
+
+const BsEye = dynamic(() => import('react-icons/bs').then((res) => res.BsEye));
 
 interface Props {
   slug: string;
