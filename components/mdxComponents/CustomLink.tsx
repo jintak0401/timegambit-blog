@@ -14,7 +14,7 @@ const CustomLink = ({
 
   if (isInternalLink) {
     return (
-      <Link href={href}>
+      <Link legacyBehavior href={href}>
         <a {...rest} />
       </Link>
     );
@@ -27,7 +27,7 @@ const CustomLink = ({
           href={href}
           {...rest}
           className="before:content-['['] after:content-[']']"
-        ></a>
+        />
       );
     return <a href={href} {...rest} />;
   }
