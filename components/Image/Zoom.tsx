@@ -4,7 +4,6 @@ import { useRef, useState } from 'react';
 
 interface Props extends ImageProps {
   rate?: number;
-  backgroundColor?: string;
   backgroundOpacity?: number;
   duration?: number;
 }
@@ -14,7 +13,6 @@ const Zoom = (props: Props) => {
     className,
     rate = 90,
     backgroundOpacity = 0.9,
-    backgroundColor = 'black',
     duration = 300,
     ...imageProps
   } = props;
@@ -74,7 +72,7 @@ const Zoom = (props: Props) => {
         />
       )}
       <NextImage
-        className={`relative my-0 block overflow-hidden duration-[${duration}ms] ${
+        className={`relative my-0 block overflow-hidden duration-${duration} ${
           clicked ? 'z-50' : `z-${zIndex} cursor-zoom-in`
         } ${className || ''}`}
         ref={imageRef}
