@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import NextImage from 'next/image';
 import { Session } from 'next-auth';
 import { toast } from 'react-toastify';
 import { mutate } from 'swr';
@@ -29,7 +29,7 @@ const GuestbookEntry = ({ entry, session }: Props) => {
 
   return (
     <div className="my-4 flex items-start gap-6 rounded-md border px-4 md:px-10 py-4">
-      <Image
+      <NextImage
         src={entry.image}
         alt="프로필 사진"
         className="rounded-full"

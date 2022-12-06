@@ -27,16 +27,15 @@ export default function Header() {
               idx > BOUND_INDEX ? 'hidden xl:inline-block' : ''
             }`}
           >
-            <Link href={href}>
-              <a
-                className={`mx-1 rounded p-1 font-semibold text-gray-900 transition-all duration-500 dark:text-gray-100 sm:px-4 sm:py-2 ${
-                  isSamePath(title)
-                    ? 'bg-primary-100 text-primary-600 dark:bg-primary-800 dark:text-primary-300'
-                    : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'
-                }`}
-              >
-                {title}
-              </a>
+            <Link
+              href={href}
+              className={`mx-1 rounded p-1 font-semibold transition-all duration-500 sm:px-4 sm:py-2 ${
+                isSamePath(title)
+                  ? 'bg-primary-100 text-primary-600 dark:bg-primary-800 dark:text-primary-300'
+                  : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'
+              }`}
+            >
+              {title}
             </Link>
           </li>
         ))}
@@ -46,23 +45,25 @@ export default function Header() {
 
   return (
     <header
-      className={`w-section fixed left-0 right-0 z-10 flex items-center justify-between border-b-2 bg-white py-2 transition-all duration-500 dark:bg-gray-900 ${
+      className={`w-section fixed left-0 right-0 z-30 flex items-center justify-between border-b-2 bg-white py-2 transition-all duration-500 dark:bg-gray-900 ${
         scrollDirection === 'down' ? '-top-[60px] sm:-top-14' : 'top-0'
       }`}
     >
-      <Link href="/" aria-label={siteMetadata.headerTitle}>
-        <a className="flex cursor-pointer items-center justify-between">
-          <div className="mr-3">
-            <Logo className="h-7 w-7 fill-current text-primary-500 dark:text-primary-300" />
+      <Link
+        href="/"
+        aria-label={siteMetadata.headerTitle}
+        className="flex cursor-pointer items-center justify-between"
+      >
+        <div className="mr-3">
+          <Logo className="h-7 w-7 fill-current text-primary-500 dark:text-primary-300" />
+        </div>
+        {typeof siteMetadata.headerTitle === 'string' ? (
+          <div className="hidden h-6 text-2xl font-semibold md:block">
+            {siteMetadata.headerTitle}
           </div>
-          {typeof siteMetadata.headerTitle === 'string' ? (
-            <div className="hidden h-6 text-2xl font-semibold md:block">
-              {siteMetadata.headerTitle}
-            </div>
-          ) : (
-            siteMetadata.headerTitle
-          )}
-        </a>
+        ) : (
+          siteMetadata.headerTitle
+        )}
       </Link>
       <div className="flex items-center text-base leading-5">
         <div className="hidden sm:block">{navItems}</div>
