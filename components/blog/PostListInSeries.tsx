@@ -3,9 +3,11 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { GoTriangleDown } from 'react-icons/go';
+import { ImBookmark } from 'react-icons/im';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 
 import phrases from '@/data/phrases';
+import seriesData from '@/data/seriesData';
 
 interface Props {
   seriesTitle: string;
@@ -66,18 +68,14 @@ const PostListInSeries = ({ seriesTitle, series }: Props) => {
 
   return (
     <div className="mt-5 rounded-md bg-gray-100 px-6 py-5 transition-colors duration-500 dark:bg-gray-800">
-      <svg
-        width="32"
-        height="48"
-        viewBox="0 0 32 48"
-        className="absolute top-0 right-4 h-auto w-6 fill-current text-primary-500 lg:right-6 lg:w-fit"
-      >
-        <path fill="currentColor" d="M32 0H0v48h.163l16-16L32 47.836V0z" />
-      </svg>
+      <ImBookmark className="absolute top-0 right-2 h-auto w-10 fill-current text-primary-500 lg:right-4 lg:w-12" />
       <header>
         <Link
           className="mb-7 block inline-block text-xl font-semibold text-gray-700 hover:text-gray-500 hover:underline dark:text-gray-200 hover:dark:text-gray-400 md:text-3xl"
-          href={`/series/${slug(seriesTitle)}`}
+          href={`/series/${slug(
+            seriesData[seriesTitle as keyof typeof seriesData]?.slug ||
+              seriesTitle
+          )}`}
         >
           {seriesTitle}
         </Link>
