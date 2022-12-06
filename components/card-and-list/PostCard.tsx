@@ -16,26 +16,21 @@ const PostCard = ({ post }: Props) => {
   return (
     <article className="basic-text my-10 box-border max-w-full gap-4 space-y-2 duration-300 hover:bg-gray-100 dark:hover:bg-gray-800 xl:grid xl:grid-cols-3 xl:items-center xl:space-y-0">
       <Link href={`/blog/${slug}`}>
-        <a>
-          <ImageWithFallback
-            alt={title}
-            src={images[0]}
-            className="rounded-md object-cover"
-            layout="responsive"
-            width={16}
-            height={9}
-            loading="lazy"
-          />
-        </a>
+        <ImageWithFallback
+          alt={title}
+          src={images[0]}
+          className="rounded-md object-cover"
+          width={1600}
+          height={900}
+          loading="lazy"
+        />
       </Link>
       <div className="flex flex-col justify-between gap-4 xl:col-span-2 xl:h-full">
         <div className="space-y-2">
           <Link href={`/blog/${slug}`}>
-            <a>
-              <h3 className="w-fit cursor-pointer text-start text-2xl font-bold leading-8 tracking-tight hover:text-primary-500">
-                {title}
-              </h3>
-            </a>
+            <h3 className="w-fit cursor-pointer text-start text-2xl font-bold leading-8 tracking-tight hover:text-primary-500">
+              {title}
+            </h3>
           </Link>
           <ul className="flex flex-wrap">
             {tags &&

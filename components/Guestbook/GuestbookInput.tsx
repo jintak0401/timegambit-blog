@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import NextImage from 'next/image';
 import { signOut } from 'next-auth/react';
 import { useRef } from 'react';
 import { toast } from 'react-toastify';
@@ -71,7 +71,7 @@ const GuestbookInput = ({ setLoading, user }: Props) => {
       </form>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Image
+          <NextImage
             src={user.image}
             alt="프로필 사진"
             className="rounded-full"
