@@ -75,10 +75,11 @@ const PostListInSeries = ({ seriesTitle, series }: Props) => {
         <path fill="currentColor" d="M32 0H0v48h.163l16-16L32 47.836V0z" />
       </svg>
       <header>
-        <Link href={`/series/${slug(seriesTitle)}`}>
-          <a className="mb-7 block inline-block text-xl font-semibold text-gray-700 hover:text-gray-500 hover:underline dark:text-gray-200 hover:dark:text-gray-400 md:text-3xl">
-            {seriesTitle}
-          </a>
+        <Link
+          className="mb-7 block inline-block text-xl font-semibold text-gray-700 hover:text-gray-500 hover:underline dark:text-gray-200 hover:dark:text-gray-400 md:text-3xl"
+          href={`/series/${slug(seriesTitle)}`}
+        >
+          {seriesTitle}
         </Link>
       </header>
       {disclosure && (
@@ -91,17 +92,14 @@ const PostListInSeries = ({ seriesTitle, series }: Props) => {
                   query: { disclosure },
                 }}
                 as={`/blog/${slug}`}
-              >
-                <a
-                  className={`hover:underline
+                className={`hover:underline
                 ${
                   slug === curSlug
                     ? 'font-semibold text-primary-500'
                     : 'text-gray-700 hover:text-gray-900 dark:text-gray-300 hover:dark:text-gray-200'
                 }`}
-                >
-                  {title}
-                </a>
+              >
+                {title}
               </Link>
             </li>
           ))}

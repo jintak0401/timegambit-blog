@@ -34,10 +34,11 @@ export default function Home({
           <h2 className="basic-text text-2xl font-semibold">
             {phrases.Main.recentPosts}
           </h2>
-          <Link href="/blog">
-            <a className="rounded-md p-2 text-center font-semibold text-primary-500 hover:bg-gray-100 dark:text-primary-600 dark:hover:bg-gray-800">
-              {phrases.Main.allPosts}
-            </a>
+          <Link
+            href="/blog"
+            className="rounded-md p-2 text-center font-semibold text-primary-500 hover:bg-gray-100 dark:text-primary-600 dark:hover:bg-gray-800"
+          >
+            {phrases.Main.allPosts}
           </Link>
         </div>
         <PostList posts={posts} />

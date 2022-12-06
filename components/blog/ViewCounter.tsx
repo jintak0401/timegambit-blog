@@ -1,7 +1,5 @@
-import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
-
-const BsEye = dynamic(() => import('react-icons/bs').then((res) => res.BsEye));
+import { IoEyeOutline } from 'react-icons/io5';
 
 interface Props {
   slug: string;
@@ -45,7 +43,7 @@ const ViewCounter = ({ slug, type = 'POST', shown = false }: Props) => {
   else
     return (
       <div className="flex items-center gap-1.5">
-        <BsEye size="1.2em" />
+        <IoEyeOutline size="1.2em" />
         {count}
       </div>
     );
