@@ -14,9 +14,7 @@ const ProjectCard = ({ title, description, imgSrc, href }: Props) => {
     <ImageWithFallback
       src={imgSrc}
       alt={title}
-      className="object-cover object-center md:h-36 lg:h-48"
-      width={544}
-      height={306}
+      className="object-cover object-center"
     />
   );
 
@@ -30,9 +28,7 @@ const ProjectCard = ({ title, description, imgSrc, href }: Props) => {
         {imgSrc &&
           (href ? (
             <Link href={href} aria-label={`Link to ${title}`}>
-              <a>
-                <CardImage />
-              </a>
+              <CardImage />
             </Link>
           ) : (
             <CardImage />
@@ -51,10 +47,12 @@ const ProjectCard = ({ title, description, imgSrc, href }: Props) => {
             {description}
           </p>
           {href && (
-            <Link href={href} aria-label={`Link to ${title}`}>
-              <a className="text-base font-medium leading-6 text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
-                Learn more &rarr;
-              </a>
+            <Link
+              href={href}
+              aria-label={`Link to ${title}`}
+              className="text-base font-medium leading-6 text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+            >
+              Learn more &rarr;
             </Link>
           )}
         </div>

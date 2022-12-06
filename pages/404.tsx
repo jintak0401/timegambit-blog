@@ -25,14 +25,13 @@ export default function Page404() {
         <div className="middle-text break-keep text-center text-lg font-semibold text-gray-500 duration-500 sm:text-xl">
           {phrases._404.description}
         </div>
-        <Link href="/">
-          <a
-            className="rounded-md bg-primary-100 bg-opacity-50 py-2 px-5 font-semibold
+        <Link
+          href="/"
+          className="rounded-md bg-primary-100 bg-opacity-50 py-2 px-5 font-semibold
             text-primary-600 text-opacity-70 duration-300 hover:bg-opacity-100 hover:text-opacity-100
             dark:bg-primary-900 dark:text-primary-200 dark:hover:bg-primary-700 sm:text-lg"
-          >
-            {phrases._404.goToMain}
-          </a>
+        >
+          {phrases._404.goToMain}
         </Link>
       </div>
     </>
