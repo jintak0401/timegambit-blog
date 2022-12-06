@@ -4,6 +4,7 @@ import { InferGetStaticPropsType } from 'next';
 
 import { pickBlogItem, sortedBlogPost } from '@/lib/contentlayer';
 import { getAllTags } from '@/lib/getBlogInfo.mjs';
+import { PostListItem } from '@/lib/types';
 
 import siteMetadata from '@/data/siteMetadata';
 
@@ -52,7 +53,7 @@ export default function TagPostListPage({
         title={`${tag} - ${siteMetadata.title}`}
         description={`${tag} tags - ${siteMetadata.author}`}
       />
-      <ListLayout posts={posts} title={tag} />
+      <ListLayout posts={posts as PostListItem[]} title={tag} />
     </>
   );
 }
