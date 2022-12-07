@@ -76,7 +76,7 @@ export default function PostLayout({
               </div>
               <LargeWidthTOC />
               <SmallWidthTOC />
-              <div className="flex gap-3">
+              <div className="flex flex-wrap gap-3">
                 {tags?.map((tag) => (
                   <TagInPost key={tag} title={tag} />
                 ))}
