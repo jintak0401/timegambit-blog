@@ -22,7 +22,7 @@ export default function SeriesPage({
     <>
       <PageSEO
         title={`Series - ${siteMetadata.author}`}
-        description={siteMetadata.description}
+        description={phrases.Seo.seriesDesc || siteMetadata.description}
       />
       <div className="divide-y divide-gray-200 dark:divide-gray-700">
         <div className="space-y-2 pt-6 pb-8 md:space-y-5">

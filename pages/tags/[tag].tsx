@@ -6,6 +6,7 @@ import { pickBlogItem, sortedBlogPost } from '@/lib/contentlayer';
 import { getAllTags } from '@/lib/getBlogInfo.mjs';
 import { PostListItem } from '@/lib/types';
 
+import phrases from '@/data/phrases';
 import siteMetadata from '@/data/siteMetadata';
 
 import { TagSEO } from '@/components/common/SEO';
@@ -50,8 +51,11 @@ export default function TagPostListPage({
   return (
     <>
       <TagSEO
-        title={`${tag} - ${siteMetadata.title}`}
-        description={`${tag} tags - ${siteMetadata.author}`}
+        title={`Tags | ${tag} - ${siteMetadata.author}`}
+        description={
+          phrases.Seo.specificTagDesc?.replace('?', tag) ||
+          `#${tag} tags - ${siteMetadata.author}`
+        }
       />
       <ListLayout posts={posts as PostListItem[]} title={tag} />
     </>

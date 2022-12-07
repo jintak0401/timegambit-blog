@@ -38,7 +38,7 @@ export default function GuestbookPage({
     <>
       <PageSEO
         title={`Guestbook - ${siteMetadata.author}`}
-        description="블로그 방명록"
+        description={phrases.Seo.guestbookDesc || siteMetadata.description}
       />
       <>
         <div className="divide-y">
