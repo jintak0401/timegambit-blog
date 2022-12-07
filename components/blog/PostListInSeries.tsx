@@ -109,7 +109,7 @@ const PostListInSeries = ({ seriesTitle, series }: Props) => {
           onClick={() => setDisclosure((prev) => !prev)}
         >
           <GoTriangleDown className={`mr-2 ${disclosure && 'rotate-180'}`} />
-          {disclosure ? phrases.Post.closeSeries : phrases.Post.openSeries}
+          {disclosure ? phrases.Blog.closeSeries : phrases.Blog.openSeries}
         </button>
         <span className="flex items-center justify-center space-x-5">
           <span className="dark:text-gray-400">

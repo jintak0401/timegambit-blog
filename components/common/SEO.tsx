@@ -3,8 +3,10 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 
 import { CoreContent } from '@/lib/contentlayer';
+import { getImageWithFallback } from '@/lib/utils';
 
 import siteMetadata from '@/data/siteMetadata';
+
 interface CommonSEOProps {
   title: string;
   description: string;
@@ -72,22 +74,28 @@ interface PageSEOProps {
 }
 
 export const PageSEO = ({ title, description, image }: PageSEOProps) => {
-  const ogImageUrl = image || siteMetadata.siteUrl + siteMetadata.socialBanner;
-  const twImageUrl = image || siteMetadata.siteUrl + siteMetadata.socialBanner;
+  const ogImageUrl =
+    image ||
+    getImageWithFallback(
+      siteMetadata.socialBanner,
+      siteMetadata.siteUrl + siteMetadata.socialBanner
+    );
   return (
     <CommonSEO
       title={title}
       description={description}
       ogType="website"
       ogImage={ogImageUrl}
-      twImage={twImageUrl}
+      twImage={ogImageUrl}
     />
   );
 };
 
 export const TagSEO = ({ title, description }: PageSEOProps) => {
-  const ogImageUrl = siteMetadata.siteUrl + siteMetadata.socialBanner;
-  const twImageUrl = siteMetadata.siteUrl + siteMetadata.socialBanner;
+  const ogImageUrl = getImageWithFallback(
+    siteMetadata.socialBanner,
+    siteMetadata.siteUrl + siteMetadata.socialBanner
+  );
   const router = useRouter();
   return (
     <>
@@ -96,7 +104,7 @@ export const TagSEO = ({ title, description }: PageSEOProps) => {
         description={description}
         ogType="website"
         ogImage={ogImageUrl}
-        twImage={twImageUrl}
+        twImage={ogImageUrl}
       />
       <Head>
         <link
@@ -135,7 +143,7 @@ export const BlogSEO = ({
   const featuredImages = imagesArr.map((img) => {
     return {
       '@type': 'ImageObject',
-      url: `${siteMetadata.siteUrl}${img}`,
+      url: getImageWithFallback(img, `${siteMetadata.siteUrl}${img}`),
     };
   });
 
@@ -155,7 +163,10 @@ export const BlogSEO = ({
       name: siteMetadata.author,
       logo: {
         '@type': 'ImageObject',
-        url: `${siteMetadata.siteUrl}${siteMetadata.siteLogo}`,
+        url: getImageWithFallback(
+          siteMetadata.siteLogo,
+          `${siteMetadata.siteUrl}${siteMetadata.siteLogo}`
+        ),
       },
     },
     description: summary,
