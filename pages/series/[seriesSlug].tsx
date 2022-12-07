@@ -5,7 +5,9 @@ import { InferGetStaticPropsType } from 'next';
 import { pickBlogItem, sortedBlogPost } from '@/lib/contentlayer';
 import { getAllSeries } from '@/lib/getBlogInfo.mjs';
 import { PostListItem, SeriesListItem } from '@/lib/types';
+import { getImageWithFallback } from '@/lib/utils';
 
+import phrases from '@/data/phrases';
 import seriesData from '@/data/seriesData';
 import siteMetadata from '@/data/siteMetadata';
 
@@ -56,8 +58,14 @@ export default function SeriesPost({
     <>
       <PageSEO
         title={`Series | ${series['title']} - ${siteMetadata.author}`}
-        description={siteMetadata.description}
-        image={siteMetadata.siteUrl + series['image']}
+        description={
+          phrases.Seo.specificSeriesDesc?.replace('?', series['title']) ||
+          `[${series['title']}] series - ${siteMetadata.author}`
+        }
+        image={getImageWithFallback(
+          series['image'],
+          siteMetadata.siteUrl + series['image']
+        )}
       />
       <ListLayout posts={posts as PostListItem[]} title={series['title']} />
     </>
