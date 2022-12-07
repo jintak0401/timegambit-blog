@@ -30,7 +30,7 @@ export default function BlogPage({
     <>
       <PageSEO
         title={`Blog - ${siteMetadata.author}`}
-        description={siteMetadata.description}
+        description={phrases.Seo.blogDesc || siteMetadata.description}
       />
       <ListLayout
         posts={posts as PostListItem[]}

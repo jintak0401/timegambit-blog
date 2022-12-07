@@ -3,6 +3,7 @@ import { GetStaticProps, InferGetStaticPropsType } from 'next';
 
 import { getAllTags } from '@/lib/getBlogInfo.mjs';
 
+import phrases from '@/data/phrases';
 import siteMetadata from '@/data/siteMetadata';
 
 import { PageSEO } from '@/components/common/SEO';
@@ -25,7 +26,7 @@ export default function TagListPage({
     <>
       <PageSEO
         title={`Tags - ${siteMetadata.author}`}
-        description="블로그 태그"
+        description={phrases.Seo.tagDesc || siteMetadata.description}
       />
       <div className="flex flex-col items-start justify-start divide-y divide-gray-200 dark:divide-gray-700 md:mt-24 md:flex-row md:items-center md:justify-center md:space-x-6 md:divide-y-0">
         <div className="space-x-2 pt-6 pb-8 md:space-y-5">

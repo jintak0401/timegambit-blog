@@ -27,7 +27,10 @@ export default function Home({
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>
-      <PageSEO title="Time Gambit" description={siteMetadata.description} />
+      <PageSEO
+        title={siteMetadata.title}
+        description={phrases.Seo.homeDesc || siteMetadata.description}
+      />
       <main className="flex flex-1 flex-col">
         <Introduction />
         <div className="flex justify-between">

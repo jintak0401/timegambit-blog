@@ -15,7 +15,7 @@ export default function AboutPage() {
     <>
       <PageSEO
         title={`About - ${siteMetadata.author}`}
-        description={siteMetadata.description}
+        description={phrases.Seo.aboutDesc || siteMetadata.description}
       />
       <h1 className="basic-text text-3xl font-extrabold md:text-5xl">
         {title}
