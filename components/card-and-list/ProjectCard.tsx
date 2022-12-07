@@ -19,7 +19,7 @@ const ProjectCard = ({ title, description, imgSrc, href }: Props) => {
   );
 
   return (
-    <div className="md max-w-[544px] p-4 md:w-1/2">
+    <div className="p-4 md:w-1/2">
       <div
         className={`${
           imgSrc && 'h-full'

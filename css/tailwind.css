@@ -79,7 +79,7 @@ input:-webkit-autofill:focus {
     }
 
     .basic-text {
-        @apply dark:text-gray-100 text-gray-900 transition-colors duration-500;
+        @apply strong-text transition-colors duration-500;
     }
 }
 

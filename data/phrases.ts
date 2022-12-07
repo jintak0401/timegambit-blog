@@ -28,8 +28,6 @@ const phrases = {
     search: '어떤 글을 찾으시나요?',
     prev: '이전 포스트',
     next: '다음 포스트',
-  },
-  Post: {
     openSeries: '목록 보기',
     closeSeries: '숨기기',
     loadComments: '댓글 불러오기',
@@ -49,10 +47,16 @@ const phrases = {
     noSeries: '시리즈로 작성된 글이 없습니다!',
   },
   Seo: {
-    defaultDesc: 'Time Gambit의 블로그',
+    homeDesc: 'Time Gambit의 블로그',
     dashboardDesc: '대시보드',
-    projectsDesc: '개발해온 프로젝트',
-    guestbookDesc: '게스트북',
+    projectsDesc: 'Time Gambit의 프로젝트',
+    guestbookDesc: 'Time Gambit 블로그 방명록',
+    seriesDesc: 'Time Gambit이 작성한 시리즈 목록',
+    blogDesc: 'Time Gambit이 작성한 포스트 목록',
+    tagDesc: 'Time Gambit 블로그에 작성된 태그 목록',
+    aboutDesc: 'Time Gambit 소개',
+    specificTagDesc: 'tag #? 포스트 목록',
+    specificSeriesDesc: 'series [?] 포스트 목록',
   },
   Guestbook: {
     title: 'Guestbook',
