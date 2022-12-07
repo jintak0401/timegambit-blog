@@ -1,5 +1,7 @@
 import Document, { Head, Html, Main, NextScript } from 'next/document';
 
+import siteMetadata from '@/data/siteMetadata';
+
 class MyDocument extends Document {
   render() {
     return (
@@ -75,7 +77,7 @@ class MyDocument extends Document {
             href="/static/favicons/favicon-128.png"
             sizes="128x128"
           />
-          <meta name="application-name" content="&nbsp;" />
+          <meta name="application-name" content={siteMetadata.title} />
           <meta name="msapplication-TileColor" content="#FFFFFF" />
           <meta name="msapplication-TileImage" content="mstile-144x144.png" />
           <meta
