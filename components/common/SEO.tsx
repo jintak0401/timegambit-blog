@@ -185,9 +185,9 @@ export const BlogSEO = ({
       <CommonSEO
         title={title}
         description={summary || siteMetadata.description}
-        ogType="website"
-        ogImage={featuredImages}
-        twImage={twImageUrl}
+        ogType="article"
+        ogImage={siteMetadata.siteUrl + siteMetadata.socialBanner}
+        twImage={siteMetadata.siteUrl + siteMetadata.socialBanner}
         canonicalUrl={canonicalUrl}
       />
       <Head>
