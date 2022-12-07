@@ -5,8 +5,6 @@ import { CoreContent } from '@/lib/contentlayer';
 import { isProd } from '@/lib/isProduction';
 import useFormattedDate from '@/hooks/useFormattedDate';
 
-import siteMetadata from '@/data/siteMetadata';
-
 import PageTitle from '@/components/blog/PageTitle';
 import PostListInSeries from '@/components/blog/PostListInSeries';
 import RoutePostBtn from '@/components/blog/RoutePostBtn';
@@ -15,7 +13,7 @@ import ScrollTopAndComment from '@/components/blog/ScrollTopAndComment';
 import TagInPost from '@/components/blog/TagInPost';
 import ViewCounter from '@/components/blog/ViewCounter';
 import Comments from '@/components/comments';
-import { BlogSEO } from '@/components/common/SEO';
+import { PageSEO } from '@/components/common/SEO';
 import LargeWidthTOC from '@/components/TOC/LargeWidthTOC';
 import SmallWidthTOC from '@/components/TOC/SmallWidthTOC';
 
@@ -41,7 +39,12 @@ export default function PostLayout({
   return (
     <>
       <ScrollIndicator />
-      <BlogSEO url={`${siteMetadata.siteUrl}/blog/${slug}`} {...content} />
+      {/*<BlogSEO url={`${siteMetadata.siteUrl}/blog/${slug}`} {...content} />*/}
+      <PageSEO
+        title={title}
+        description={content.summary as string}
+        image={content.images?.[0]}
+      />
       <ScrollTopAndComment />
       <article className="transition-colors duration-500">
         <div>
