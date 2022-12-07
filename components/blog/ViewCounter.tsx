@@ -1,5 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { IoEyeOutline } from 'react-icons/io5';
+
+import usePostViews from '@/hooks/usePostViews';
 
 interface Props {
   slug: string;
@@ -7,35 +9,23 @@ interface Props {
   type?: 'POST' | 'GET';
 }
 
-interface Views {
-  viewCount: number;
-}
-
 const LAST_POST = 'lastPost';
 
 const ViewCounter = ({ slug, type = 'POST', shown = false }: Props) => {
-  const [count, setCount] = useState(0);
+  const { viewCount, isLoading, isError, increment } = usePostViews(slug);
 
   useEffect(() => {
-    if (type === 'POST' && localStorage.getItem(LAST_POST) === slug) return;
+    if (type === 'GET' || localStorage.getItem(LAST_POST) === slug) return;
 
-    type === 'POST' && localStorage.setItem(LAST_POST, slug);
+    localStorage.setItem(LAST_POST, slug);
 
-    const fetching = fetch(`/api/views/${slug}`, {
-      method: type,
-    });
-    if (shown) {
-      fetching
-        .then((res) => res.json())
-        .then(({ viewCount }: Views) => setCount(viewCount))
-        .catch(() => setCount(-1));
-    }
-  }, [slug, type, shown]);
+    increment();
+  }, []);
 
   // when no need to show & fetching is error
-  if (!shown || count === -1) return null;
+  if (!shown || isError) return null;
   // loading
-  else if (count === 0)
+  else if (isLoading)
     return (
       <div className="h-5 w-12 animate-pulse rounded-md bg-gray-200 dark:bg-gray-700" />
     );
@@ -44,7 +34,7 @@ const ViewCounter = ({ slug, type = 'POST', shown = false }: Props) => {
     return (
       <div className="flex items-center gap-1.5">
         <IoEyeOutline size="1.2em" />
-        {count}
+        {viewCount}
       </div>
     );
 };
