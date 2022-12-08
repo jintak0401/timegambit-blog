@@ -1,0 +1,109 @@
+---
+title: "[Next JS / React] 오픈 그래프(OG) 에러 해결방법"
+date: '2022-12-08'
+lastmod: '2022-12-08'
+tags: ['블로그','오픈그래프']
+draft: false
+series: 블로그 제작일지
+summary: React, Next JS에서 OG(오픈 그래프)가 제대로 동작하지 않는 에러의 해결방법을 공유합니다.
+images: [https://i.imgur.com/xCc6Niu.png]
+layout: PostLayout
+---
+
+## 제가 겪은 오픈 그래프 버그
+
+OG 태그가 제대로 동작하지 않아서 검색해보았더니 사람마다 겪는 증상들이 다 제각각인 것 같습니다.
+제 블로그도 분명 모든 오픈 그래프 태그들이 header에 잘 정의되어 있는데도 카카오톡, 디스코드, 메타(페이스북) OG 디버거 등에서
+제대로 동작하지 않더라구요. 이 포스트는 어째서 이런 버그가 있었고, 어떻게 해결하였는지 기록한 포스트입니다.
+
+### 결론부터 말하자면
+
+![버그 개요](https://i.imgur.com/OWgg3Vb.png)
+
+Next JS로 개발 중인 제 블로그에서의 원인은 `dynamic import`에 있었습니다. dynamic import는
+리액트에서는 `React.lazy`(lazy loading)이라고 보시면 됩니다. 메타태그들을 생성해주는 SEO 컴포넌트가
+dynamic import로 불러오는 컴포넌트 내에 있었습니다. og 태그들을 파싱하는 시점은 dynamic import로
+SEO 컴포넌트가 불려오기 전이었습니다. 하지만 저는 개발자 도구로 SEO 컴포넌트가 온전히 og 태그들을
+생성한 뒤의 헤더를 보고 '왜 제대로 다 있는데 제대로 동작 안하지?' 라고 생각했습니다.
+
+## 좀 더 자세한 설명
+
+### 원인
+
+정말 의아했던 부분이 다른 페이지들은 다 오픈 그래프 태그들이 잘 동작하는데, 유독 블로그 포스트 페이지만
+동작하지 않았었습니다. 그래서 포스트용 SEO 컴포넌트인 BlogSEO 컴포넌트를 잘못 구현했나 싶어서 한줄 한줄
+꼼꼼히 다시 보고 조금이라도 의심스러운 부분은 수정해서 배포하여 다시 확인을 해보았습니다. 하지만 여전히
+문제가 있었습니다. 그래서 BlogSEO가 아닌 제대로 동작하는 것이 보장된 일반 페이지용 SEO 컴포넌트인
+PageSEO를 포스트 페이지에 사용해보았습니다. 여전히 동작하지 않았습니다. 그래서 SEO 컴포넌트는
+문제가 없으며 다른 곳에 문제가 있음을 깨달았습니다.
+
+```tsx:MDXComponents.tsx
+const Wrapper = ({ layout, content, ...rest }: MDXLayout) => {
+  const Layout = dynamic<LayoutProps>(() => import(`@/layouts/${layout}`));
+  return <Layout content={content} {...rest} />;
+};
+```
+
+```tsx:PostLayout.tsx
+export default function PostLayout({
+  content,
+  ...
+}: Props) {
+  const { slug, date, title, tags } = content;
+
+  return (
+    <>
+      ...
+      <BlogSEO url={`${siteMetadata.siteUrl}/blog/${slug}`} {...content} />
+      ...
+    </>
+  );
+}
+```
+
+다른 페이지들과 포스트용 페이지의 다른 점이 무엇일지 다시 한 번 생각해보고 코드들을 다시 뜯어봤습니다.
+그리고 MDXComponents.tsx의 `dynamic`을 본 순간 직감적으로 원인을 알 수 있었습니다. 포스트 페이지 레이아웃을 다양하게
+지원할 수 있도록 dynamic import를 이용하여 mdx 파일에 정의된 layout을 가져와서 그 때 그 때 레이아웃을
+불러오도록 구현했습니다. 하지만 이로 인해 SEO 컴포넌트가 바로 불려오지 않고 나중에 불려오며,
+불려오기 전에 og 태그들을 파싱하기 때문에 제대로 동작하지 않았던 것입니다.
+
+### 해결방법
+
+```tsx:/pages/blog/[...slug].tsx
+export default function BlogPost({
+  post,
+  prev,
+  next,
+  series,
+  seriesTitle
+}: InferGetStaticPropsType<typeof getStaticProps>) {
+  return (
+    <>
+      <BlogSEO
+        url={`${siteMetadata.siteUrl}/blog/${post.slug}`}
+        {...post}
+      />
+      <MDXLayoutRenderer
+        layout={post["layout"] || DEFAULT_LAYOUT}
+        content={post}
+        prev={prev}
+        next={next}
+        seriesTitle={seriesTitle}
+        series={series}
+      />
+    </>
+  );
+}
+```
+
+해결방법은 당연히 dynamic import를 사용하지 않는 곳으로 BlogSEO 컴포넌트를 가져 나오는 것입니다.
+기존에는 `MDXLayoutRenderer` 내에서 MDXComponents.tsx의 Wrapper를 통해 dynamic import로 Layout을 불러오고,
+그 안에 있던 BlogSEO 컴포넌트가 og 태그들을 만들어주었습니다. 하지만 현재는 페이지 로딩시 바로
+불려지도록 pages/blog[...slug].tsx에 BlogSEO를 사용해주어 해결하였습니다.
+
+## 3줄 요약
+
+1. Next JS로 개발 중이시라면 dynamic import, React로 개발 중이시라면 React.lazy로 코드를 불러오고 계신가요?
+2. 1번의 방법으로 가져오는 코드들 중 SEO를 위한 og 메타태그를 생성해주는 코드가 있나요?
+3. 만약 그렇다면 dynamic import 혹은 lazy import 바깥으로 해당 코드들을 빼내세요!
+
