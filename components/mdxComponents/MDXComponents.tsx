@@ -2,9 +2,11 @@ import type { Blog } from 'contentlayer/generated';
 import { ComponentMap } from 'mdx-bundler/client';
 import dynamic from 'next/dynamic';
 import { useMDXComponent } from 'next-contentlayer/hooks';
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import { coreContent } from '@/lib/contentlayer';
+
+import PostLayout from '@/layouts/PostLayout';
 
 const Alert = dynamic(() => import('./Alert'));
 const CustomImage = dynamic(() => import('./CustomImage'));
@@ -18,14 +20,12 @@ interface MDXLayout {
   [key: string]: unknown;
 }
 
-interface LayoutProps {
-  content: Blog;
-  [key: string]: unknown;
-}
-
-const Wrapper = ({ layout, content, ...rest }: MDXLayout) => {
-  const Layout = dynamic<LayoutProps>(() => import(`@/layouts/${layout}`));
-  return <Layout content={content} {...rest} />;
+const Wrapper = ({ layout, content, children, ...rest }: MDXLayout) => {
+  return (
+    <PostLayout content={content} {...rest}>
+      {children as ReactNode}
+    </PostLayout>
+  );
 };
 
 export const MDXComponents: ComponentMap = {
