@@ -51,7 +51,9 @@ const CommonSEO = ({
         <meta property="og:image" content={ogImage} key={ogImage} />
       )}
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:site" content={siteMetadata.twitter} />
+      {siteMetadata.twitter && (
+        <meta name="twitter:site" content={siteMetadata.twitter} />
+      )}
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={twImage} />
@@ -158,6 +160,10 @@ export const BlogSEO = ({
     image: featuredImages,
     datePublished: publishedAt,
     dateModified: modifiedAt,
+    author: {
+      '@type': 'Person',
+      name: siteMetadata.author,
+    },
     publisher: {
       '@type': 'Organization',
       name: siteMetadata.author,
@@ -178,7 +184,7 @@ export const BlogSEO = ({
     <>
       <CommonSEO
         title={title}
-        description={summary ?? siteMetadata.description}
+        description={summary || siteMetadata.description}
         ogType="article"
         ogImage={featuredImages}
         twImage={twImageUrl}

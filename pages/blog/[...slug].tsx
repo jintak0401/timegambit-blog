@@ -3,7 +3,10 @@ import { InferGetStaticPropsType } from 'next';
 
 import { coreContent, sortedBlogPost } from '@/lib/contentlayer';
 
+import siteMetadata from '@/data/siteMetadata';
+
 import PageTitle from '@/components/blog/PageTitle';
+import { BlogSEO } from '@/components/common/SEO';
 import { MDXLayoutRenderer } from '@/components/mdxComponents/MDXComponents';
 
 const DEFAULT_LAYOUT = 'PostLayout';
@@ -81,14 +84,20 @@ export default function BlogPost({
   return (
     <>
       {'draft' in post && post['draft'] !== true ? (
-        <MDXLayoutRenderer
-          layout={post['layout'] || DEFAULT_LAYOUT}
-          content={post}
-          prev={prev}
-          next={next}
-          seriesTitle={seriesTitle}
-          series={series}
-        />
+        <>
+          <BlogSEO
+            url={`${siteMetadata.siteUrl}/blog/${post.slug}`}
+            {...post}
+          />
+          <MDXLayoutRenderer
+            layout={post['layout'] || DEFAULT_LAYOUT}
+            content={post}
+            prev={prev}
+            next={next}
+            seriesTitle={seriesTitle}
+            series={series}
+          />
+        </>
       ) : (
         <div className="mt-24 text-center">
           <PageTitle>
