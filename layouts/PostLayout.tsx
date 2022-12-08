@@ -13,7 +13,6 @@ import ScrollTopAndComment from '@/components/blog/ScrollTopAndComment';
 import TagInPost from '@/components/blog/TagInPost';
 import ViewCounter from '@/components/blog/ViewCounter';
 import Comments from '@/components/comments';
-import { PageSEO } from '@/components/common/SEO';
 import LargeWidthTOC from '@/components/TOC/LargeWidthTOC';
 import SmallWidthTOC from '@/components/TOC/SmallWidthTOC';
 
@@ -39,12 +38,6 @@ export default function PostLayout({
   return (
     <>
       <ScrollIndicator />
-      {/*<BlogSEO url={`${siteMetadata.siteUrl}/blog/${slug}`} {...content} />*/}
-      <PageSEO
-        title={title}
-        description={content.summary as string}
-        image={content.images?.[0]}
-      />
       <ScrollTopAndComment />
       <article className="transition-colors duration-500">
         <div>
