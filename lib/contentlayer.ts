@@ -23,6 +23,8 @@ export type ConvertPick<T> = ConvertUndefined<T> & PickRequired<T>;
  *
  * https://github.com/contentlayerdev/contentlayer/issues/24
  */
+
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 export const pick = <Obj, Keys extends keyof Obj>(
   obj: Obj,
   keys: Keys[]
