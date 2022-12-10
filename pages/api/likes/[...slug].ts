@@ -1,3 +1,4 @@
+import { createHash } from 'crypto';
 import { RowDataPacket } from 'mysql2';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -22,13 +23,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const ipAddress = req.headers['x-forwarded-for'] || '0.0.0.0';
 
-    /*
     const encryptedIP = createHash('sha256')
       .update(ipAddress + (process.env.IP_ADDRESS_SALT as string), 'utf8')
       .digest('hex');
-*/
-
-    const encryptedIP = ipAddress;
 
     connection = await db.getConnection();
     await connection.beginTransaction();
@@ -72,7 +69,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     });
   } catch (e) {
     connection && (await connection.rollback());
-    console.error(e);
     return res.status(500).json({
       message: (e as Error).message,
     });
