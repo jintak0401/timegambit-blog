@@ -110,3 +110,7 @@ body {
     transition-timing-function: var(--timing-func);
 }
 
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+

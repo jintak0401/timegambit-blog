@@ -42,10 +42,23 @@ module.exports = {
         bounceRight: {
           '50%': { transform: 'translateX(7px)' },
         },
+        postLikeEmojiAnimation: {
+          '0%': { transform: 'translateY(0px)', opacity: 0 },
+          '50%': { transform: 'translateY(-40px)', opacity: 1 },
+          '100%': { transform: 'translateY(-60px)', opacity: 0 },
+        },
+        postLikeHeartAnimation: {
+          '25%': { transform: 'scale(0.9)' },
+          '50%': { transform: 'scale(1.1)' },
+          '75%': { transform: 'scale(0.95)' },
+          '100%': { transform: 'scale(1)' },
+        },
       },
       animation: {
         'bounce-left': 'bounceLeft 0.5s ease-in-out',
         'bounce-right': 'bounceRight 0.5s ease-in-out',
+        emoji: 'postLikeEmojiAnimation 1s ease-in-out forwards',
+        heart: 'postLikeHeartAnimation 1s ease-in-out',
       },
       typography: (theme) => ({
         DEFAULT: {

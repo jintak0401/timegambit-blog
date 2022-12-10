@@ -6,6 +6,7 @@ import { isProd } from '@/lib/isProduction';
 import useFormattedDate from '@/hooks/useFormattedDate';
 
 import PageTitle from '@/components/blog/PageTitle';
+import PostLike from '@/components/blog/PostLike';
 import PostListInSeries from '@/components/blog/PostListInSeries';
 import RoutePostBtn from '@/components/blog/RoutePostBtn';
 import ScrollIndicator from '@/components/blog/ScrollIndicator';
@@ -72,27 +73,32 @@ export default function PostLayout({
               </div>
               <LargeWidthTOC />
               <SmallWidthTOC />
-              <div className="flex flex-wrap gap-3">
-                {tags?.map((tag) => (
-                  <TagInPost key={tag} title={tag} />
-                ))}
-              </div>
+              <PostLike slug={slug} />
+              {tags && (
+                <div className="flex flex-wrap gap-3">
+                  {tags.map((tag) => (
+                    <TagInPost key={tag} title={tag} />
+                  ))}
+                </div>
+              )}
             </div>
             <footer className="space-y-2 pt-5 md:space-y-4">
-              <div className="flex w-full flex-col-reverse gap-2 md:flex-row">
-                <RoutePostBtn
-                  title={prev?.title}
-                  slug={prev?.slug}
-                  direction={'prev'}
-                  empty={!prev}
-                />
-                <RoutePostBtn
-                  title={next?.title}
-                  slug={next?.slug}
-                  direction={'next'}
-                  empty={!next}
-                />
-              </div>
+              {(prev || next) && (
+                <div className="flex w-full flex-col-reverse gap-2 md:flex-row">
+                  <RoutePostBtn
+                    title={prev?.title}
+                    slug={prev?.slug}
+                    direction={'prev'}
+                    empty={!prev}
+                  />
+                  <RoutePostBtn
+                    title={next?.title}
+                    slug={next?.slug}
+                    direction={'next'}
+                    empty={!next}
+                  />
+                </div>
+              )}
               <Comments frontMatter={content} />
             </footer>
           </div>
