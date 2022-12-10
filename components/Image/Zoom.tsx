@@ -73,7 +73,7 @@ const Zoom = (props: Props) => {
       )}
       <NextImage
         className={`relative my-0 block overflow-hidden duration-${duration} ${
-          clicked ? 'z-50' : `z-${zIndex} cursor-zoom-in`
+          clicked ? 'z-50' : `${zIndex === 10 ? 'z-10' : 'z-0'} cursor-zoom-in`
         } ${className || ''}`}
         ref={imageRef}
         onClick={handleImageZoom}

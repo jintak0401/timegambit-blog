@@ -6,7 +6,9 @@ const DEDUPING_INTERVAL = 60000;
 const getPostViews = async (slug: string): Promise<{ viewCount: number }> => {
   const res = await fetch(`${API_URL}/${slug}`);
   if (!res.ok) {
-    throw new Error('An error occurred while fetching the data.');
+    throw new Error(
+      'An error occurred while fetching the data. [usePostViews]'
+    );
   }
   return res.json();
 };
@@ -16,14 +18,14 @@ const updatePostViews = async (
 ): Promise<{ viewCount: number }> => {
   const res = await fetch(`${API_URL}/${slug}`, { method: 'POST' });
   if (!res.ok) {
-    throw new Error('An error occurred while posting the data.');
+    throw new Error('An error occurred while posting the data. [usePostViews]');
   }
   return res.json();
 };
 
 const usePostViews = (slug: string, config?: SWRConfiguration) => {
   const { data, error, mutate } = useSWR<{ viewCount: number }>(
-    slug,
+    [API_URL, slug],
     () => getPostViews(slug),
     {
       dedupingInterval: DEDUPING_INTERVAL,

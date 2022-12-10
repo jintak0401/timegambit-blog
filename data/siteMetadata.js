@@ -18,6 +18,7 @@ const siteMetadata = {
   youtube: '',
   linkedin: '',
   locale: 'ko-KR',
+  maxLikeCount: 4,
   oauth: {
     providers: ['google', 'github', 'naver', 'kakao'],
   },
