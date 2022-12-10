@@ -105,7 +105,7 @@ const PostLike = ({ slug }: Props) => {
         {isLoading ? (
           <div className="my-1 h-6 w-10 animate-pulse rounded-md bg-gray-200 dark:bg-gray-700" />
         ) : (
-          <div className="strong-text my-1 h-6 w-10 text-center text-2xl font-semibold duration-500">
+          <div className="strong-text my-1 flex h-6 w-10 items-center justify-center text-2xl font-semibold duration-500">
             {postLikes}
           </div>
         )}
