@@ -21,7 +21,7 @@ const SmallWidthTOC = () => {
         TOC
       </button>
       <article
-        className={`fixed top-[59px] h-fit max-h-[85vh] w-80 overflow-y-scroll rounded-l-lg border-y-2 
+        className={`fixed top-[59px] z-20 h-fit max-h-[85vh] w-80 overflow-y-scroll rounded-l-lg border-y-2 
         border-l-2 border-primary-700 bg-white duration-500 scrollbar-hide dark:bg-gray-900 
         sm:top-[50px] ${tocShow ? 'right-0' : '-right-80'}
         `}
