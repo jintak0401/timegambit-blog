@@ -32,11 +32,10 @@ const GuestbookEntry = ({ entry, session }: Props) => {
       <NextImage
         src={entry.image}
         alt="프로필 사진"
-        className="rounded-full"
+        className="rounded-full object-cover"
         loading="lazy"
         width="40"
         height="40"
-        objectFit="cover"
       />
       <div className="w-5/6 flex-1">
         <div className="flex items-center justify-between">

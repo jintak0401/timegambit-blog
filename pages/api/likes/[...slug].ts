@@ -21,7 +21,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   let connection = null;
   try {
-    const ipAddress = req.headers['x-forwarded-for'] || '0.0.0.0';
+    const ipAddress =
+      req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
     const encryptedIP = createHash('sha256')
       .update(ipAddress + (process.env.IP_ADDRESS_SALT as string), 'utf8')

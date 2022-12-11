@@ -1,5 +1,6 @@
 import { RowDataPacket } from 'mysql2';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import * as process from 'process';
 
 import { db } from '@/lib/db';
 
@@ -16,7 +17,18 @@ export default async function handler(
     return res.status(400).json({ message: `There is no post "${slug}"` });
   }
   if (method !== 'POST' && method !== 'GET') {
-    return res.status(400).json({ message: `Only accept "GET" or "POST"` });
+    res.setHeader('Allow', ['GET', 'POST']);
+    return res.status(405).json({ message: `Only accept "GET" or "POST"` });
+  }
+
+  const ipAddress =
+    (req.headers['x-forwarded-for'] as string)?.split(',')[0] ||
+    req.socket.remoteAddress;
+
+  if (method === 'POST' && process.env.OWN_IP === ipAddress) {
+    return res
+      .status(200)
+      .json({ message: "View counts are not increased at owner's viewing" });
   }
 
   let connection = null;
