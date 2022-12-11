@@ -74,13 +74,13 @@ const GuestbookInput = ({ setLoading, user }: Props) => {
           <NextImage
             src={user.image}
             alt="프로필 사진"
-            className="rounded-full"
-            loading="lazy"
+            className="h-12 w-12 rounded-full object-cover"
             width="50"
             height="50"
-            objectFit="cover"
           />
-          <div className="strong-text text-lg font-medium">{user.name}</div>
+          <div className="strong-text w-36 truncate text-lg sm:w-96">
+            {user.name}
+          </div>
         </div>
         <button
           className="w-24 rounded-md bg-primary-200 py-2 dark:bg-primary-700"
