@@ -28,7 +28,7 @@ const GuestbookEntry = ({ entry, session }: Props) => {
   };
 
   return (
-    <div className="my-4 flex items-start gap-6 rounded-md border px-4 md:px-10 py-4">
+    <div className="my-4 flex w-full items-start gap-6 rounded-md border px-4 py-4 md:px-10">
       <NextImage
         src={entry.image}
         alt="프로필 사진"
@@ -38,10 +38,10 @@ const GuestbookEntry = ({ entry, session }: Props) => {
         height="40"
         objectFit="cover"
       />
-      <div className="flex-1">
+      <div className="w-5/6 flex-1">
         <div className="flex items-center justify-between">
-          <div>
-            <div>{entry.name}</div>
+          <div className="max-w-full">
+            <div className="max-w-full truncate">{entry.name}</div>
             <div className="weak-text">{entry.updatedAt}</div>
           </div>
           {session?.user?.email === entry.email && (
