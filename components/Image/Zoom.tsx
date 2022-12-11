@@ -1,6 +1,6 @@
 import NextImage from 'next/image';
 import { ImageProps } from 'next/image';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface Props extends ImageProps {
   rate?: number;
@@ -20,6 +20,12 @@ const Zoom = (props: Props) => {
   const imageRef = useRef<HTMLImageElement>(null);
 
   const [clicked, setClicked] = useState(false);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    if (!error) return;
+    throw 'Image not loaded';
+  }, [error]);
 
   const handleImageZoom = () => {
     if (!imageRef.current || clicked) return;
@@ -80,6 +86,7 @@ const Zoom = (props: Props) => {
         } ${className || ''}`}
         ref={imageRef}
         onClick={handleImageZoom}
+        onError={() => setError(true)}
         {...imageProps}
       />
     </>
