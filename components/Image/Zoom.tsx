@@ -1,6 +1,6 @@
 import NextImage from 'next/image';
 import { ImageProps } from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 interface Props extends ImageProps {
   rate?: number;
@@ -20,12 +20,7 @@ const Zoom = (props: Props) => {
   const imageRef = useRef<HTMLImageElement>(null);
 
   const [clicked, setClicked] = useState(false);
-  const [error, setError] = useState(false);
-
-  useEffect(() => {
-    if (!error) return;
-    throw 'Image not loaded';
-  }, [error]);
+  const [zIndex, setZIndex] = useState<number>(0);
 
   const handleImageZoom = () => {
     if (!imageRef.current || clicked) return;
@@ -40,7 +35,6 @@ const Zoom = (props: Props) => {
     const cT = imageRect.top;
 
     const zoomPerc = rate / 100;
-    imageRef.current.style.zIndex = '50';
     if (
       ((window.innerHeight * zoomPerc) / clientHeight) * clientWidth >=
       window.innerWidth
@@ -64,11 +58,8 @@ const Zoom = (props: Props) => {
 
     imageRef.current.style.transform = `scale(1)`;
 
-    imageRef.current.style.zIndex = '10';
-    setTimeout(
-      () => imageRef.current && (imageRef.current.style.zIndex = ''),
-      duration + 100
-    );
+    setZIndex(10);
+    setTimeout(() => setZIndex(0), duration + 100);
     setClicked(false);
   };
 
@@ -82,11 +73,10 @@ const Zoom = (props: Props) => {
       )}
       <NextImage
         className={`relative my-0 block overflow-hidden duration-${duration} ${
-          clicked ? '' : 'cursor-zoom-in'
+          clicked ? 'z-50' : `${zIndex === 10 ? 'z-10' : 'z-0'} cursor-zoom-in`
         } ${className || ''}`}
         ref={imageRef}
         onClick={handleImageZoom}
-        onError={() => setError(true)}
         {...imageProps}
       />
     </>
