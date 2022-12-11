@@ -1,8 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import resolveConfig from 'tailwindcss/resolveConfig';
-
-import tailwindConfig from '@/tailwind.config.js';
-const twFullConfig = resolveConfig(tailwindConfig);
 
 import { usePostLikes } from '@/hooks/usePostLikes';
 
@@ -13,24 +9,19 @@ interface Props {
 }
 
 const emojis = ['❤️', '😘', '🥰', '😍'];
-const heartStartCoord = 18,
-  heartEndCoord = 4;
-const getPrimaryColorWithStep = (step: number) => {
-  if (!twFullConfig?.theme?.colors) return;
-  if (!('primary' in twFullConfig.theme.colors)) return;
-  const primaryColors = twFullConfig.theme.colors.primary as object;
-  return primaryColors[step as keyof typeof primaryColors];
-};
+const HEART_START_POS = 18,
+  HEART_END_POS = 4;
+
+const convertLike2PosY = (like?: number) =>
+  like
+    ? (like / siteMetadata.maxLikeCount) * (HEART_END_POS - HEART_START_POS) +
+      HEART_START_POS
+    : HEART_START_POS;
 
 const PostLike = ({ slug }: Props) => {
   const timeout = useRef<ReturnType<typeof setTimeout>>();
   const { userLikes, postLikes, increment, isLoading } = usePostLikes(slug);
   const [clicked, setClicked] = useState(false);
-  const convertLike2PosY = (like?: number) =>
-    like
-      ? (like / siteMetadata.maxLikeCount) * (heartEndCoord - heartStartCoord) +
-        heartStartCoord
-      : heartStartCoord;
 
   const [posY, setPosY] = useState(convertLike2PosY(userLikes));
 
@@ -80,21 +71,8 @@ const PostLike = ({ slug }: Props) => {
           >
             <defs>
               <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop
-                  offset="20%"
-                  style={{
-                    stopColor: getPrimaryColorWithStep(300) || '#fa3351',
-                    stopOpacity: 1,
-                  }}
-                />
-                <stop
-                  offset="80%"
-                  className="text-primary-900"
-                  style={{
-                    stopColor: getPrimaryColorWithStep(600) || '#ff792c',
-                    stopOpacity: 1,
-                  }}
-                />
+                <stop offset="20%" className="post-like-first-grad" />
+                <stop offset="80%" className="post-like-second-grad" />
               </linearGradient>
               <mask
                 id="mask"
