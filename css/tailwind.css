@@ -81,6 +81,16 @@ input:-webkit-autofill:focus {
     .basic-text {
         @apply strong-text transition-colors duration-500;
     }
+
+    .post-like-first-grad {
+        stop-color: theme('colors.primary.300');
+        stop-opacity: 1;
+    }
+
+    .post-like-second-grad {
+        stop-color: theme('colors.primary.600');
+        stop-opacity: 1;
+    }
 }
 
 ::-webkit-scrollbar {

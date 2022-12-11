@@ -9,17 +9,19 @@ interface Props {
 }
 
 const emojis = ['❤️', '😘', '🥰', '😍'];
+const HEART_START_POS = 18,
+  HEART_END_POS = 4;
+
+const convertLike2PosY = (like?: number) =>
+  like
+    ? (like / siteMetadata.maxLikeCount) * (HEART_END_POS - HEART_START_POS) +
+      HEART_START_POS
+    : HEART_START_POS;
+
 const PostLike = ({ slug }: Props) => {
-  const heartStartCoord = 18,
-    heartEndCoord = 4;
   const timeout = useRef<ReturnType<typeof setTimeout>>();
   const { userLikes, postLikes, increment, isLoading } = usePostLikes(slug);
   const [clicked, setClicked] = useState(false);
-  const convertLike2PosY = (like?: number) =>
-    like
-      ? (like / siteMetadata.maxLikeCount) * (heartEndCoord - heartStartCoord) +
-        heartStartCoord
-      : heartStartCoord;
 
   const [posY, setPosY] = useState(convertLike2PosY(userLikes));
 
@@ -69,14 +71,8 @@ const PostLike = ({ slug }: Props) => {
           >
             <defs>
               <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop
-                  offset="20%"
-                  style={{ stopColor: '#5eead4', stopOpacity: 1 }}
-                />
-                <stop
-                  offset="80%"
-                  style={{ stopColor: '#14b8a6', stopOpacity: 1 }}
-                />
+                <stop offset="20%" className="post-like-first-grad" />
+                <stop offset="80%" className="post-like-second-grad" />
               </linearGradient>
               <mask
                 id="mask"
