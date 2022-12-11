@@ -1,4 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
+import resolveConfig from 'tailwindcss/resolveConfig';
+
+import tailwindConfig from '@/tailwind.config.js';
+const twFullConfig = resolveConfig(tailwindConfig);
 
 import { usePostLikes } from '@/hooks/usePostLikes';
 
@@ -9,9 +13,16 @@ interface Props {
 }
 
 const emojis = ['❤️', '😘', '🥰', '😍'];
+const heartStartCoord = 18,
+  heartEndCoord = 4;
+const getPrimaryColorWithStep = (step: number) => {
+  if (!twFullConfig?.theme?.colors) return;
+  if (!('primary' in twFullConfig.theme.colors)) return;
+  const primaryColors = twFullConfig.theme.colors.primary as object;
+  return primaryColors[step as keyof typeof primaryColors];
+};
+
 const PostLike = ({ slug }: Props) => {
-  const heartStartCoord = 18,
-    heartEndCoord = 4;
   const timeout = useRef<ReturnType<typeof setTimeout>>();
   const { userLikes, postLikes, increment, isLoading } = usePostLikes(slug);
   const [clicked, setClicked] = useState(false);
@@ -71,11 +82,18 @@ const PostLike = ({ slug }: Props) => {
               <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop
                   offset="20%"
-                  style={{ stopColor: '#5eead4', stopOpacity: 1 }}
+                  style={{
+                    stopColor: getPrimaryColorWithStep(300) || '#fa3351',
+                    stopOpacity: 1,
+                  }}
                 />
                 <stop
                   offset="80%"
-                  style={{ stopColor: '#14b8a6', stopOpacity: 1 }}
+                  className="text-primary-900"
+                  style={{
+                    stopColor: getPrimaryColorWithStep(600) || '#ff792c',
+                    stopOpacity: 1,
+                  }}
                 />
               </linearGradient>
               <mask
