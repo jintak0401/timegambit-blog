@@ -1,0 +1,305 @@
+---
+title: "[Axios] 요청취소(cancel) 톺아보기 (feat. Promise)"
+date: '2022-12-11'
+lastmod: '2022-12-11'
+tags: ['톺아보기','axios']
+draft: false
+series: 톺아보기
+summary: axios 라이브러리의 cancel(요청취소) 기능을 분석해봤습니다.
+images: [https://i.imgur.com/QWfDHjf.png]
+layout: PostLayout
+---
+
+## 분석하기 앞서
+
+이 포스트는 axios의 요청취소 기능이 어떻게 구현되어있는지 소스코드를 분석한 글입니다. axios 영어문서에는
+0.22.0 버전부터 JS가 제공하는 `AbortController`를 사용하는 것이 권장되며, axios가 제공하는
+`CancelToken`은 deprecated 되었다고 합니다. 하지만 여전히 CancelToken을 통한
+취소도 사용할 수 있으며 이 글은 axios에 대한 글이므로, CancelToken을 이용한 방법을 분석해보았습니다.
+
+```
+axios/lib
+  ├── adapters
+  │     └── http.js
+  └── cancel
+        └── CancelToken.js
+```
+
+이번 글에서 주요한 코드들이 있는 파일들입니다. 특히 `CancelToken.js`를 다룹니다.
+
+## Axios 요청취소 방법
+
+```ts showLineNumbers {1-2,5,17,21}
+const CancelToken = axios.CancelToken;
+const source = CancelToken.source();
+
+axios.get('/user/12345', {
+  cancelToken: source.token
+}).catch(function (thrown) {
+  if (axios.isCancel(thrown)) {
+    console.log('Request canceled', thrown.message);
+  } else {
+    // 에러 핸들링
+  }
+});
+
+axios.post('/user/12345', {
+  name: 'new name'
+}, {
+  cancelToken: source.token
+})
+
+// 요청 취소하기 (메시지 파라미터는 옵션입니다)
+source.cancel('Operation canceled by the user.');
+```
+
+동작원리를 살펴보기 전에 요청취소를 어떻게 하는지부터 알아보겠습니다.
+
+1. `source`를 `axios.CancelToken.source()`로 만들어 줍니다.
+2. 요청취소가 필요한 axios 요청 옵션으로 `cancelToken`에 `source.token`을 넣어줍니다.
+3. `source.cancel('취소 메시지')`를 이용해 source.token을 가지고 있는 요청들을 취소합니다.
+
+이 코드를 보면 source는 객체이며 `token`과 `cancel`(함수)를 가지고 있다는 것을 알 수 있습니다.
+그러면 이제 본격적으로 axios 코드를 분석해보겠습니다.
+
+## CancelToken.source()
+
+```js:CancelToken.js showLineNumbers {5-7}
+class CancelToken {
+  ...
+  static source() {
+    let cancel;
+    const token = new CancelToken(function executor(c) {
+      cancel = c;
+    });
+    return {
+      token,
+      cancel
+    };
+  }
+}
+
+export default CancelToken;
+```
+
+CancelToken의 source 함수는 static 함수입니다. 생각해보면 그렇겠네요.
+`(new axios.CancelToken()).source()`로 새 객체를 생성하고 source 함수를 호출한 것이 아닌
+`axios.CancelToken.source()`로 객체를 생성하지 않고 source 함수를 호출했으니까요.
+이 코드에서 중요한 포인트는 3가지입니다.
+
+1. CancelToken 객체가 생성되어 `token`에 담겨 return됩니다.
+2. CancelToken 객체가 생성될 때 `executor` 함수가 인자로 들어갑니다. source의 `cancel` 변수를
+executor 함수가 인자로 받은 c 변수로 초기화시킵니다.
+3. executor 함수의 c 인자는 함수일 것입니다.(source.cancel('에러메시지') 로 호출하니까요.)
+CancelToken의 생성자에서 executor 함수에 함수 c를 인자로 넣어 호출함으로써 source.cancel을 c로
+초기화시킬 것입니다.
+
+## Promise를 톺아보자
+
+CancelToken의 constructor를 분석하기 전에 Promise에 대해 좀 더 깊게 알아봅시다.
+Promise를 간단하게 직접 구현해보고, CancelToken의 생성자 함수에서 사용하고 있는 방법을
+부분적으로 적용해봅시다.
+
+```js showLineNumbers {8, 11-19, 21-30, 41-43, 45-47}
+// Promise를 직접 구현
+class Promise {
+  state = 'pending';
+  value;
+  resolveCallback;
+
+  constructor(callback) {
+    callback(this.resolveFn);
+  }
+
+  resolveFn = (value) => {
+    if (this.state === 'pending') {
+      this.state = 'fulfilled';
+      this.value = value;
+      if (this.resolveCallback){
+        this.resolveCallback();
+      }
+    }
+  }
+
+  then = (callback) => {
+    return new Promise((resolve) => {
+      if (this.state === 'pending') {
+       this.resolveCallback = () => this.handleCallback(callback, resolve);
+      }
+      else if (this.state === 'fulfilled') {
+        this.handleCallback(callback, resolve);
+      }
+    })
+  }
+
+  handleCallback = (callback, resolve) => {
+    const result = callback(this.value);
+    resolve(result);
+  }
+}
+
+// CancelToken constructor 부분 간략화
+let resolvePromise;
+
+const promise = new Promise(function promiseExecutor(resolve) {
+  resolvePromise = resolve;
+});
+
+promise.then(function thenExecutor(val) {
+  console.log(`promise.then의 val: ${val}`);
+});
+
+resolvePromise(12345);
+resolvePromise(67890);
+
+
+/********** 결과 **********/
+promise.then의 val: 12345
+````
+
+Promise를 간단하게 구현해보았습니다. 어디까지나 간단하게 구현한 것이므로 JS가 제공하는 Promise와
+동일한 기능이 아닌, 기본적인 기능만 제공합니다. reject, catch, finally 등도 지원하지 않고 resolve, then만 지원하고 있습니다.
+좀 더 자세하게 알고싶다면 [V8 Promise 소스코드](https://chromium.googlesource.com/v8/v8/+/3.29.45/src/promise.js?autodive=0%2F)를
+보시거나 [개발자 정현민님의 "자바스크립트의 Promise 직접 구현하기"](https://blog.hyunmin.dev/14)를
+보시기 바랍니다.
+
+#### 코드 동작 설명
+1. 41번 라인에서 Promise가 생성됩니다.(이 때 생성된 Promise를 p1이라고 하겠습니다.) `promiseExecutor`가 7번 라인의 `callback`으로 받아져
+callback이 **즉시 호출됩니다**.
+2. 1번에 의해 p1의 `resolveFn`이 promiseExecutor의 `resolve`로 들어가게 됩니다.
+따라서 39번 라인의 `resolvePromise`는 42번 라인에 의해 p1의 `resolveFn`이 됩니다.
+3. 45번 라인의 `then`에 의해 `thenExecutor`가 21번 라인의 `callback`으로 받아집니다.
+then은 Promise의 메소드로 새로운 Promise를 재귀적으로 return해줍니다.^[then이 Promise를 재귀적으로
+return 해주기 때문에 then 체이닝이 가능합니다.] (이 때 생성된 Promise를 p2라고 하겠습니다.)
+4. 1번에서 Promise가 생성될 때 callback이 즉시 호출된다고 했습니다. 45번 라인에서 then이 호출됨으로써
+22번 라인의 Promise의 `(resolve) => {...}` 함수가 즉시 호출됩니다. 현재 p1의 `this.state`는 pending이므로
+p1의 `resolveCallback`은 `() => this.handleCallback(callback, resolve)`로 바뀝니다. 이 때
+callback과 resolve는 다음과 같습니다.
+  * callback: 45번 라인의 `thenExecutor`(3번에서 then의 인자로 넣어주었기 때문입니다.)
+  * resolve: p2의 `resolveFn`
+5. 49번 라인에서 `resolvePromise`가 호출됩니다. 2번에서 resolvePromise는 p1의 `promiseFn`이 되었으므로,
+p1의 상태로 11~19라인이 실행됩니다. p1의 상태는 pending이므로 state는 fulfilled로 바뀌며, value 또한
+resolvePromise의 인자인 12345로 바뀝니다. 4번에서 `resolveCallback`이 할당되었으므로, resolveCallback이
+호출됩니다.
+6. 5번의 resolveCallback의 호출로 45번 라인의 `thenExecutor`가 callback으로, p2의 `resolveFn`이
+resolve로 하여 `handleCallback`이 호출됩니다. 5번에서 p1의 `this.value`는 12345가 되었으므로 `promise.then의 val: 12345`가 출력됩니다.
+thenExecutor의 return 값이 없으므로 p2의 resolveFn이 undefined를 인자로 하여 호출됩니다.
+p2의 상태도 fulfilled로 바뀌고 value는 undefined, resolveCallback은 할당되지 않았으므로 아무 동작도 하지 않습니다.
+7. 5번에서 호출된 p1의 `resolveCallback`이 종료되었으므로 49번 라인의 `resolvePromise` 함수  호출이 종료됩니다.
+8. 50번 라인에서 `resolvePromise`(= p1의 `resolveFn`)가 호출됩니다. 하지만 p1의 state는 5번에서
+fulfilled로 바뀌었으므로 아무 동작하지 않고 종료됩니다. 따라서 "promise.then의 val: 67890"이 출력되지 않습니다.
+
+저는 개인적으로 41~43번 라인처럼 Promise의 내부 resolve 함수를 꺼내서 원할 때 호출하는 방법을
+처음보았습니다. 이렇게 새로운 시각을 느낄 때 라이브러리의 소스코드를 까보는 것도 공부에 큰 도움이
+된다고 느낍니다. 그러면 본격적으로 axios를 톺아보도록 할까요?
+
+
+## CancelToken constructor
+
+[위](#canceltokensource)에서 CancelToken 클래스 생성자의 인자인 `executor`함수가 호출될 때, executor의 인자로 받아지는
+함수가 `source.cancel`이 된다고 했습니다. 그리고 Promise를 직접 구현해보고 부분적으로 적용해보면서
+`resolvePromise`가 호출될 때, then을 통해 등록된 함수가 호출된다는 사실도 알 수 있었습니다.
+
+```js:CancelToken.js showLineNumbers {12-21,32}
+class CancelToken {
+  constructor(executor) {
+
+    let resolvePromise;
+
+    this.promise = new Promise(function promiseExecutor(resolve) {
+      resolvePromise = resolve;
+    });
+
+    const token = this;
+
+    this.promise.then(cancel => {
+      if (!token._listeners) return;
+
+      let i = token._listeners.length;
+
+      while (i-- > 0) {
+        token._listeners[i](cancel);
+      }
+      token._listeners = null;
+    });
+
+    ...
+
+    executor(function cancel(message, config, request) {
+      if (token.reason) {
+        // 요청 취소가 이미 일어난 경우
+        return;
+      }
+
+      token.reason = new CanceledError(message, config, request);
+      resolvePromise(token.reason);
+    });
+  }
+```
+
+#### 코드 설명
+1. 6~21번 라인을 수행하면서 `resolvePromise`가 호출될 때 `(cancel) => {...}` 함수가 호출됨을
+알 수 있습니다.
+2. 25번 라인에서 `executor` 함수를 호출하면서 `cancel` 함수를 인자로 넣어주고 있습니다. 즉,
+`source.cancel`은 25번 라인의 cancel 함수가 됩니다.
+3. source.cancel 함수가 처음으로 호출될 때만 26번 라인에서 `token.reason`이 undefined이므로,
+32번 라인에서 `resolvePromise`가 호출됩니다.
+4. 3번에서 `resolvePromise`가 호출되면 12~21번 라인의 `(cancel) => {...}` 함수가 호출됩니다.
+코드의 형태를 통해 Observer 패턴으로 구현되어 있다는 것을 알 수 있습니다.
+`cancel`(= `token.reason`)을 인자로 하여 listener 함수들을 호출함으로써 요청이 취소되었음을
+알리고 있습니다.
+
+### cancelToken Observer 패턴 구독 등록 & 해제
+
+위에서 설명하였을 때 생략하였지만 Observer 패턴을 위해 CancelToken 클래스의 메소드로 `subscribe`와 `unsubscribe`
+함수가 있습니다. 그렇다면 누가, 어디에서 subscribe를 통해 등록을 하고, unsubscribe 함수를 통해 해제를 할까요?
+
+```js:http.js showLineNumbers {8-10,20-22}
+function httpAdapter(config) {
+  return new Promise(function dispatchHttpRequest(resolvePromise, rejectPromise) {
+
+    ...
+
+    function onFinished() {
+      ...
+      if (config.cancelToken) {
+        config.cancelToken.unsubscribe(abort);
+      }
+      ...
+    }
+
+    ...
+
+    function abort(reason) {
+      emitter.emit('abort', !reason || reason.type ? new CanceledError(null, config, req) : reason);
+    }
+    ...
+    if (config.cancelToken || config.signal) {
+      config.cancelToken && config.cancelToken.subscribe(abort);
+      ...
+    }
+    ...
+  }
+}
+```
+
+등록과 해제는 `/adapters/http.js`에서 하고 있었습니다. `source.token`을 `cancelToken`으로 하여
+axios 요청의 config로 넣어주어야 요청취소를 할 수 있다고 위에서 설명했었죠? 8~10번 라인의 코드가 onFinished 함수 내에
+있네요. 이름만 봐도 통신이 끝났을 때 config.cancelToken이 있다면 abort함수를 구독해제하겠다는 것을 알 수 있습니다.
+
+구독등록은 20~22라인에서 하고 있습니다. 마찬가지로 config.cancelToken이 존재한다면 abort 함수를
+등록함으로써 `listener`가 호출될 때 abort 함수가 실행되도록 하고 있습니다.
+
+## 마치며
+이번 포스트까지 axios 라이브러리의 interceptors, timeout, cancel 기능이 어떻게 동작되는지
+알아보았습니다. 직접 소스코드를 보면서 분석하며 새로운 시각을 접할 수 있었고, 글로 작성하면서,
+알게된 것들을 정리할 수 있었습니다.
+
+톺아보기 시리즈는 앞으로 개발자를 하면서 멈추지 않고 쭉 해볼 생각입니다. 이 글을 읽는 여러분들도
+톺아보기 시리즈를 통해 조금이나마 새로운 것을 배우거나 깨달을 수 있었으면 하는 바람입니다 🙃
+
+
+## Reference
+
+1. [Axios Cancellation 문서](https://axios-http.com/docs/cancellation)
+2. [개발자 정현민님의 "자바스크립트의 Promise 직접 구현하기"](https://blog.hyunmin.dev/14)
