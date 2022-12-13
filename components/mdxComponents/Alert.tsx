@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
 import {
-  BsCheckCircle,
-  BsExclamationCircle,
-  BsExclamationTriangle,
-  BsXCircle,
-} from 'react-icons/bs';
+  FaCheckCircle,
+  FaExclamationCircle,
+  FaExclamationTriangle,
+  FaTimesCircle,
+} from 'react-icons/fa';
 
 interface Props {
   type: 'info' | 'success' | 'warning' | 'danger';
@@ -13,24 +13,24 @@ interface Props {
 
 const typeMapping = {
   info: {
-    icon: BsExclamationCircle,
+    icon: FaExclamationCircle,
     style:
       'border-[#4433ff] bg-[#dfebf6] dark:border-[#617bff] dark:bg-[#182635]',
     iconStyle: 'text-[#4433ff] dark:text-[#617bff]',
   },
   success: {
-    icon: BsCheckCircle,
+    icon: FaCheckCircle,
     style: 'border-[#00cc88] bg-[#00cc88]/10',
     iconStyle: 'text-[#00cc88]',
   },
   warning: {
-    icon: BsExclamationTriangle,
+    icon: FaExclamationTriangle,
     style:
       'border-[#ff9d00] bg-[#ffdd00]/25 dark:border-[#ff8000] dark:bg-[#ffa200]/10',
     iconStyle: 'text-[#ff9d00] dark:text-[#ff8000] !rounded-md',
   },
   danger: {
-    icon: BsXCircle,
+    icon: FaTimesCircle,
     style:
       'border-[#f90657] bg-[#d6054b]/10 dark:border-[#fa3879] dark:bg-[#d6054b]/10',
     iconStyle: 'text-[#f90657] dark:text-[#fa3879]',
