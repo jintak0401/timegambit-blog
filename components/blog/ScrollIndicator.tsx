@@ -10,13 +10,14 @@ const ScrollIndicator = () => {
     const onScroll = () => {
       setScrollY(window.scrollY);
     };
-    onResize();
+    const timeout = setTimeout(() => onResize(), 200);
     onScroll();
     window.addEventListener('scroll', onScroll);
     window.addEventListener('resize', onResize);
     return () => {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onResize);
+      clearTimeout(timeout);
     };
   }, []);
 
