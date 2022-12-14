@@ -1,5 +1,8 @@
-import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import {
+  IoArrowBackCircleOutline,
+  IoArrowForwardCircleOutline,
+} from 'react-icons/io5';
 
 import phrases from '@/data/phrases';
 
@@ -16,17 +19,15 @@ const RoutePostBtn = ({ title, slug, direction, empty }: Props) => {
     return <div className="h-full w-full md:w-1/2" />;
   }
 
-  const Arrow = dynamic(() =>
-    import('react-icons/bs').then(
-      (res) =>
-        res[direction === 'prev' ? 'BsArrowLeftCircle' : 'BsArrowRightCircle']
-    )
-  );
+  const Arrow =
+    direction === 'prev'
+      ? IoArrowBackCircleOutline
+      : IoArrowForwardCircleOutline;
 
   return (
     <Link
       href={`/blog/${slug}`}
-      className={`group flex w-full items-center gap-4 rounded-md bg-gray-100 py-2
+      className={`group flex w-full items-center gap-2 rounded-md bg-gray-100 py-2
         px-3 text-2xl font-semibold duration-300 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 md:w-1/2 ${
           direction === 'prev'
             ? 'flex-row-reverse justify-start'
@@ -46,7 +47,7 @@ const RoutePostBtn = ({ title, slug, direction, empty }: Props) => {
         </div>
       </div>
       <Arrow
-        className={`h-7 w-7 fill-current text-primary-500 ${
+        className={`h-9 w-9 fill-current text-primary-500 ${
           direction === 'prev'
             ? 'group-hover:animate-bounce-left'
             : 'group-hover:animate-bounce-right'
