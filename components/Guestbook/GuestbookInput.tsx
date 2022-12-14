@@ -86,7 +86,7 @@ const GuestbookInput = ({ setLoading, user }: Props) => {
           className="w-24 rounded-md bg-primary-200 py-2 dark:bg-primary-700"
           onClick={() => {
             setLoading(true);
-            signOut().finally(() => setLoading(false));
+            signOut().catch(() => setLoading(false));
           }}
         >
           {phrases.Guestbook.logout}
