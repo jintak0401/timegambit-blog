@@ -20,8 +20,8 @@ const PostCard = ({ post }: Props) => {
           alt={title}
           src={images[0]}
           className="rounded-md object-cover"
-          width={1600}
-          height={900}
+          width="1692"
+          height="1000"
           loading="lazy"
         />
       </Link>
