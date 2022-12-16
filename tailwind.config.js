@@ -53,12 +53,17 @@ module.exports = {
           '75%': { transform: 'scale(0.95)' },
           '100%': { transform: 'scale(1)' },
         },
+        cardLoadedAnimation: {
+          '0%': { transform: 'translateY(20px)', opacity: 0 },
+          '100%': { transform: 'translateY(0px)', opacity: 1 },
+        },
       },
       animation: {
         'bounce-left': 'bounceLeft 0.5s ease-in-out',
         'bounce-right': 'bounceRight 0.5s ease-in-out',
         emoji: 'postLikeEmojiAnimation 1s ease-in-out forwards',
         heart: 'postLikeHeartAnimation 1s ease-in-out',
+        card: 'cardLoadedAnimation 500ms ease-in-out',
       },
       typography: (theme) => ({
         DEFAULT: {
