@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useState } from 'react';
 
 import { SeriesListItem } from '@/lib/types';
 import useFormattedDate from '@/hooks/useFormattedDate';
@@ -12,15 +13,24 @@ interface Props {
 }
 
 const SeriesCard = ({ series }: Props) => {
+  const [loaded, setLoaded] = useState(false);
   const { title, image, length, lastmod, href } = series;
   return (
-    <article className="rounded-md border-2 shadow-md transition-all hover:-translate-y-2 hover:shadow-xl dark:border-gray-600 dark:shadow-none">
+    <article
+      className={`rounded-md border-2 shadow-md transition-all hover:-translate-y-2 hover:shadow-xl dark:border-gray-600 dark:shadow-none ${
+        loaded ? 'animate-card' : 'opacity-0'
+      }`}
+    >
       <Link href={`/series/${href}`} aria-label={`Link to ${title}`}>
         <ImageWithFallback
           src={image}
           alt={title}
           className={'rounded-md'}
-          priority={true}
+          width="1695"
+          height="1000"
+          onLoadingComplete={() => {
+            setLoaded(true);
+          }}
         />
         <div className="px-2 py-3">
           <h2 className="strong-text mt-3 mb-1 text-lg font-semibold">
