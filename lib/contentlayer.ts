@@ -1,5 +1,7 @@
 import type { Blog, DocumentTypes } from 'contentlayer/generated';
 
+import { PostListItem } from '@/lib/types';
+
 export function dateSortDesc(a: string, b: string, reverse: boolean) {
   if (a > b) return reverse ? 1 : -1;
   if (a < b) return reverse ? -1 : 1;
@@ -58,4 +60,12 @@ export function allCoreContent<T extends DocumentTypes>(contents: T[]) {
 
 export function pickBlogItem(blog: Blog) {
   return pick(blog, ['title', 'slug', 'date', 'tags', 'summary', 'images']);
+}
+
+export function filterBlogPosts(posts: PostListItem[], word: string) {
+  if (!word) return posts;
+  return posts.filter((post: PostListItem) => {
+    const searchContent = post.title + post.summary + post.tags?.join(' ');
+    return searchContent.toLowerCase().includes(word.toLowerCase());
+  });
 }
