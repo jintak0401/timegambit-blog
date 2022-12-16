@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useCallback, useState } from 'react';
 
 import ImageWithFallback from '@/components/Image/ImageWithFallback';
 
@@ -10,16 +11,26 @@ interface Props {
 }
 
 const ProjectCard = ({ title, description, imgSrc, href }: Props) => {
-  const CardImage = () => (
-    <ImageWithFallback
-      src={imgSrc}
-      alt={title}
-      className="object-cover object-center"
-    />
+  const [loaded, setLoaded] = useState(false);
+
+  const CardImage = useCallback(
+    () => (
+      <ImageWithFallback
+        src={imgSrc}
+        alt={title}
+        className="object-cover object-center"
+        width="1778"
+        height="1000"
+        onLoadingComplete={() => {
+          setLoaded(true);
+        }}
+      />
+    ),
+    [imgSrc, title]
   );
 
   return (
-    <div className="p-4 md:w-1/2">
+    <div className={`p-4 md:w-1/2 ${loaded ? 'animate-card' : 'opacity-0'}`}>
       <div
         className={`${
           imgSrc && 'h-full'
