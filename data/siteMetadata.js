@@ -19,6 +19,9 @@ const siteMetadata = {
   linkedin: '',
   locale: 'ko-KR',
   maxLikeCount: 4,
+  blog: {
+    postsPerScroll: 10,
+  },
   oauth: {
     providers: ['google', 'github', 'naver', 'kakao'],
   },

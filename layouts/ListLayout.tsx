@@ -1,8 +1,13 @@
-import { useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
+import { filterBlogPosts } from '@/lib/contentlayer';
 import { PostListItem } from '@/lib/types';
+import useDebounce from '@/hooks/useDebounce';
+import useInfiniteScrollObserver from '@/hooks/useInfiniteScrollObserver';
+import useIsFirstRender from '@/hooks/useIsFirstRender';
 
 import phrases from '@/data/phrases';
+import siteMetadata from '@/data/siteMetadata';
 
 import PostList from '@/components/card-and-list/PostList';
 
@@ -13,15 +18,46 @@ interface Props {
 }
 
 export default function ListLayout({ posts, title, description }: Props) {
+  const targetRef = useRef<HTMLDivElement | null>(null);
+  const isFirstRender = useIsFirstRender();
   const [searchValue, setSearchValue] = useState('');
-  const filteredBlogPosts = posts.filter((post: PostListItem) => {
-    const searchContent = post.title + post.summary + post.tags?.join(' ');
-    return searchContent.toLowerCase().includes(searchValue.toLowerCase());
-  });
+  const [displayPosts, setDisplayPosts] = useState<PostListItem[]>(
+    posts.slice(0, siteMetadata.blog.postsPerScroll)
+  );
 
-  // If initialDisplayPosts exist, display it if no searchValue is specified
-  const displayPosts =
-    posts.length > 0 && !searchValue ? posts : filteredBlogPosts;
+  const setNextDisplayPosts = (init = false) => {
+    setDisplayPosts((prev) => {
+      const _posts = filterBlogPosts(posts, searchValue);
+      const nextPosts = _posts.slice(
+        0,
+        (init ? 0 : prev.length) + siteMetadata.blog.postsPerScroll
+      );
+
+      if (nextPosts.length !== prev.length) return nextPosts;
+
+      let idx;
+      for (idx = 0; idx < nextPosts.length; idx++) {
+        if (nextPosts[idx] !== prev[idx]) break;
+      }
+      return idx === nextPosts.length ? prev : nextPosts;
+    });
+  };
+
+  useDebounce(() => !isFirstRender && setNextDisplayPosts(true), 300, [
+    searchValue,
+  ]);
+
+  const onIntersect = useCallback(
+    ([entry]: IntersectionObserverEntry[]) =>
+      entry.isIntersecting && setNextDisplayPosts(),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [searchValue]
+  );
+
+  useInfiniteScrollObserver({
+    target: targetRef,
+    onIntersect: onIntersect,
+  });
 
   return (
     <>
@@ -55,7 +91,10 @@ export default function ListLayout({ posts, title, description }: Props) {
             </svg>
           </div>
         </div>
-        <PostList posts={displayPosts} />
+        <div>
+          <PostList posts={displayPosts} />
+          <div ref={targetRef} />
+        </div>
       </div>
     </>
   );
