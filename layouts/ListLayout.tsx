@@ -91,8 +91,10 @@ export default function ListLayout({ posts, title, description }: Props) {
             </svg>
           </div>
         </div>
-        <PostList posts={displayPosts} />
-        <div ref={targetRef} />
+        <div>
+          <PostList posts={displayPosts} />
+          <div ref={targetRef} />
+        </div>
       </div>
     </>
   );
