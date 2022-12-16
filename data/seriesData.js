@@ -3,8 +3,8 @@
  * value: series cover image url
  */
 const seriesData = {
-  톺아보기: {
-    image: 'https://i.imgur.com/qP0A2eD.png',
+  동작원리: {
+    image: 'https://i.imgur.com/tTGn5AQ.png',
     slug: 'digging',
   },
   'HTTP 완벽 가이드': {

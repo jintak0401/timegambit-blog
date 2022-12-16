@@ -1,12 +1,12 @@
 ---
-title: "[Axios] 요청취소(cancel) 톺아보기 (feat. Promise)"
+title: "[Axios] 요청취소(cancel) 동작원리 (feat. Promise)"
 date: '2022-12-11'
 lastmod: '2022-12-11'
-tags: ['톺아보기','axios']
+tags: ['동작원리','axios']
 draft: false
-series: 톺아보기
-summary: axios 라이브러리의 cancel(요청취소) 기능을 분석해봤습니다.
-images: [https://i.imgur.com/QWfDHjf.png]
+series: 동작원리
+summary: axios 라이브러리 cancel(요청취소) 기능의 동작원리를 분석해보았습니다.
+images: [https://i.imgur.com/la00IAA.png]
 layout: PostLayout
 ---
 
@@ -94,7 +94,7 @@ executor 함수가 인자로 받은 c 변수로 초기화시킵니다.
 CancelToken의 생성자에서 executor 함수에 함수 c를 인자로 넣어 호출함으로써 source.cancel을 c로
 초기화시킬 것입니다.
 
-## Promise를 톺아보자
+## Promise를 구현해보자
 
 CancelToken의 constructor를 분석하기 전에 Promise에 대해 좀 더 깊게 알아봅시다.
 Promise를 간단하게 직접 구현해보고, CancelToken의 생성자 함수에서 사용하고 있는 방법을
@@ -191,7 +191,7 @@ fulfilled로 바뀌었으므로 아무 동작하지 않고 종료됩니다. 따�
 
 저는 개인적으로 41~43번 라인처럼 Promise의 내부 resolve 함수를 꺼내서 원할 때 호출하는 방법을
 처음보았습니다. 이렇게 새로운 시각을 느낄 때 라이브러리의 소스코드를 까보는 것도 공부에 큰 도움이
-된다고 느낍니다. 그러면 본격적으로 axios를 톺아보도록 할까요?
+된다고 느낍니다. 그러면 본격적으로 axios의 요청취소를 분석해볼까요?
 
 
 ## CancelToken constructor
@@ -295,8 +295,8 @@ axios 요청의 config로 넣어주어야 요청취소를 할 수 있다고 위�
 알아보았습니다. 직접 소스코드를 보면서 분석하며 새로운 시각을 접할 수 있었고, 글로 작성하면서,
 알게된 것들을 정리할 수 있었습니다.
 
-톺아보기 시리즈는 앞으로 개발자를 하면서 멈추지 않고 쭉 해볼 생각입니다. 이 글을 읽는 여러분들도
-톺아보기 시리즈를 통해 조금이나마 새로운 것을 배우거나 깨달을 수 있었으면 하는 바람입니다 🙃
+동작원리 시리즈는 앞으로 개발자를 하면서 멈추지 않고 쭉 해볼 생각입니다. 이 글을 읽는 여러분들도
+동작원리 시리즈를 통해 조금이나마 새로운 것을 배우거나 깨달을 수 있었으면 하는 바람입니다 🙃
 
 
 ## Reference
