@@ -20,7 +20,7 @@ const ViewCounter = ({ slug, type = 'POST', shown = false }: Props) => {
     localStorage.setItem(LAST_POST, slug);
 
     increment();
-  }, []);
+  }, [increment, slug, type]);
 
   // when no need to show & fetching is error
   if (!shown || isError) return null;
