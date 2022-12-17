@@ -3,8 +3,6 @@ import {
   defineDocumentType,
   makeSource,
 } from 'contentlayer/source-files';
-import rehypeAutolinkHeadings from 'rehype-autolink-headings';
-import rehypeKatex from 'rehype-katex';
 import rehypePresetMinify from 'rehype-preset-minify';
 import rehypePrismPlus from 'rehype-prism-plus';
 // Rehype packages
@@ -12,7 +10,6 @@ import rehypeSlug from 'rehype-slug';
 import remarkFootnotes from 'remark-footnotes';
 // Remark packages
 import remarkGfm from 'remark-gfm';
-import remarkMath from 'remark-math';
 
 import remarkCodeTitles from './lib/remark/remark-code-title';
 import remarkExtractFrontmatter from './lib/remark/remark-extract-frontmatter';
@@ -55,13 +52,11 @@ export default makeSource({
       remarkGfm,
       remarkCodeTitles,
       [remarkFootnotes, { inlineNotes: true }],
-      remarkMath,
       remarkImgToJsx,
     ],
     rehypePlugins: [
       rehypeSlug,
-      rehypeAutolinkHeadings,
-      rehypeKatex,
+      // rehypeAutolinkHeadings,
       [rehypePrismPlus, { ignoreMissing: true }],
       rehypePresetMinify,
     ],
