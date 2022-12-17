@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 
 import throttle from '@/lib/throttle';
 
+const THRESHOLD = 30;
+const TOP_BOUND = 20;
 export const useScrollDirection = () => {
   const scrollYPos = useRef(0);
   const [scrollDirection, setScrollDirection] = useState('up');
@@ -9,7 +11,11 @@ export const useScrollDirection = () => {
   useEffect(() => {
     const handleScroll = () => {
       const newY = window.scrollY;
-      setScrollDirection(scrollYPos.current > newY ? 'up' : 'down');
+      if (newY < TOP_BOUND) {
+        setScrollDirection('up');
+      } else if (Math.abs(newY - scrollYPos.current) >= THRESHOLD) {
+        setScrollDirection(scrollYPos.current > newY ? 'up' : 'down');
+      }
       scrollYPos.current = window.scrollY;
     };
 

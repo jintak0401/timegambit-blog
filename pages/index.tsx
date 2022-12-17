@@ -11,11 +11,9 @@ import PostList from '@/components/card-and-list/PostList';
 import { PageSEO } from '@/components/common/SEO';
 import Introduction from '@/components/Introduction';
 
-const HOME_POST_LENGTH = 3;
-
 export const getStaticProps: GetStaticProps = async () => {
   const posts = sortedBlogPost(allBlogs)
-    .slice(0, HOME_POST_LENGTH)
+    .slice(0, siteMetadata.blogPost.homePostLength)
     .map(pickBlogItem);
   return {
     props: { posts },
@@ -33,7 +31,7 @@ export default function Home({
       />
       <main className="flex flex-1 flex-col">
         <Introduction />
-        <div className="flex justify-between">
+        <div className="mb-2 flex justify-between">
           <h2 className="basic-text text-2xl font-semibold">
             {phrases.Main.recentPosts}
           </h2>

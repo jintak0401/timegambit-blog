@@ -14,7 +14,8 @@ const HEART_START_POS = 18,
 
 const convertLike2PosY = (like?: number) =>
   like
-    ? (like / siteMetadata.maxLikeCount) * (HEART_END_POS - HEART_START_POS) +
+    ? (like / siteMetadata.blogPost.maxLikeCount) *
+        (HEART_END_POS - HEART_START_POS) +
       HEART_START_POS
     : HEART_START_POS;
 
@@ -64,7 +65,9 @@ const PostLike = ({ slug }: Props) => {
           <svg
             viewBox="0 0 20 20"
             className={`h-12 w-12 ${clicked ? 'translate-y-px' : ''} ${
-              userLikes === siteMetadata.maxLikeCount ? 'animate-heart' : ''
+              userLikes === siteMetadata.blogPost.maxLikeCount
+                ? 'animate-heart'
+                : ''
             }`}
             onMouseDown={() => setClicked(true)}
             onMouseUp={() => setClicked(false)}

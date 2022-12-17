@@ -51,7 +51,7 @@ export const usePostLikes = (slug: string, config?: SWRConfiguration) => {
   const [batchedLikes, setBatchedLikes] = useState(0);
 
   const increment = () => {
-    if (!data || data.userLikes >= siteMetadata.maxLikeCount) {
+    if (!data || data.userLikes >= siteMetadata.blogPost.maxLikeCount) {
       return;
     }
 
