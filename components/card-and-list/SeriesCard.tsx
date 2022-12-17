@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { useState } from 'react';
 
+import formattedDate from '@/lib/formattedDate';
 import { SeriesListItem } from '@/lib/types';
-import useFormattedDate from '@/hooks/useFormattedDate';
 
 import phrases from '@/data/phrases';
 
@@ -42,7 +42,7 @@ const SeriesCard = ({ series }: Props) => {
             </span>
             <span className="weak-text"> · </span>
             <span className="weak-text">
-              {phrases.Series.lastUpdate} {useFormattedDate(lastmod)}
+              {phrases.Series.lastUpdate} {formattedDate(lastmod, false)}
             </span>
           </div>
         </div>
