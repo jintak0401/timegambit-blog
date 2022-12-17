@@ -18,7 +18,7 @@ export default function Header() {
   const isSamePath = (title: string) => path === title.toLowerCase();
 
   const navItems = (
-    <nav>
+    <nav className="hidden sm:block">
       <ul className="flex">
         {navLinks.map(({ href, title }, idx) => (
           <li
@@ -46,7 +46,9 @@ export default function Header() {
   return (
     <header
       className={`w-section fixed left-0 right-0 z-30 flex items-center justify-between border-b-2 bg-white py-2 transition-all duration-500 dark:bg-gray-900 ${
-        scrollDirection === 'down' ? '-top-[60px] sm:-top-14' : 'top-0'
+        scrollDirection === 'down'
+          ? '-translate-y-[70px] sm:-translate-y-16'
+          : 'translate-y-0'
       }`}
     >
       <Link
@@ -66,7 +68,7 @@ export default function Header() {
         )}
       </Link>
       <div className="flex items-center text-base leading-5">
-        <div className="hidden sm:block">{navItems}</div>
+        {navItems}
         <ThemeSwitch />
         <MobileNav />
       </div>
