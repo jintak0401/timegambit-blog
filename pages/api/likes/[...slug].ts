@@ -37,7 +37,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       );
       const count = Math.min(
         req.body.count > 0 ? req.body.count : 0,
-        siteMetadata.maxLikeCount - (userLikes[0]?.count || 0)
+        siteMetadata.blogPost.maxLikeCount - (userLikes[0]?.count || 0)
       );
 
       await Promise.all([
