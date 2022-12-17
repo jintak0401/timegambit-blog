@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
+import formattedDate from '@/lib/formattedDate';
 import { PostListItem } from '@/lib/types';
-import useFormattedDate from '@/hooks/useFormattedDate';
 
 import ViewCounter from '@/components/blog/ViewCounter';
 import ImageWithFallback from '@/components/Image/ImageWithFallback';
@@ -48,7 +48,7 @@ const PostCard = ({ post }: Props) => {
         <dl className="flex gap-2 text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
           <dt className="sr-only">작성 날짜</dt>
           <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
-            <time dateTime={date}>{useFormattedDate(date)}</time>
+            <time dateTime={date}>{formattedDate(date)}</time>
           </dd>
           <p className="bold">-</p>
           <dt className="sr-only">조회수</dt>
