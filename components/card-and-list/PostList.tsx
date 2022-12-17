@@ -10,7 +10,7 @@ interface Props {
 
 const PostList = ({ posts }: Props) => {
   return (
-    <ul className="space-y-8">
+    <ul className="space-y-8 py-4">
       {!posts.length && phrases.Blog.noPost}
       {posts.map((post) => (
         <li key={post.title}>
