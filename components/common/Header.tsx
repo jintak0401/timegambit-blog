@@ -47,7 +47,7 @@ export default function Header() {
     <header
       className={`w-section fixed left-0 right-0 z-30 flex items-center justify-between border-b-2 bg-white py-2 transition-all duration-500 dark:bg-gray-900 ${
         scrollDirection === 'down'
-          ? '-translate-y-[60px] sm:-translate-y-14'
+          ? '-translate-y-[70px] sm:-translate-y-16'
           : 'translate-y-0'
       }`}
     >
