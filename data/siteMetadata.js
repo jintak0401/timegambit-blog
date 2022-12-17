@@ -18,9 +18,10 @@ const siteMetadata = {
   youtube: '',
   linkedin: '',
   locale: 'ko-KR',
-  maxLikeCount: 4,
-  blog: {
+  blogPost: {
+    maxLikeCount: 4,
     postsPerScroll: 10,
+    homePostLength: 3,
   },
   oauth: {
     providers: ['google', 'github', 'naver', 'kakao'],
