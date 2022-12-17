@@ -14,6 +14,13 @@ const phrases = {
   cancel: '취소',
   toc: 'Table of contents',
   delete_successful: '성공적으로 삭제했습니다',
+  formattingDate: {
+    today: '오늘',
+    daysAgo: '일 전',
+    weeksAgo: '주 전',
+    monthsAgo: '개월 전',
+    yearsAgo: '년 전',
+  },
   Main: {
     name: 'Time Gambit',
     description: '호기심과 탐구심과 순수함을 잃지 않으려고 노력합니다.',
