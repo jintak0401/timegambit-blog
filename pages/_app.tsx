@@ -9,7 +9,6 @@ import '@fontsource/dejavu-mono';
 import 'react-toastify/dist/ReactToastify.css';
 import '@/css/tailwind.css';
 import '@/css/prism.css';
-import '@/css/katex.css';
 
 import siteMetadata from '@/data/siteMetadata';
 

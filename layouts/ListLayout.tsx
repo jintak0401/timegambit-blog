@@ -22,7 +22,7 @@ export default function ListLayout({ posts, title, description }: Props) {
   const isFirstRender = useIsFirstRender();
   const [searchValue, setSearchValue] = useState('');
   const [displayPosts, setDisplayPosts] = useState<PostListItem[]>(
-    posts.slice(0, siteMetadata.blog.postsPerScroll)
+    posts.slice(0, siteMetadata.blogPost.postsPerScroll)
   );
 
   const setNextDisplayPosts = (init = false) => {
@@ -30,7 +30,7 @@ export default function ListLayout({ posts, title, description }: Props) {
       const _posts = filterBlogPosts(posts, searchValue);
       const nextPosts = _posts.slice(
         0,
-        (init ? 0 : prev.length) + siteMetadata.blog.postsPerScroll
+        (init ? 0 : prev.length) + siteMetadata.blogPost.postsPerScroll
       );
 
       if (nextPosts.length !== prev.length) return nextPosts;
