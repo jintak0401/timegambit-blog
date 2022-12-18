@@ -4,9 +4,9 @@ import path from "path";
 
 import { escape } from "./htmlEscaper.mjs";
 import { allBlogs } from "../.contentlayer/generated/Blog/_index.mjs";
-import siteMetadata from "../data/siteMetadata.js";
-import { getAllSeries, getAllTags } from "../lib/getBlogInfo.mjs";
-import seriesData from "../data/seriesData.js";
+import siteMetadata from "../data/siteMetadata.mjs";
+import { getAllSeries, getAllTags } from "../src/lib/getBlogInfo.mjs";
+import seriesData from "../data/seriesData.mjs";
 
 const generateRssItem = (post) => `
   <item>
@@ -71,7 +71,7 @@ const generateRss = (posts, page = "feed.xml") => `
         (post) =>
           post.draft !== true && post.series === aSeries
       );
-      const seriesSlug = slug(seriesData[aSeries]?.slug || aSeries)
+      const seriesSlug = slug(seriesData[aSeries]?.slug || aSeries);
       const rss = generateRss(filteredPosts, `series/${seriesSlug}/feed.xml`);
       const rssPath = path.join("public", "series", seriesSlug);
       mkdirSync(rssPath, { recursive: true });

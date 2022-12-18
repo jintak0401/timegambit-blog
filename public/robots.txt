@@ -1,9 +1,7 @@
 User-Agent: *
-Disallow: /
+Allow: /*
+Disallow: /api/*
 
-User-Agent: Googlebot
-User-Agent: Yeti
-User-Agent: Daumoa
-Allow: /
+Sitemap: https://www.timegambit.com/sitemap.xml
 
-#DaumWebMasterTool:82b7b83860579d43bc86ed13498e46f8c484808bb07d6a852dd2b781d5782895:d/Foo/jdd3mile3QAxEoaw==
+#DaumWebMasterTool:#DaumWebMasterTool:54ab18795284653f2eaf2d6606c423457e94ecde605cd64b9f4930193af818f1:05rBMTmLVmAYLkQyAlRLqA==
