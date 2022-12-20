@@ -10,11 +10,11 @@ module.exports = {
     optimizeUniversalDefaults: true,
   },
   content: [
-    './pages/**/*.tsx',
-    './components/**/*.tsx',
-    './layouts/**/*.tsx',
-    './lib/**/*.ts',
-    './data/**/*.mdx',
+    './src/pages/**/*.tsx',
+    './src/components/**/*.tsx',
+    './src/layouts/**/*.tsx',
+    './src/lib/**/*.ts',
+    './src/data/**/*.mdx',
   ],
   darkMode: 'class',
   theme: {
@@ -32,7 +32,7 @@ module.exports = {
         sans: ['Pretendard', ...defaultTheme.fontFamily.sans],
       },
       colors: {
-        primary: colors.teal,
+        primary: colors.indigo,
         gray: colors.neutral,
       },
       keyframes: {
@@ -73,7 +73,7 @@ module.exports = {
               color: theme('colors.primary.500'),
               wordBreak: 'break-all',
               '&:hover': {
-                color: `${theme('colors.primary.600')} !important`,
+                color: `${theme('colors.primary.700')} !important`,
               },
               code: {
                 color: theme('colors.primary.400'),
@@ -147,9 +147,9 @@ module.exports = {
           css: {
             color: theme('colors.gray.300'),
             a: {
-              color: theme('colors.primary.500'),
+              color: theme('colors.primary.400'),
               '&:hover': {
-                color: `${theme('colors.primary.400')} !important`,
+                color: `${theme('colors.primary.300')} !important`,
               },
               code: { color: theme('colors.primary.400') },
             },

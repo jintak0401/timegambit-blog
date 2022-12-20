@@ -1,0 +1,127 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard-dynamic-subset.css");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --timing-func: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.task-list-item::before {
+    @apply hidden;
+}
+
+.task-list-item {
+    @apply list-none;
+}
+
+.footnotes {
+    @apply pt-8 mt-12 border-t border-gray-200 dark:border-gray-700;
+}
+
+.csl-entry {
+    @apply my-5;
+}
+
+/* https://stackoverflow.com/questions/61083813/how-to-avoid-internal-autofill-selected-style-to-be-applied */
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+    transition: background-color 600000s 0s, color 600000s 0s;
+}
+
+@layer base {
+    html {
+        font-family: "Pretendard", sans-serif;
+    }
+
+    ::selection {
+        @apply bg-primary-100 text-primary-500 dark:bg-primary-800 dark:text-primary-200;
+    }
+
+    ::-moz-selection {
+        @apply bg-primary-100 text-primary-500;
+    }
+}
+
+@layer components {
+    .primary-color-text {
+        @apply text-primary-400 hover:text-primary-700 dark:hover:text-primary-300;
+    }
+
+    .strong-text {
+        @apply text-gray-900 dark:text-gray-100;
+    }
+
+    .middle-text {
+        @apply text-gray-500 dark:text-gray-400;
+    }
+
+    .weak-text {
+        @apply text-gray-400 dark:text-gray-500;
+    }
+
+    .w-section {
+        @apply mx-auto max-w-3xl px-4 xl:max-w-5xl xl:px-0;
+    }
+
+    .card {
+        z-index: 1;
+        @apply rounded-md py-10 relative;
+    }
+
+    .card::before {
+        content: "";
+        z-index: -1;
+        @apply absolute w-full h-full top-0 left-0 shadow-2xl rounded-md opacity-0 transition-opacity duration-500;
+    }
+
+    .card:hover::before {
+        @apply opacity-100;
+    }
+
+    .basic-text {
+        @apply strong-text transition-colors duration-500;
+    }
+
+    .post-like-first-grad {
+        stop-color: theme('colors.primary.300');
+        stop-opacity: 1;
+    }
+
+    .post-like-second-grad {
+        stop-color: theme('colors.primary.600');
+        stop-opacity: 1;
+    }
+}
+
+::-webkit-scrollbar {
+    @apply bg-gray-300 dark:bg-gray-700 w-3;
+}
+
+::-webkit-scrollbar-thumb {
+    background-clip: padding-box;
+    border: 1px solid transparent;
+    @apply bg-gray-500 dark:bg-gray-300 rounded-lg border-transparent border-2;
+}
+
+/* we define color scheme here */
+
+.dark {
+    --base-color: #171717;
+}
+
+.light {
+    --base-color: #ffffff;
+}
+
+html,
+body {
+    background-color: var(--base-color);
+    transition: background-color 500ms;
+    transition-timing-function: var(--timing-func);
+}
+
+* {
+    -webkit-tap-highlight-color: transparent;
+}
