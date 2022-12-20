@@ -1,9 +1,10 @@
 import phrases from 'data/phrases';
 import siteMetadata from 'data/siteMetadata.mjs';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { filterBlogPosts } from '@/lib/contentlayer';
 import { PostListItem } from '@/lib/types';
+import { sameAllElements } from '@/lib/utils';
 import useDebounce from '@/hooks/useDebounce';
 import useInfiniteScrollObserver from '@/hooks/useInfiniteScrollObserver';
 import useIsFirstRender from '@/hooks/useIsFirstRender';
@@ -24,6 +25,13 @@ export default function ListLayout({ posts, title, description }: Props) {
     posts.slice(0, siteMetadata.blogPost.postsPerScroll)
   );
 
+  useEffect(() => {
+    setDisplayPosts((prev) => {
+      const newPosts = posts.slice(0, siteMetadata.blogPost.postsPerScroll);
+      return sameAllElements(prev, newPosts) ? prev : newPosts;
+    });
+  }, [posts]);
+
   const setNextDisplayPosts = (init = false) => {
     setDisplayPosts((prev) => {
       const _posts = filterBlogPosts(posts, searchValue);
@@ -32,13 +40,7 @@ export default function ListLayout({ posts, title, description }: Props) {
         (init ? 0 : prev.length) + siteMetadata.blogPost.postsPerScroll
       );
 
-      if (nextPosts.length !== prev.length) return nextPosts;
-
-      let idx;
-      for (idx = 0; idx < nextPosts.length; idx++) {
-        if (nextPosts[idx] !== prev[idx]) break;
-      }
-      return idx === nextPosts.length ? prev : nextPosts;
+      return sameAllElements(nextPosts, prev) ? prev : nextPosts;
     });
   };
 
