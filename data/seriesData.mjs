@@ -12,7 +12,7 @@ const seriesData = {
     slug: 'http',
   },
   '블로그 제작일지': {
-    image: 'https://i.imgur.com/AQGmxni.png',
+    image: 'https://i.imgur.com/FmvxvwS.png',
     slug: 'blog-log',
   },
 };
