@@ -35,8 +35,8 @@ export default function Home({
             {phrases.Main.recentPosts}
           </h2>
           <Link
-            href="/src/pages/blog"
-            className="rounded-md p-2 text-center font-semibold text-primary-500 hover:bg-gray-100 dark:text-primary-600 dark:hover:bg-gray-800"
+            href="/blog"
+            className="rounded-md p-2 text-center font-semibold text-primary-500 hover:bg-gray-100 dark:text-primary-400 dark:hover:bg-gray-800"
           >
             {phrases.Main.allPosts}
           </Link>

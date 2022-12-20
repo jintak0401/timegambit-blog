@@ -15,7 +15,7 @@ const AboutCard = ({ title, date, info }: Props) => {
       </div>
       <ul
         role="list"
-        className="basic-text list-inside list-disc space-y-3 marker:text-primary-500"
+        className="basic-text list-inside list-disc space-y-3 marker:text-primary-400"
       >
         {info.map((piece) => (
           <li role="listitem" key={piece}>

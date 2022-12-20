@@ -35,7 +35,7 @@ export default function AboutPage() {
           </h2>
           <ul
             role="list"
-            className="list-inside list-disc space-y-3 text-lg marker:text-primary-500"
+            className="list-inside list-disc space-y-3 text-lg marker:text-primary-400"
           >
             {Object.entries(about.Contact).map(([key, value]) => (
               <li role="listitem" key={key}>
@@ -44,7 +44,7 @@ export default function AboutPage() {
                 </span>
                 <Link
                   href={`${value.includes('@') ? 'mailto:' : ''}${value}`}
-                  className="font-medium text-primary-500 hover:text-primary-600 hover:underline dark:hover:text-primary-400"
+                  className="primary-color-text font-medium hover:underline"
                 >
                   {value}
                 </Link>
