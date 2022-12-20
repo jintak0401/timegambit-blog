@@ -6,7 +6,7 @@ const dedent = require('dedent');
 const root = process.cwd();
 
 const getLayouts = () => {
-  const layoutPath = path.join(root, 'layouts');
+  const layoutPath = path.join(root, 'scr', 'layouts');
   return fs
     .readdirSync(layoutPath)
     .map((filename) => path.parse(filename).name)
@@ -63,7 +63,7 @@ inquirer
       name: 'draft',
       message: 'Set post as draft?',
       type: 'list',
-      choices: ['yes', 'no'],
+      choices: ['no', 'yes'],
     },
     {
       name: 'series',

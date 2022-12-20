@@ -11,9 +11,9 @@ import remarkFootnotes from 'remark-footnotes';
 // Remark packages
 import remarkGfm from 'remark-gfm';
 
-import remarkCodeTitles from './lib/remark/remark-code-title';
-import remarkExtractFrontmatter from './lib/remark/remark-extract-frontmatter';
-import remarkImgToJsx from './lib/remark/remark-img-to-jsx';
+import remarkCodeTitles from './src/lib/remark/remark-code-title';
+import remarkExtractFrontmatter from './src/lib/remark/remark-extract-frontmatter';
+import remarkImgToJsx from './src/lib/remark/remark-img-to-jsx';
 
 const computedFields: ComputedFields = {
   slug: {
