@@ -1,10 +1,15 @@
-import Logo from 'data/logo.svg';
+import LogoTitle from 'data/logo/_logoTitle.svg';
+import DarkLogo from 'data/logo/darkLogo.svg';
+import DarkLogoTitle from 'data/logo/darkLogoTitle.svg';
+import Logo from 'data/logo/logo.svg';
 import navLinks from 'data/navLinks';
 import siteMetadata from 'data/siteMetadata.mjs';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { useScrollDirection } from '@/hooks/useScrollDirection';
+
+import SvgSwitcher from '@/components/Image/SvgSwitcher';
 
 import MobileNav from './MobileNav';
 import ThemeSwitch from './ThemeSwitch';
@@ -30,7 +35,7 @@ export default function Header() {
               href={href}
               className={`mx-1 rounded p-1 font-semibold transition-all duration-500 sm:px-4 sm:py-2 ${
                 isSamePath(title)
-                  ? 'bg-primary-100 text-primary-600 dark:bg-primary-800 dark:text-primary-300'
+                  ? 'bg-primary-100 text-primary-600 dark:bg-primary-800 dark:text-primary-200'
                   : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'
               }`}
             >
@@ -55,16 +60,18 @@ export default function Header() {
         aria-label={siteMetadata.headerTitle}
         className="flex cursor-pointer items-center justify-between"
       >
-        <div className="mr-3">
-          <Logo className="h-7 w-7 fill-current text-primary-500 dark:text-primary-300" />
+        <SvgSwitcher
+          className="mr-3 h-8 w-8"
+          LightModeSvg={Logo}
+          DarkModeSvg={DarkLogo}
+        />
+        <div className="hidden md:block">
+          <SvgSwitcher
+            className="h-6 w-52"
+            LightModeSvg={LogoTitle}
+            DarkModeSvg={DarkLogoTitle}
+          />
         </div>
-        {typeof siteMetadata.headerTitle === 'string' ? (
-          <div className="hidden h-6 text-2xl font-semibold md:block">
-            {siteMetadata.headerTitle}
-          </div>
-        ) : (
-          siteMetadata.headerTitle
-        )}
       </Link>
       <div className="flex items-center text-base leading-5">
         {navItems}

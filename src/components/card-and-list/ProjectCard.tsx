@@ -61,7 +61,7 @@ const ProjectCard = ({ title, description, imgSrc, href }: Props) => {
             <Link
               href={href}
               aria-label={`Link to ${title}`}
-              className="text-base font-medium leading-6 text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+              className="primary-color-text text-base font-medium leading-6"
             >
               Learn more &rarr;
             </Link>

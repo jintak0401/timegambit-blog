@@ -43,7 +43,7 @@ const PostListInSeries = ({ seriesTitle, series }: Props) => {
           className={`rounded-full bg-white dark:bg-gray-700 ${
             isDisabled
               ? 'opacity-40'
-              : 'hover:bg-primary-100 hover:dark:bg-primary-900'
+              : 'hover:bg-primary-100 hover:dark:bg-primary-800'
           }`}
           key={index}
           onClick={() =>
@@ -59,6 +59,9 @@ const PostListInSeries = ({ seriesTitle, series }: Props) => {
           }
           disabled={isDisabled}
         >
+          <span className="sr-only">
+            {nextIdx === idx ? 'next' : 'prev'} post in series
+          </span>
           <Icon className="h-6 w-6 text-primary-500" />
         </button>
       ))}
@@ -92,7 +95,7 @@ const PostListInSeries = ({ seriesTitle, series }: Props) => {
                 className={`hover:underline
                 ${
                   slug === curSlug
-                    ? 'font-semibold text-primary-500'
+                    ? 'font-semibold text-primary-500 dark:text-primary-400'
                     : 'text-gray-700 hover:text-gray-900 dark:text-gray-300 hover:dark:text-gray-200'
                 }`}
               >

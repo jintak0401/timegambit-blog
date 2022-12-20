@@ -45,6 +45,9 @@ input:-webkit-autofill:focus {
 }
 
 @layer components {
+    .primary-color-text {
+        @apply text-primary-400 hover:text-primary-700 dark:hover:text-primary-300;
+    }
 
     .strong-text {
         @apply text-gray-900 dark:text-gray-100;
@@ -70,7 +73,6 @@ input:-webkit-autofill:focus {
     .card::before {
         content: "";
         z-index: -1;
-        /*box-shadow: rgba(0, 0, 0, 0.1) 0 10px 20px 0;*/
         @apply absolute w-full h-full top-0 left-0 shadow-2xl rounded-md opacity-0 transition-opacity duration-500;
     }
 
@@ -123,4 +125,3 @@ body {
 * {
     -webkit-tap-highlight-color: transparent;
 }
-
