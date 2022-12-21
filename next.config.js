@@ -6,6 +6,9 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 /** @type {import('next').NextConfig} */
 const nextConfig = withContentlayer(
   withBundleAnalyzer({
+    experimental: {
+      scrollRestoration: true,
+    },
     reactStrictMode: true,
     swcMinify: true,
 
@@ -26,7 +29,7 @@ const nextConfig = withContentlayer(
       dirs: ['pages', 'components', 'lib', 'layouts'],
     },
 
-    webpack: (config, { dev, isServer }) => {
+    webpack: (config) => {
       config.module.rules.push({
         test: /\.svg$/,
         use: [
