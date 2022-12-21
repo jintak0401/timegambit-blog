@@ -6,7 +6,7 @@ const dedent = require('dedent');
 const root = process.cwd();
 
 const getLayouts = () => {
-  const layoutPath = path.join(root, 'scr', 'layouts');
+  const layoutPath = path.join(root, 'src', 'layouts');
   return fs
     .readdirSync(layoutPath)
     .map((filename) => path.parse(filename).name)
@@ -106,6 +106,7 @@ inquirer
     if (error.isTtyError) {
       console.log("Prompt couldn't be rendered in the current environment");
     } else {
+      console.error(error);
       console.log('Something went wrong, sorry!');
     }
   });
