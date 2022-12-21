@@ -1,5 +1,6 @@
 import phrases from 'data/phrases';
 import siteMetadata from 'data/siteMetadata.mjs';
+import { useRouter } from 'next/router';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { filterBlogPosts } from '@/lib/contentlayer';
@@ -18,19 +19,24 @@ interface Props {
 }
 
 export default function ListLayout({ posts, title, description }: Props) {
-  const targetRef = useRef<HTMLDivElement | null>(null);
+  const router = useRouter();
+  const infScrollRef = useRef<HTMLDivElement | null>(null);
   const isFirstRender = useIsFirstRender();
   const [searchValue, setSearchValue] = useState('');
-  const [displayPosts, setDisplayPosts] = useState<PostListItem[]>(
-    posts.slice(0, siteMetadata.blogPost.postsPerScroll)
-  );
+  const [displayPosts, setDisplayPosts] = useState<PostListItem[]>(() => {
+    return posts.slice(0, siteMetadata.blogPost.postsPerScroll);
+  });
 
+  // for routing tag page
   useEffect(() => {
+    setSearchValue('');
     setDisplayPosts((prev) => {
-      const newPosts = posts.slice(0, siteMetadata.blogPost.postsPerScroll);
-      return sameAllElements(prev, newPosts) ? prev : newPosts;
+      return sameAllElements(prev, posts)
+        ? prev
+        : posts.slice(0, siteMetadata.blogPost.postsPerScroll);
     });
-  }, [posts]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.asPath]);
 
   const setNextDisplayPosts = (init = false) => {
     setDisplayPosts((prev) => {
@@ -49,14 +55,15 @@ export default function ListLayout({ posts, title, description }: Props) {
   ]);
 
   const onIntersect = useCallback(
-    ([entry]: IntersectionObserverEntry[]) =>
-      entry.isIntersecting && setNextDisplayPosts(),
+    ([entry]: IntersectionObserverEntry[]) => {
+      entry.isIntersecting && setNextDisplayPosts();
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [searchValue]
+    [searchValue, posts]
   );
 
   useInfiniteScrollObserver({
-    target: targetRef,
+    target: infScrollRef,
     onIntersect: onIntersect,
   });
 
@@ -72,6 +79,7 @@ export default function ListLayout({ posts, title, description }: Props) {
             <input
               aria-label="Search articles"
               type="text"
+              value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
               placeholder={phrases.Blog.search}
               className="block w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-900 transition-colors duration-500 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-900 dark:bg-gray-800 dark:text-gray-100"
@@ -94,7 +102,7 @@ export default function ListLayout({ posts, title, description }: Props) {
         </div>
         <div>
           <PostList posts={displayPosts} />
-          <div ref={targetRef} />
+          <div ref={infScrollRef} />
         </div>
       </div>
     </>
