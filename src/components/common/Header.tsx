@@ -1,7 +1,7 @@
 import LogoTitle from 'data/logo/_logoTitle.svg';
 import DarkLogo from 'data/logo/darkLogo.svg';
 import DarkLogoTitle from 'data/logo/darkLogoTitle.svg';
-import Logo from 'data/logo/logo.svg';
+import Logo from 'data/logo/LogoComponent';
 import navLinks from 'data/navLinks';
 import siteMetadata from 'data/siteMetadata.mjs';
 import Link from 'next/link';
@@ -62,6 +62,7 @@ export default function Header() {
       >
         <SvgSwitcher
           className="mr-3 h-8 w-8"
+          svgkey="header"
           LightModeSvg={Logo}
           DarkModeSvg={DarkLogo}
         />
