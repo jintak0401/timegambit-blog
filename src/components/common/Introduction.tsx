@@ -1,6 +1,6 @@
 import DarkLogo from 'data/logo/darkLogo.svg';
 import DarkLogoTitle from 'data/logo/darkLogoTitle.svg';
-import Logo from 'data/logo/logo.svg';
+import Logo from 'data/logo/LogoComponent';
 import LogoTitle from 'data/logo/logoTitle.svg';
 import phrases from 'data/phrases';
 
