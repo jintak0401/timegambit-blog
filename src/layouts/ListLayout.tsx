@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { filterBlogPosts } from '@/lib/contentlayer';
+import { scrollPosStore } from '@/lib/scrollPosStore';
 import { PostListItem } from '@/lib/types';
 import { sameAllElements } from '@/lib/utils';
 import useDebounce from '@/hooks/useDebounce';
@@ -20,20 +21,23 @@ interface Props {
 
 export default function ListLayout({ posts, title, description }: Props) {
   const router = useRouter();
+  const { getScrollPosState, setListLengthState } = scrollPosStore;
+  const { listLength } = getScrollPosState(router.pathname);
   const infScrollRef = useRef<HTMLDivElement | null>(null);
   const isFirstRender = useIsFirstRender();
   const [searchValue, setSearchValue] = useState('');
   const [displayPosts, setDisplayPosts] = useState<PostListItem[]>(() => {
-    return posts.slice(0, siteMetadata.blogPost.postsPerScroll);
+    return posts.slice(0, listLength);
   });
 
-  // for routing tag page
   useEffect(() => {
     setSearchValue('');
     setDisplayPosts((prev) => {
-      return sameAllElements(prev, posts)
+      const nextState = sameAllElements(prev, posts)
         ? prev
         : posts.slice(0, siteMetadata.blogPost.postsPerScroll);
+      setListLengthState(router.pathname, nextState.length);
+      return nextState;
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.asPath]);
@@ -46,7 +50,9 @@ export default function ListLayout({ posts, title, description }: Props) {
         (init ? 0 : prev.length) + siteMetadata.blogPost.postsPerScroll
       );
 
-      return sameAllElements(nextPosts, prev) ? prev : nextPosts;
+      const nextState = sameAllElements(nextPosts, prev) ? prev : nextPosts;
+      setListLengthState(router.pathname, nextState.length);
+      return nextState;
     });
   };
 

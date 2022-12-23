@@ -11,6 +11,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import '@/css/tailwind.css';
 import '@/css/prism.css';
 
+import useRestoreScrollPos from '@/hooks/useRestoreScrollPos';
+
 import Analytics from '@/components/analytics';
 import LayoutWrapper from '@/components/common/LayoutWrapper';
 
@@ -18,6 +20,7 @@ export default function App({
   Component,
   pageProps: { session, ...pageProps },
 }: AppProps<{ session: Session }>) {
+  useRestoreScrollPos();
   return (
     <ThemeProvider attribute="class" defaultTheme={siteMetadata.theme}>
       <Head>
