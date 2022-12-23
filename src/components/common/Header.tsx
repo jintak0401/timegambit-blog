@@ -1,7 +1,4 @@
-import LogoTitle from 'data/logo/_logoTitle.svg';
-import DarkLogo from 'data/logo/darkLogo.svg';
-import DarkLogoTitle from 'data/logo/darkLogoTitle.svg';
-import Logo from 'data/logo/logo.svg';
+import { DarkLogo, DarkLogoTitle, Logo, LogoTitle } from 'data/logo';
 import navLinks from 'data/navLinks';
 import siteMetadata from 'data/siteMetadata.mjs';
 import Link from 'next/link';
@@ -62,12 +59,14 @@ export default function Header() {
       >
         <SvgSwitcher
           className="mr-3 h-8 w-8"
+          svgkey="header_logo"
           LightModeSvg={Logo}
           DarkModeSvg={DarkLogo}
         />
         <div className="hidden md:block">
           <SvgSwitcher
             className="h-6 w-52"
+            svgkey="header_title"
             LightModeSvg={LogoTitle}
             DarkModeSvg={DarkLogoTitle}
           />

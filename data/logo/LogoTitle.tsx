@@ -1,0 +1,122 @@
+const LogoTitle = ({ svgkey, ...rest }: { svgkey?: string }) => {
+  const generateId = (id: string) => (svgkey ? `${id}__${svgkey}` : id);
+
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 310.09 29.79"
+      {...rest}
+    >
+      <defs>
+        <linearGradient
+          id={generateId('d')}
+          x1="-117.94"
+          y1="14.89"
+          x2="338.47"
+          y2="14.89"
+          gradientTransform="matrix(1, 0, 0, 1, 0, 0)"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0" stopColor="#7056ff" />
+          <stop offset="1" stopColor="#3508aa" />
+        </linearGradient>
+        <linearGradient
+          id={generateId('e')}
+          x1="-117.94"
+          x2="338.47"
+          xlinkHref={`#${generateId('d')}`}
+        />
+        <linearGradient
+          id={generateId('f')}
+          x1="-117.94"
+          x2="338.47"
+          xlinkHref={`#${generateId('d')}`}
+        />
+        <linearGradient
+          id={generateId('g')}
+          x1="-117.94"
+          x2="338.47"
+          xlinkHref={`#${generateId('d')}`}
+        />
+        <linearGradient
+          id={generateId('h')}
+          x1="-117.94"
+          x2="338.47"
+          xlinkHref={`#${generateId('d')}`}
+        />
+        <linearGradient
+          id={generateId('i')}
+          x1="-117.94"
+          x2="338.47"
+          xlinkHref={`#${generateId('d')}`}
+        />
+        <linearGradient
+          id={generateId('j')}
+          x1="-117.94"
+          x2="338.47"
+          xlinkHref={`#${generateId('d')}`}
+        />
+        <linearGradient
+          id={generateId('k')}
+          x1="-117.94"
+          x2="338.47"
+          xlinkHref={`#${generateId('d')}`}
+        />
+        <linearGradient
+          id={generateId('l')}
+          x1="-117.94"
+          x2="338.47"
+          xlinkHref={`#${generateId('d')}`}
+        />
+        <linearGradient
+          id={generateId('m')}
+          x1="-117.94"
+          x2="338.47"
+          xlinkHref={`#${generateId('d')}`}
+        />
+      </defs>
+      <path
+        fill={`url(#${generateId('d')})`}
+        d="M21.28,6.87h-7.37V29.22H7.37V6.87H0V.57H21.28V6.87Z"
+      />
+      <path
+        d="M36.83,.57V29.22h-6.55V.57h6.55Z"
+        fill={`url(#${generateId('e')})`}
+      />
+      <path
+        d="M76.52,29.22h-6.55V12.56l-7.41,12.15h-.74l-7.41-12.15V29.22h-6.55V.57h6.55l7.77,12.72L69.97,.57h6.55V29.22Z"
+        fill={`url(#${generateId('f')})`}
+      />
+      <path
+        d="M105.57,22.91v6.3h-18V.57h17.8V6.87h-11.25v4.75h10.23v6.22h-10.23v5.07h11.46Z"
+        fill={`url(#${generateId('g')})`}
+      />
+      <path
+        d="M160.12,15.71c0,8.76-6.1,14.08-14.12,14.08-9,0-15.47-6.63-15.47-14.85s6.59-14.93,15.02-14.93c5.48,0,10.11,2.7,12.52,6.55l-5.57,3.19c-1.19-1.88-3.76-3.36-7-3.36-4.83,0-8.43,3.56-8.43,8.59s3.44,8.43,9,8.43c3.81,0,6.3-1.68,7.32-4.42h-7.65v-5.73h14.36v2.45Z"
+        fill={`url(#${generateId('h')})`}
+      />
+      <path
+        d="M185.69,24.71h-10.64l-1.43,4.5h-7.16L176.2,.57h8.35l9.74,28.64h-7.16l-1.43-4.5Zm-1.96-6.14l-3.36-10.52-3.36,10.52h6.71Z"
+        fill={`url(#${generateId('i')})`}
+      />
+      <path
+        d="M231.52,29.22h-6.55V12.56l-7.41,12.15h-.74l-7.41-12.15V29.22h-6.55V.57h6.55l7.77,12.72,7.77-12.72h6.55V29.22Z"
+        fill={`url(#${generateId('j')})`}
+      />
+      <path
+        d="M263.85,20.83c0,5.07-4.13,8.39-9.25,8.39h-12.03V.57h11.21c4.99,0,9.04,3.23,9.04,8.18,0,2.37-.94,4.25-2.5,5.61,2.13,1.35,3.52,3.56,3.52,6.47Zm-14.73-14.12v5.07h4.66c1.47,0,2.5-1.06,2.5-2.54s-.98-2.54-2.5-2.54h-4.66Zm8.18,13.63c0-1.6-1.06-2.74-2.7-2.74h-5.48v5.48h5.48c1.64,0,2.7-1.15,2.7-2.74Z"
+        fill={`url(#${generateId('k')})`}
+      />
+      <path
+        d="M279.81,.57V29.22h-6.55V.57h6.55Z"
+        fill={`url(#${generateId('l')})`}
+      />
+      <path
+        d="M310.09,6.87h-7.37V29.22h-6.55V6.87h-7.37V.57h21.28V6.87Z"
+        fill={`url(#${generateId('m')})`}
+      />
+    </svg>
+  );
+};
+
+export default LogoTitle;
