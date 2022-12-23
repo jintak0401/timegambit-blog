@@ -1,7 +1,4 @@
-import DarkLogo from 'data/logo/darkLogo.svg';
-import DarkLogoTitle from 'data/logo/darkLogoTitle.svg';
-import Logo from 'data/logo/LogoComponent';
-import LogoTitle from 'data/logo/logoTitle.svg';
+import { DarkLogo, DarkLogoTitle, Logo, LogoTitle } from 'data/logo';
 import phrases from 'data/phrases';
 
 import SvgSwitcher from '@/components/Image/SvgSwitcher';
@@ -12,7 +9,7 @@ const Introduction = () => {
       <div className="flex flex-1 items-center justify-center">
         <SvgSwitcher
           className="h-32 w-32"
-          svgkey="introduction"
+          svgkey="introduction_logo"
           LightModeSvg={Logo}
           DarkModeSvg={DarkLogo}
         />
@@ -20,6 +17,7 @@ const Introduction = () => {
       <div className="flex-1">
         <SvgSwitcher
           className="mx-auto mt-5 h-10 w-72 fill-current lg:mx-0 lg:mt-0 lg:w-96"
+          svgkey="introduction_title"
           LightModeSvg={LogoTitle}
           DarkModeSvg={DarkLogoTitle}
         />
