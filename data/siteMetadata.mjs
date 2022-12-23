@@ -18,6 +18,7 @@ const siteMetadata = {
   youtube: '',
   linkedin: '',
   locale: 'ko-KR',
+  needRestoreScrollPosPage: ['/blog', '/tags/[tag]', '/series/[seriesSlug]'],
   blogPost: {
     maxLikeCount: 4,
     postsPerScroll: 10,
