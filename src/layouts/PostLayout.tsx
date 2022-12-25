@@ -10,10 +10,10 @@ import PostLike from '@/components/blog/PostLike';
 import PostListInSeries from '@/components/blog/PostListInSeries';
 import RoutePostBtn from '@/components/blog/RoutePostBtn';
 import ScrollIndicator from '@/components/blog/ScrollIndicator';
-import ScrollTopAndComment from '@/components/blog/ScrollTopAndComment';
 import TagInPost from '@/components/blog/TagInPost';
 import ViewCounter from '@/components/blog/ViewCounter';
 import Comments from '@/components/comments';
+import ScrollTopAndBottom from '@/components/common/ScrollTopAndBottom';
 import LargeWidthTOC from '@/components/TOC/LargeWidthTOC';
 import SmallWidthTOC from '@/components/TOC/SmallWidthTOC';
 
@@ -39,7 +39,7 @@ export default function PostLayout({
   return (
     <>
       <ScrollIndicator />
-      <ScrollTopAndComment />
+      <ScrollTopAndBottom />
       <article className="transition-colors duration-500">
         <div>
           <header>
