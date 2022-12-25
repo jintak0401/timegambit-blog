@@ -31,9 +31,6 @@ input:-webkit-autofill:focus {
 }
 
 @layer base {
-    html {
-        font-family: "Pretendard", sans-serif;
-    }
 
     ::selection {
         @apply bg-primary-100 text-primary-500 dark:bg-primary-800 dark:text-primary-200;
