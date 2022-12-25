@@ -1,6 +1,6 @@
 /* Code title styles */
 .remark-code-title {
-    font-family: 'DejaVu Mono', 'Pretendard', serif;
+    font-family: var(--font-dejavu), 'Pretendard', serif;
     @apply rounded-t bg-gray-700 px-5 py-3 text-base font-bold text-gray-200;
 }
 
@@ -54,7 +54,7 @@
 }
 
 pre {
-    font-family: 'DejaVu Mono', 'Pretendard', serif;
+    font-family: var(--font-dejavu), 'Pretendard', serif;
 }
 
 pre > code {

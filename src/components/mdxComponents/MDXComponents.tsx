@@ -1,5 +1,4 @@
 import type { Blog } from 'contentlayer/generated';
-import { ComponentMap } from 'mdx-bundler/client';
 import { useMDXComponent } from 'next-contentlayer/hooks';
 import React, { ReactNode } from 'react';
 
@@ -26,7 +25,7 @@ const Wrapper = ({ layout, content, children, ...rest }: MDXLayout) => {
   );
 };
 
-export const MDXComponents: ComponentMap = {
+export const MDXComponents = {
   wrapper: Wrapper,
   img: CustomImage,
   a: CustomLink,

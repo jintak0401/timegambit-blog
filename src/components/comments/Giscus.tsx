@@ -68,7 +68,7 @@ const Giscus = () => {
           {phrases.Blog.loadComments}
         </button>
       )}
-      <div className="giscus" id={COMMENTS_ID} />
+      <div className={`${enableLoadComments ? 'h-0' : ''}`} id={COMMENTS_ID} />
     </div>
   );
 };

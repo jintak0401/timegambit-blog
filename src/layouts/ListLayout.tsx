@@ -12,6 +12,7 @@ import useInfiniteScrollObserver from '@/hooks/useInfiniteScrollObserver';
 import useIsFirstRender from '@/hooks/useIsFirstRender';
 
 import PostList from '@/components/card-and-list/PostList';
+import ScrollTopAndBottom from '@/components/common/ScrollTopAndBottom';
 
 interface Props {
   posts: PostListItem[];
@@ -75,6 +76,7 @@ export default function ListLayout({ posts, title, description }: Props) {
 
   return (
     <>
+      <ScrollTopAndBottom goBottom={false} />
       <div className="divide-y">
         <div className="space-y-2 pt-6 pb-8 md:space-y-5">
           <h1 className="basic-text text-3xl font-extrabold leading-9 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">

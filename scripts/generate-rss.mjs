@@ -51,13 +51,14 @@ const generateRss = (posts, page = "feed.xml") => `
   if (allBlogs.length > 0) {
     const tags = await getAllTags();
     for (const tag of Object.keys(tags)) {
+      const sluggedTag = slug(tag);
       const filteredPosts = allBlogs.filter(
         (post) =>
           post.draft !== true &&
-          post.tags.map((t) => slug(t)).includes(tag)
+          post.tags.map((t) => slug(t)).includes(sluggedTag)
       );
-      const rss = generateRss(filteredPosts, `tags/${tag}/feed.xml`);
-      const rssPath = path.join("public", "tags", tag);
+      const rss = generateRss(filteredPosts, `tags/${sluggedTag}/feed.xml`);
+      const rssPath = path.join("public", "tags", sluggedTag);
       mkdirSync(rssPath, { recursive: true });
       writeFileSync(path.join(rssPath, "feed.xml"), rss);
     }
