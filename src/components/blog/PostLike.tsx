@@ -46,6 +46,8 @@ const PostLike = ({ slug }: Props) => {
           onMouseUp={() => setClicked(false)}
           onTouchEnd={() => setClicked(false)}
           className="relative"
+          aria-label="like button"
+          type="button"
         >
           <div className="absolute w-full text-center text-lg">
             {emojis.map((item, idx) => (
