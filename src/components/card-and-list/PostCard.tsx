@@ -59,12 +59,12 @@ const PostCard = ({ post }: Props) => {
           <p>{summary}</p>
         </div>
         <dl className="flex gap-2 text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
-          <dt className="sr-only">작성 날짜</dt>
+          <dt className="sr-only">Creation Date</dt>
           <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
             <time dateTime={date}>{formattedDate(date)}</time>
           </dd>
-          <p className="bold">-</p>
-          <dt className="sr-only">조회수</dt>
+          <dd>-</dd>
+          <dt className="sr-only">View Count</dt>
           <dd>
             <ViewCounter slug={slug} type={'GET'} shown={true} />
           </dd>
