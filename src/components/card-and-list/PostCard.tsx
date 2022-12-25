@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useState } from 'react';
 
 import formattedDate from '@/lib/formattedDate';
 import { PostListItem } from '@/lib/types';
@@ -14,12 +15,17 @@ interface Props {
 
 const PostCard = ({ post }: Props) => {
   const { title, summary, tags, images, slug, date } = post;
+  const [loading, setLoading] = useState(true);
+
   return (
     <article
       className="basic-text box-border max-w-full gap-4 space-y-2 rounded-md p-3 duration-300
      hover:bg-gray-100 dark:hover:bg-gray-800 md:grid md:grid-cols-5 md:items-center md:space-y-0 xl:grid-cols-3"
     >
-      <Link href={`/blog/${slug}`} className="md:col-span-2 xl:col-span-1">
+      <Link
+        href={`/blog/${slug}`}
+        className="relative md:col-span-2 xl:col-span-1"
+      >
         <ImageWithFallback
           alt={title}
           src={images[0]}
@@ -27,6 +33,12 @@ const PostCard = ({ post }: Props) => {
           width="1692"
           height="1000"
           loading="lazy"
+          onLoadingComplete={() => setLoading(false)}
+        />
+        <div
+          className={`placeholder absolute top-0 left-0 h-full w-full overflow-hidden rounded-md bg-gray-200 dark:bg-gray-700 ${
+            loading ? 'block' : 'hidden'
+          }`}
         />
       </Link>
       <div className="flex flex-col justify-between gap-4 md:col-span-3 md:h-full xl:col-span-2">

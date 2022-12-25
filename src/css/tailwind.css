@@ -93,6 +93,11 @@ input:-webkit-autofill:focus {
         stop-color: theme('colors.primary.600');
         stop-opacity: 1;
     }
+
+    .placeholder::after {
+        content: ' ';
+        @apply absolute -left-full h-full top-0 animate-loading shadow-[0_0_50px_9px] shadow-white dark:shadow-gray-500;
+    }
 }
 
 ::-webkit-scrollbar {
