@@ -29,9 +29,9 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",\
           "packageDependencies": [\
             ["@effect-ts/core", "npm:0.60.4"],\
-            ["@fontsource/dejavu-mono", "npm:4.5.4"],\
             ["@next/bundle-analyzer", "npm:12.3.1"],\
             ["@next/eslint-plugin-next", "npm:12.3.1"],\
+            ["@next/font", "npm:13.1.1"],\
             ["@svgr/webpack", "npm:6.5.1"],\
             ["@tailwindcss/forms", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:0.5.3"],\
             ["@tailwindcss/typography", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:0.5.8"],\
@@ -2931,15 +2931,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
-      ["@fontsource/dejavu-mono", [\
-        ["npm:4.5.4", {\
-          "packageLocation": "./.yarn/cache/@fontsource-dejavu-mono-npm-4.5.4-ac0f7f060d-31dce29aed.zip/node_modules/@fontsource/dejavu-mono/",\
-          "packageDependencies": [\
-            ["@fontsource/dejavu-mono", "npm:4.5.4"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
       ["@gar/promisify", [\
         ["npm:1.1.3", {\
           "packageLocation": "./.yarn/cache/@gar-promisify-npm-1.1.3-ac1a325862-4059f790e2.zip/node_modules/@gar/promisify/",\
@@ -3178,6 +3169,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@next/eslint-plugin-next", "npm:12.3.1"],\
             ["glob", "npm:7.1.7"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@next/font", [\
+        ["npm:13.1.1", {\
+          "packageLocation": "./.yarn/cache/@next-font-npm-13.1.1-9e6d49da60-468a77d3a6.zip/node_modules/@next/font/",\
+          "packageDependencies": [\
+            ["@next/font", "npm:13.1.1"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -12588,9 +12588,9 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["timegambit-blog", "workspace:."],\
             ["@effect-ts/core", "npm:0.60.4"],\
-            ["@fontsource/dejavu-mono", "npm:4.5.4"],\
             ["@next/bundle-analyzer", "npm:12.3.1"],\
             ["@next/eslint-plugin-next", "npm:12.3.1"],\
+            ["@next/font", "npm:13.1.1"],\
             ["@svgr/webpack", "npm:6.5.1"],\
             ["@tailwindcss/forms", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:0.5.3"],\
             ["@tailwindcss/typography", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:0.5.8"],\
