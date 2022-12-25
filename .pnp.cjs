@@ -56,7 +56,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["globby", "npm:13.1.2"],\
             ["inquirer", "npm:8.0.0"],\
             ["js-yaml", "npm:4.1.0"],\
-            ["mdx-bundler", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:9.0.1"],\
+            ["mdx-bundler", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:9.2.1"],\
             ["mysql2", "npm:2.3.3"],\
             ["next", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:13.1.1"],\
             ["next-auth", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:4.18.0"],\
@@ -2868,10 +2868,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "HARD"\
         }],\
-        ["virtual:a19857eef75e159176cabd8d6c0821b2716670e0be3ff7307a991436b15b5ff7208ad45a44b933e4012e3e120f6dd935be2b18d3a6d15dc3fe08f6ddc74fd9c2#npm:0.1.4", {\
-          "packageLocation": "./.yarn/__virtual__/@esbuild-plugins-node-resolve-virtual-d09581bc1d/0/cache/@esbuild-plugins-node-resolve-npm-0.1.4-fffd1de563-eba359dd17.zip/node_modules/@esbuild-plugins/node-resolve/",\
+        ["virtual:b5980efcc5902ca95eb0f9d8cbf3e570580fd37d26fb9eb15f7609bbbb4d3ac8a5f00b084672ae0e666f75e46a734c947bc245f935003ede4d8ce94c02060b6f#npm:0.1.4", {\
+          "packageLocation": "./.yarn/__virtual__/@esbuild-plugins-node-resolve-virtual-28d0db03b0/0/cache/@esbuild-plugins-node-resolve-npm-0.1.4-fffd1de563-eba359dd17.zip/node_modules/@esbuild-plugins/node-resolve/",\
           "packageDependencies": [\
-            ["@esbuild-plugins/node-resolve", "virtual:a19857eef75e159176cabd8d6c0821b2716670e0be3ff7307a991436b15b5ff7208ad45a44b933e4012e3e120f6dd935be2b18d3a6d15dc3fe08f6ddc74fd9c2#npm:0.1.4"],\
+            ["@esbuild-plugins/node-resolve", "virtual:b5980efcc5902ca95eb0f9d8cbf3e570580fd37d26fb9eb15f7609bbbb4d3ac8a5f00b084672ae0e666f75e46a734c947bc245f935003ede4d8ce94c02060b6f#npm:0.1.4"],\
             ["@types/esbuild", null],\
             ["@types/resolve", "npm:1.20.2"],\
             ["debug", "virtual:569a25513afb6a24dfed8c5a30a481623293e0360f4b156e464840d4caead450805a6a0e63416cee33f850b619b3920e00801a8b5031df983b570ea9dd38b09f#npm:4.3.4"],\
@@ -3101,10 +3101,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "HARD"\
         }],\
-        ["virtual:a19857eef75e159176cabd8d6c0821b2716670e0be3ff7307a991436b15b5ff7208ad45a44b933e4012e3e120f6dd935be2b18d3a6d15dc3fe08f6ddc74fd9c2#npm:2.1.3", {\
-          "packageLocation": "./.yarn/__virtual__/@mdx-js-esbuild-virtual-ec56a67d38/0/cache/@mdx-js-esbuild-npm-2.1.3-20467931f2-c3bbd5c483.zip/node_modules/@mdx-js/esbuild/",\
+        ["virtual:b5980efcc5902ca95eb0f9d8cbf3e570580fd37d26fb9eb15f7609bbbb4d3ac8a5f00b084672ae0e666f75e46a734c947bc245f935003ede4d8ce94c02060b6f#npm:2.1.3", {\
+          "packageLocation": "./.yarn/__virtual__/@mdx-js-esbuild-virtual-bc631f7d25/0/cache/@mdx-js-esbuild-npm-2.1.3-20467931f2-c3bbd5c483.zip/node_modules/@mdx-js/esbuild/",\
           "packageDependencies": [\
-            ["@mdx-js/esbuild", "virtual:a19857eef75e159176cabd8d6c0821b2716670e0be3ff7307a991436b15b5ff7208ad45a44b933e4012e3e120f6dd935be2b18d3a6d15dc3fe08f6ddc74fd9c2#npm:2.1.3"],\
+            ["@mdx-js/esbuild", "virtual:b5980efcc5902ca95eb0f9d8cbf3e570580fd37d26fb9eb15f7609bbbb4d3ac8a5f00b084672ae0e666f75e46a734c947bc245f935003ede4d8ce94c02060b6f#npm:2.1.3"],\
             ["@mdx-js/mdx", "npm:2.1.3"],\
             ["@types/esbuild", null],\
             ["esbuild", null],\
@@ -9096,20 +9096,28 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "SOFT"\
         }],\
-        ["virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:9.0.1", {\
-          "packageLocation": "./.yarn/__virtual__/mdx-bundler-virtual-a19857eef7/0/cache/mdx-bundler-npm-9.0.1-a5ea196447-8b20c023ea.zip/node_modules/mdx-bundler/",\
+        ["npm:9.2.1", {\
+          "packageLocation": "./.yarn/cache/mdx-bundler-npm-9.2.1-bb67dc2697-3a7e9269d8.zip/node_modules/mdx-bundler/",\
           "packageDependencies": [\
-            ["mdx-bundler", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:9.0.1"],\
+            ["mdx-bundler", "npm:9.2.1"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:9.2.1", {\
+          "packageLocation": "./.yarn/__virtual__/mdx-bundler-virtual-b5980efcc5/0/cache/mdx-bundler-npm-9.2.1-bb67dc2697-3a7e9269d8.zip/node_modules/mdx-bundler/",\
+          "packageDependencies": [\
+            ["mdx-bundler", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:9.2.1"],\
             ["@babel/runtime", "npm:7.19.0"],\
-            ["@esbuild-plugins/node-resolve", "virtual:a19857eef75e159176cabd8d6c0821b2716670e0be3ff7307a991436b15b5ff7208ad45a44b933e4012e3e120f6dd935be2b18d3a6d15dc3fe08f6ddc74fd9c2#npm:0.1.4"],\
+            ["@esbuild-plugins/node-resolve", "virtual:b5980efcc5902ca95eb0f9d8cbf3e570580fd37d26fb9eb15f7609bbbb4d3ac8a5f00b084672ae0e666f75e46a734c947bc245f935003ede4d8ce94c02060b6f#npm:0.1.4"],\
             ["@fal-works/esbuild-plugin-global-externals", "npm:2.1.2"],\
-            ["@mdx-js/esbuild", "virtual:a19857eef75e159176cabd8d6c0821b2716670e0be3ff7307a991436b15b5ff7208ad45a44b933e4012e3e120f6dd935be2b18d3a6d15dc3fe08f6ddc74fd9c2#npm:2.1.3"],\
+            ["@mdx-js/esbuild", "virtual:b5980efcc5902ca95eb0f9d8cbf3e570580fd37d26fb9eb15f7609bbbb4d3ac8a5f00b084672ae0e666f75e46a734c947bc245f935003ede4d8ce94c02060b6f#npm:2.1.3"],\
             ["@types/esbuild", null],\
             ["esbuild", null],\
             ["gray-matter", "npm:4.0.3"],\
             ["remark-frontmatter", "npm:4.0.1"],\
             ["remark-mdx-frontmatter", "npm:1.1.1"],\
-            ["uuid", "npm:8.3.2"]\
+            ["uuid", "npm:8.3.2"],\
+            ["vfile", "npm:5.3.6"]\
           ],\
           "packagePeers": [\
             "@types/esbuild",\
@@ -12615,7 +12623,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["globby", "npm:13.1.2"],\
             ["inquirer", "npm:8.0.0"],\
             ["js-yaml", "npm:4.1.0"],\
-            ["mdx-bundler", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:9.0.1"],\
+            ["mdx-bundler", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:9.2.1"],\
             ["mysql2", "npm:2.3.3"],\
             ["next", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:13.1.1"],\
             ["next-auth", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:4.18.0"],\
@@ -13115,6 +13123,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/vfile-npm-5.3.5-aa9b688b1f-14a9ea19d1.zip/node_modules/vfile/",\
           "packageDependencies": [\
             ["vfile", "npm:5.3.5"],\
+            ["@types/unist", "npm:2.0.6"],\
+            ["is-buffer", "npm:2.0.5"],\
+            ["unist-util-stringify-position", "npm:3.0.2"],\
+            ["vfile-message", "npm:3.1.2"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:5.3.6", {\
+          "packageLocation": "./.yarn/cache/vfile-npm-5.3.6-2fd46e1771-1aa5efff51.zip/node_modules/vfile/",\
+          "packageDependencies": [\
+            ["vfile", "npm:5.3.6"],\
             ["@types/unist", "npm:2.0.6"],\
             ["is-buffer", "npm:2.0.5"],\
             ["unist-util-stringify-position", "npm:3.0.2"],\
