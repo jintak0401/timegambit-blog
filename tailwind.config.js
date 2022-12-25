@@ -57,6 +57,10 @@ module.exports = {
           '0%': { transform: 'translateY(20px)', opacity: 0 },
           '100%': { transform: 'translateY(0px)', opacity: 1 },
         },
+        loadingAnimation: {
+          '0%': { left: '-100%' },
+          '100%': { left: '150%' },
+        },
       },
       animation: {
         'bounce-left': 'bounceLeft 0.5s ease-in-out',
@@ -64,6 +68,7 @@ module.exports = {
         emoji: 'postLikeEmojiAnimation 1s ease-in-out forwards',
         heart: 'postLikeHeartAnimation 1s ease-in-out',
         card: 'cardLoadedAnimation 500ms ease-in-out',
+        loading: 'loadingAnimation 1.5s infinite',
       },
       typography: (theme) => ({
         DEFAULT: {

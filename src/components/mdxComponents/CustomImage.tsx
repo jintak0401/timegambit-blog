@@ -26,9 +26,7 @@ const CustomImage = ({ src, alt }: Props) => {
       <ErrorBoundary fallback={<FallbackImage alt={alt as string} />}>
         <Zoom
           className="mx-auto w-auto max-w-full"
-          placeholder="blur"
           priority={true}
-          blurDataURL={`/_next/image?url=${src}&w=16&q=1`}
           src={src as string}
           alt={alt as string}
           width="1000"
