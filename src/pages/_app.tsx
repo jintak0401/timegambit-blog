@@ -1,3 +1,4 @@
+import localFont from '@next/font/local';
 import siteMetadata from 'data/siteMetadata.mjs';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
@@ -5,7 +6,6 @@ import { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 import { ThemeProvider } from 'next-themes';
 import { ToastContainer } from 'react-toastify';
-import '@fontsource/dejavu-mono';
 
 import 'react-toastify/dist/ReactToastify.css';
 import '@/css/tailwind.css';
@@ -15,6 +15,13 @@ import useRestoreScrollPos from '@/hooks/useRestoreScrollPos';
 
 import Analytics from '@/components/analytics';
 import LayoutWrapper from '@/components/common/LayoutWrapper';
+
+const dejavu = localFont({
+  src: '../fonts/dejavu-400.woff2',
+  variable: '--font-dejavu',
+  display: 'swap',
+  fallback: ['Pretendard'],
+});
 
 export default function App({
   Component,
@@ -27,7 +34,7 @@ export default function App({
         <meta content="width=device-width, initial-scale=1" name="viewport" />
       </Head>
       <Analytics />
-      <LayoutWrapper>
+      <LayoutWrapper className={`${dejavu.variable} font-sans`}>
         <SessionProvider session={session}>
           <Component {...pageProps} />
         </SessionProvider>

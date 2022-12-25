@@ -14,7 +14,7 @@ const Guestbook = () => {
   const [loading, setLoading] = useState(false);
 
   return (
-    <div className="strong-text space-y-6 rounded-md border-2 p-4 md:p-10">
+    <div className="strong-text space-y-6 rounded-md border-2 p-4 md:py-6 md:px-10">
       <header className="flex items-center justify-start gap-4">
         <h2 className="text-2xl font-semibold md:text-3xl">
           {session
