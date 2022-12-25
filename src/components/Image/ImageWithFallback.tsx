@@ -14,8 +14,6 @@ const ImageWithFallback = ({
     <NextImage
       src={imgSrc}
       alt={alt}
-      placeholder="blur"
-      blurDataURL={`/_next/image?url=${imgSrc}&w=16&q=1`}
       onError={() => setImgSrc(siteMetaData.fallbackImage)}
       width={width || 1000}
       height={height || 1000}
