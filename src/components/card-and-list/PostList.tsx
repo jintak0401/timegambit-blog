@@ -1,6 +1,6 @@
-import phrases from 'data/phrases';
-
 import { PostListItem } from '@/lib/types';
+
+import NoPost from '@/components/common/NoPost';
 
 import PostCard from './PostCard';
 
@@ -9,16 +9,18 @@ interface Props {
 }
 
 const PostList = ({ posts }: Props) => {
-  return (
-    <ul className="space-y-8 py-4">
-      {!posts.length && phrases.Blog.noPost}
-      {posts.map((post) => (
-        <li key={post.title}>
-          <PostCard post={post} />
-        </li>
-      ))}
-    </ul>
-  );
+  if (posts.length) {
+    return (
+      <ul className="space-y-8 py-4">
+        {posts.map((post) => (
+          <li key={post.title}>
+            <PostCard post={post} />
+          </li>
+        ))}
+      </ul>
+    );
+  }
+  return <NoPost />;
 };
 
 export default PostList;
