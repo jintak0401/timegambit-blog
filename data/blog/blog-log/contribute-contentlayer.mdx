@@ -52,8 +52,8 @@ mdx-bundler를 열어보았습니다.
 }
 ```
 
-정답은 package.json에 있었습니다. 9.0.1 버전의 mdx-bundler의 peerDependencies에 esbuild의 버전이 0.11.x ~ 0.14.x인 것을 확인할 수 있었습니다.
-이 부분에 `|| 0.15.x`를 추가하면 될 것 같았습니다.
+정답은 package.json에 있었습니다. 9.0.1 버전의 mdx-bundler의 peerDependencies에 호환되는 esbuild의 버전이 0.11.x ~ 0.14.x인
+것을 확인할 수 있었습니다. 이 부분에 `|| 0.15.x`를 추가하면 될 것 같았습니다.
 
 ### Issue 및 PR 확인하기
 
@@ -111,8 +111,8 @@ mdx-bundler를 열어보았습니다.
 
 ### 기여하기
 
-[](https://github.com/contentlayerdev/contentlayer/blob/ded8348cb6b34b7f0350f5e8d817f3f41fe53687/CONTRIBUTING.md)
-contentlayer를 fork하여 mdx-bundler의 버전을 9.2.1로 업데이트하고 contentlayer에서 제공하는 [contributing guidelines]를 따라
+
+contentlayer를 fork하여 mdx-bundler의 버전을 9.2.1로 업데이트하고 contentlayer에서 제공하는 [contributing guidelines](https://github.com/contentlayerdev/contentlayer/blob/ded8348cb6b34b7f0350f5e8d817f3f41fe53687/CONTRIBUTING.md)를 따라
 test를 진행하였습니다. 아무 이상이 없는 것을 확인하고 [PR](https://github.com/contentlayerdev/contentlayer/pull/343)을 올렸습니다.
 contentlayer 관리자인 schickling이 PR을 확인해주셨고 코멘트도 남겨주었습니다.
 
