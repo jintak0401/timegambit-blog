@@ -31,7 +31,7 @@ const phrases = {
   Blog: {
     title: 'Blog',
     description: '학습한 내용과 지식들을 공유 및 정리합니다.',
-    noPost: '포스트를 찾을 수 없네요...',
+    noPost: '포스트를 찾을 수 없습니다 🙄',
     search: '어떤 글을 찾으시나요?',
     prev: '이전 포스트',
     next: '다음 포스트',
