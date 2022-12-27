@@ -38,6 +38,7 @@ const phrases = {
     openSeries: '목록 보기',
     closeSeries: '숨기기',
     loadComments: '댓글 불러오기',
+    share: '공유하기',
   },
   SignIn: {
     title: 'Time Gambit 블로그에 어서오세요! 다음으로 로그인 해주세요.',
