@@ -10,6 +10,7 @@ import PostLike from '@/components/blog/PostLike';
 import PostListInSeries from '@/components/blog/PostListInSeries';
 import RoutePostBtn from '@/components/blog/RoutePostBtn';
 import ScrollIndicator from '@/components/blog/ScrollIndicator';
+import ShareBtn from '@/components/blog/ShareBtn';
 import TagInPost from '@/components/blog/TagInPost';
 import ViewCounter from '@/components/blog/ViewCounter';
 import Comments from '@/components/comments';
@@ -34,7 +35,7 @@ export default function PostLayout({
   seriesTitle,
   children,
 }: Props) {
-  const { slug, date, title, tags } = content;
+  const { slug, date, title, tags, summary } = content;
 
   return (
     <>
@@ -77,6 +78,7 @@ export default function PostLayout({
                   {tags.map((tag) => (
                     <TagInPost key={tag} title={tag} />
                   ))}
+                  <ShareBtn title={title} text={summary} />
                 </div>
               )}
             </div>
