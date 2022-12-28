@@ -119,6 +119,7 @@ input:-webkit-autofill:focus {
 
 html,
 body {
+    overflow-x: clip;
     background-color: var(--base-color);
     transition: background-color 500ms;
     transition-timing-function: var(--timing-func);
