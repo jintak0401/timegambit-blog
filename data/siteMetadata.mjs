@@ -23,6 +23,8 @@ const siteMetadata = {
     maxLikeCount: 4,
     postsPerScroll: 10,
     homePostLength: 3,
+    // Viewing the same article within 4 hours does not increase view count.
+    viewCountTimeLimit: 4,
   },
   oauth: {
     providers: ['google', 'github', 'naver', 'kakao'],
