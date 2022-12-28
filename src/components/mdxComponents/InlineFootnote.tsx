@@ -9,7 +9,7 @@ const InlineFootnote = ({
   AnchorHTMLAttributes<HTMLAnchorElement>,
   HTMLAnchorElement
 >) => {
-  const [_, setShow] = useState(false);
+  const [show, setShow] = useState(false);
 
   return (
     <span
@@ -22,7 +22,7 @@ const InlineFootnote = ({
         {...rest}
         className="py-2 before:content-['['] after:content-[']']"
       />
-      <FootnoteTooltip idx={rest.children as string} />
+      <FootnoteTooltip idx={rest.children as string} show={show} />
     </span>
   );
 };
