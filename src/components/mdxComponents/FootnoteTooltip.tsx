@@ -21,7 +21,7 @@ const FootnoteTooltip = ({ idx, show }: Props) => {
   const ref = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    if (!ref.current || window.innerWidth <= 640) return;
+    if (!ref.current) return;
     ref.current.style.visibility = show ? 'visible' : 'hidden';
   }, [show]);
 
