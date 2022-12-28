@@ -2,6 +2,8 @@
 import Link from 'next/link';
 import { AnchorHTMLAttributes, DetailedHTMLProps } from 'react';
 
+import InlineFootnote from './InlineFootnote';
+
 const CustomLink = ({
   href,
   ...rest
@@ -21,14 +23,9 @@ const CustomLink = ({
   }
 
   if (isAnchorLink) {
-    if (rest['aria-describedby'] === 'footnote-label')
-      return (
-        <a
-          href={href}
-          {...rest}
-          className="before:content-['['] after:content-[']']"
-        />
-      );
+    if (rest['aria-describedby'] === 'footnote-label') {
+      return <InlineFootnote href={href} {...rest} />;
+    }
     return <a href={href} {...rest} />;
   }
 
