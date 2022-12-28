@@ -48,7 +48,7 @@ const phrases = {
     description: '사이드 & 토이 프로젝트를 기록합니다.',
   },
   Series: {
-    title: '시리즈',
+    title: 'Series',
     description: '시리즈로 작성된 포스트들을 모았습니다.',
     lastUpdate: '마지막 업데이트',
     seriesLength: '?개의 포스트', // put '?' mark at the position of number(length)
