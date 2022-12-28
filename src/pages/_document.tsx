@@ -36,7 +36,7 @@ class MyDocument extends Document {
           <meta name="theme-color" content="#ffffff" />
           <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
         </Head>
-        <body className="antialiased">
+        <body className="overflow-x-hidden antialiased">
           <Main />
           <NextScript />
         </body>
