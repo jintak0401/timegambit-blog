@@ -1,5 +1,7 @@
 import { AnchorHTMLAttributes, DetailedHTMLProps, useState } from 'react';
 
+import { isTouchDevice } from '@/lib/utils';
+
 import FootnoteTooltip from './FootnoteTooltip';
 
 const InlineFootnote = ({
@@ -22,7 +24,9 @@ const InlineFootnote = ({
         {...rest}
         className="py-2 before:content-['['] after:content-[']']"
       />
-      <FootnoteTooltip idx={rest.children as string} show={show} />
+      {!isTouchDevice() && (
+        <FootnoteTooltip idx={rest.children as string} show={show} />
+      )}
     </span>
   );
 };
