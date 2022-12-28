@@ -1,3 +1,4 @@
+import siteMetadata from 'data/siteMetadata.mjs';
 import { useEffect } from 'react';
 import { IoEyeOutline } from 'react-icons/io5';
 
@@ -9,15 +10,29 @@ interface Props {
   type?: 'POST' | 'GET';
 }
 
-const LAST_POST = 'lastPost';
+const LAST_POST = 'last-post';
+
+const LIMIT_TIME =
+  (siteMetadata.blogPost.viewCountTimeLimit || 0) * 60 * 60 * 1000;
 
 const ViewCounter = ({ slug, type = 'POST', shown = false }: Props) => {
   const { viewCount, isLoading, isError, increment } = usePostViews(slug);
 
   useEffect(() => {
-    if (type === 'GET' || localStorage.getItem(LAST_POST) === slug) return;
+    if (type === 'GET') return;
 
-    localStorage.setItem(LAST_POST, slug);
+    const { slug: storageSlug, date: storageDate } = JSON.parse(
+      localStorage.getItem(LAST_POST) || '{}'
+    );
+
+    if (
+      storageSlug === slug &&
+      storageDate &&
+      Number(new Date()) - Number(new Date(storageDate)) < LIMIT_TIME
+    )
+      return;
+
+    localStorage.setItem(LAST_POST, JSON.stringify({ slug, date: new Date() }));
 
     increment();
   }, [increment, slug, type]);

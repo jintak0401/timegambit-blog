@@ -6,4 +6,9 @@ const sameAllElements = (a: unknown[], b: unknown[]) => {
   return a.every((item, idx) => item === b[idx]);
 };
 
-export { getImageWithFallback, sameAllElements };
+const isTouchDevice = () => {
+  if (typeof window === 'undefined') return false;
+  return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+};
+
+export { getImageWithFallback, isTouchDevice, sameAllElements };
