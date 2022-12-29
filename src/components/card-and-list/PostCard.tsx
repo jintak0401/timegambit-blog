@@ -29,20 +29,18 @@ const PostCard = ({ post }: Props) => {
         <ImageWithFallback
           alt={title}
           src={images[0]}
-          className="rounded-md object-cover"
-          width="1692"
-          height="1000"
+          className="aspect-[191/100] rounded-md object-cover"
           loading="lazy"
           onLoadingComplete={() => setLoading(false)}
         />
         <div
-          className={`placeholder absolute top-0 left-0 h-full w-full overflow-hidden rounded-md bg-gray-200 dark:bg-gray-700 ${
+          className={`placeholder absolute top-1/2 left-0 my-auto aspect-[191/100] w-full -translate-y-1/2 overflow-hidden rounded-md bg-gray-200 dark:bg-gray-700 ${
             loading ? 'block' : 'hidden'
           }`}
         />
       </Link>
       <div className="flex flex-col justify-between gap-4 md:col-span-3 md:h-full xl:col-span-2">
-        <div className="space-y-2">
+        <div className="space-y-2 md:space-y-1">
           <Link href={`/blog/${slug}`}>
             <h3 className="w-fit cursor-pointer text-start text-xl font-bold leading-8 tracking-tight hover:text-primary-500 xl:text-2xl">
               {title}
@@ -58,9 +56,9 @@ const PostCard = ({ post }: Props) => {
           </ul>
           <p>{summary}</p>
         </div>
-        <dl className="flex gap-2 text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
+        <dl className="flex gap-2 text-base font-medium text-gray-500 dark:text-gray-400">
           <dt className="sr-only">Creation Date</dt>
-          <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
+          <dd className="text-base font-medium text-gray-500 dark:text-gray-400">
             <time dateTime={date}>{formattedDate(date)}</time>
           </dd>
           <dd>-</dd>
