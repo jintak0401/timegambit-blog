@@ -4,7 +4,7 @@
  */
 const seriesData = {
   동작원리: {
-    image: 'https://i.imgur.com/USRU2iv.png',
+    image: 'https://i.imgur.com/FKJ3GMT.png',
     slug: 'digging',
   },
   'HTTP 완벽 가이드': {
@@ -12,7 +12,7 @@ const seriesData = {
     slug: 'http',
   },
   '블로그 제작일지': {
-    image: 'https://i.imgur.com/FmvxvwS.png',
+    image: 'https://i.imgur.com/Wigx54E.png',
     slug: 'blog-log',
   },
 };

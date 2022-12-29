@@ -24,9 +24,7 @@ const SeriesCard = ({ series }: Props) => {
         <ImageWithFallback
           src={image}
           alt={title}
-          className={'rounded-md'}
-          width="1695"
-          height="1000"
+          className="aspect-[191/100] rounded-md object-cover"
           onLoadingComplete={() => {
             setLoaded(true);
           }}
