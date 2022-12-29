@@ -8,6 +8,8 @@ interface Props {
   text?: string;
 }
 
+const removeFragment = (url: string) => url.replace(/#.*$/, '');
+
 const ShareBtn = ({ title, text }: Props) => {
   const router = useRouter();
   const ref = useRef<HTMLButtonElement>(null);
@@ -21,7 +23,7 @@ const ShareBtn = ({ title, text }: Props) => {
   const onClick = () => {
     if (typeof navigator?.share === 'undefined') return;
     navigator.share({
-      url: router.asPath,
+      url: removeFragment(router.asPath),
       title,
       text,
     });

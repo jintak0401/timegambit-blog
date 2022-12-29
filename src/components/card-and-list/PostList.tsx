@@ -11,7 +11,7 @@ interface Props {
 const PostList = ({ posts }: Props) => {
   if (posts.length) {
     return (
-      <ul className="space-y-8 py-4">
+      <ul className="space-y-6 py-4">
         {posts.map((post) => (
           <li key={post.title}>
             <PostCard post={post} />
