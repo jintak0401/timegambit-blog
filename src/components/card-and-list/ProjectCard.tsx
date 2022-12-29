@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 
 import ImageWithFallback from '@/components/Image/ImageWithFallback';
 
@@ -13,20 +13,15 @@ interface Props {
 const ProjectCard = ({ title, description, imgSrc, href }: Props) => {
   const [loaded, setLoaded] = useState(false);
 
-  const CardImage = useCallback(
-    () => (
-      <ImageWithFallback
-        src={imgSrc}
-        alt={title}
-        className="object-cover object-center"
-        width="1778"
-        height="1000"
-        onLoadingComplete={() => {
-          setLoaded(true);
-        }}
-      />
-    ),
-    [imgSrc, title]
+  const CardImage = () => (
+    <ImageWithFallback
+      src={imgSrc}
+      alt={title}
+      className="aspect-video object-cover"
+      onLoadingComplete={() => {
+        setLoaded(true);
+      }}
+    />
   );
 
   return (
