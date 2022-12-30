@@ -12,9 +12,9 @@ const SmallWidthTOC = () => {
   return (
     <div className="2xl:hidden">
       <button
-        className={`fixed right-0 top-[59px] z-20 rounded-l-md border-y-2 border-l-2 border-primary-700 bg-primary-500 px-2 py-1 
-        text-gray-100 duration-500 dark:border-primary-500 dark:bg-primary-700 dark:text-gray-200 sm:top-[50px]
-        ${scrollDirection === 'down' ? 'translate-x-[50px]' : 'traslate-x-0'} 
+        className={`fixed right-0 top-[59px] z-20 rounded-l-md border-y-2 border-l-2 border-primary-700 bg-primary-500 px-2 py-1 text-gray-100 duration-500 dark:border-primary-500 dark:bg-primary-700 dark:text-gray-200 sm:top-[50px] ${
+          scrollDirection === 'down' ? 'translate-x-[50px]' : 'traslate-x-0'
+        } 
         `}
         onClick={() => setTocShow(true)}
       >

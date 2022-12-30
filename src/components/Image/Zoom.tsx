@@ -81,7 +81,7 @@ const Zoom = (props: Props) => {
         />
       )}
       <NextImage
-        className={`relative my-0 block overflow-hidden duration-${duration} ${
+        className={`relative my-0 block overflow-hidden duration-300 ${
           clicked ? '' : 'cursor-zoom-in'
         } ${className || ''}`}
         ref={imageRef}
