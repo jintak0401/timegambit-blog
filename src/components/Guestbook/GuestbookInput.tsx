@@ -63,7 +63,7 @@ const GuestbookInput = ({ setLoading, user }: Props) => {
         />
         <button
           type="submit"
-          className="w-full rounded-md bg-primary-200 py-2 dark:bg-primary-700 sm:w-24"
+          className="w-full rounded-md bg-primary-200 py-2 duration-200 hover:bg-primary-400 hover:text-gray-100 dark:bg-primary-900 dark:text-gray-300 dark:hover:bg-primary-600 sm:w-24"
         >
           {phrases.Guestbook.submitMessage}
         </button>
@@ -82,7 +82,7 @@ const GuestbookInput = ({ setLoading, user }: Props) => {
           </div>
         </div>
         <button
-          className="w-24 rounded-md bg-primary-200 py-2 dark:bg-primary-700"
+          className="w-24 rounded-md bg-primary-200 py-2 duration-200 hover:bg-primary-400 hover:text-gray-100 dark:bg-primary-900 dark:text-gray-300 dark:hover:bg-primary-600"
           onClick={() => {
             setLoading(true);
             signOut().catch(() => setLoading(false));
