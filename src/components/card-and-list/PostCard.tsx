@@ -18,10 +18,7 @@ const PostCard = ({ post }: Props) => {
   const [loading, setLoading] = useState(true);
 
   return (
-    <article
-      className="basic-text box-border max-w-full gap-4 space-y-2 rounded-md p-3 duration-300
-     hover:bg-gray-100 dark:hover:bg-gray-800 md:grid md:grid-cols-5 md:items-center md:space-y-0 xl:grid-cols-3"
-    >
+    <article className="strong-text box-border max-w-full gap-4 space-y-2 rounded-md p-3 duration-300 hover:bg-gray-200 dark:hover:bg-gray-800 md:grid md:grid-cols-5 md:items-center md:space-y-0 xl:grid-cols-3">
       <Link
         href={`/blog/${slug}`}
         className="relative md:col-span-2 xl:col-span-1"
