@@ -21,11 +21,11 @@ const Introduction = () => {
           LightModeSvg={LogoTitle}
           DarkModeSvg={DarkLogoTitle}
         />
-        <p className="my-3 font-medium text-gray-600 duration-500 dark:text-gray-300">
+        <p className="my-3 font-medium text-gray-600 dark:text-gray-300">
           {phrases.Main.description}
         </p>
         {phrases.Main.subDescription && (
-          <p className="font-medium leading-none text-gray-400 duration-500 dark:text-gray-500">
+          <p className="font-medium leading-none text-gray-400 dark:text-gray-500">
             {phrases.Main.subDescription}
           </p>
         )}

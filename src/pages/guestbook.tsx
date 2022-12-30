@@ -43,7 +43,7 @@ export default function GuestbookPage({
       <>
         <div className="divide-y">
           <div className="space-y-2 pt-6 pb-8 md:space-y-5">
-            <h1 className="basic-text text-3xl font-extrabold leading-9 tracking-tight sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
+            <h1 className="strong-text text-3xl font-extrabold leading-9 tracking-tight sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
               {phrases.Guestbook.title}
             </h1>
             <p className="middle-text text-lg leading-7">

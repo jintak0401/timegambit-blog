@@ -26,12 +26,9 @@ const RoutePostBtn = ({ title, slug, direction, empty }: Props) => {
   return (
     <Link
       href={`/blog/${slug}`}
-      className={`group flex w-full items-center gap-2 rounded-md bg-gray-100 py-2
-        px-3 text-2xl font-semibold duration-300 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 md:w-1/2 ${
-          direction === 'prev'
-            ? 'flex-row-reverse justify-start'
-            : 'justify-end'
-        }`}
+      className={`group flex w-full items-center gap-2 rounded-md bg-gray-100 py-2 px-3 text-2xl font-semibold duration-300 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 md:w-1/2 ${
+        direction === 'prev' ? 'flex-row-reverse justify-start' : 'justify-end'
+      }`}
     >
       <div
         className={`flex flex-1 flex-col overflow-hidden ${
