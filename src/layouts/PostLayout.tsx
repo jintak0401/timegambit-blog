@@ -41,7 +41,7 @@ export default function PostLayout({
     <>
       <ScrollIndicator />
       <ScrollTopAndBottom />
-      <article className="transition-colors duration-500">
+      <article>
         <div>
           <header>
             <div className="space-y-1 border-b border-gray-200 pb-10 text-center dark:border-gray-700">

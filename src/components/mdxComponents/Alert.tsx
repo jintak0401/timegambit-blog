@@ -44,7 +44,7 @@ const Alert = ({ type, children }: Props) => {
       className={`${style} relative my-12 rounded-md border-l-2 px-5 py-3 transition-colors sm:border-l-4`}
     >
       <Icon
-        className={`${iconStyle} absolute -left-0.5 top-0 h-8 w-8 -translate-y-1/2 -translate-x-1/2 overflow-visible rounded-full border border-white bg-white fill-current p-0.5 transition-colors duration-500 dark:border-gray-900 dark:bg-gray-900 sm:h-10 sm:w-10`}
+        className={`${iconStyle} duration-default absolute -left-0.5 top-0 h-8 w-8 -translate-y-1/2 -translate-x-1/2 overflow-visible rounded-full border border-white bg-white fill-current p-0.5 transition-colors dark:border-gray-900 dark:bg-gray-900 sm:h-10 sm:w-10`}
       />
       {children}
     </div>

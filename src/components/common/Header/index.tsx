@@ -31,7 +31,7 @@ const NavItems = () => {
           >
             <Link
               href={href}
-              className={`mx-1 rounded p-1 font-semibold transition-all duration-500 sm:px-4 sm:py-2 ${
+              className={`duration-default mx-1 rounded p-1 font-semibold sm:px-4 sm:py-2 ${
                 isSamePath(title)
                   ? 'bg-primary-100 text-primary-600 dark:bg-primary-800 dark:text-primary-200'
                   : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'
@@ -65,7 +65,7 @@ export default function Header() {
   return (
     <>
       <header
-        className={`w-section fixed left-0 right-0 z-20 flex items-center justify-between border-b-2 bg-white py-2 transition-all duration-500 dark:bg-gray-900 ${
+        className={`w-section transition-header fixed left-0 right-0 z-20 flex items-center justify-between border-b-2 bg-white py-2 dark:bg-gray-900 ${
           scrollDirection === 'down'
             ? '-translate-y-[70px] sm:-translate-y-16'
             : 'translate-y-0'
