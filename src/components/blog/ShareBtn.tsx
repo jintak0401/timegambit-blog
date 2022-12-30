@@ -32,10 +32,7 @@ const ShareBtn = ({ title, text }: Props) => {
   return (
     <button
       ref={ref}
-      className="ml-auto flex flex-row items-center justify-center gap-1.5
-       rounded-md bg-primary-200 px-2 py-1 text-sm text-gray-900 duration-200
-       hover:bg-primary-400 hover:text-gray-100 dark:bg-primary-900
-       dark:text-gray-300 dark:hover:bg-primary-600"
+      className="ml-auto flex flex-row items-center justify-center gap-1.5 rounded-md bg-primary-200 px-2 py-1 text-sm text-gray-900 duration-200 hover:bg-primary-400 hover:text-gray-100 dark:bg-primary-900 dark:text-gray-300 dark:hover:bg-primary-600"
       onClick={onClick}
     >
       <FaShareAlt className="h-[14px] w-[14px]" />

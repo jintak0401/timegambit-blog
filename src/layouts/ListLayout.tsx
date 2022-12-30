@@ -79,10 +79,12 @@ export default function ListLayout({ posts, title, description }: Props) {
       <ScrollTopAndBottom goBottom={false} />
       <div className="divide-y">
         <div className="space-y-2 pt-6 pb-8 md:space-y-5">
-          <h1 className="basic-text text-3xl font-extrabold leading-9 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
+          <h1 className="strong-text text-3xl font-extrabold leading-9 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
             {title}
           </h1>
-          {description && <p className="text-gray-500">{description}</p>}
+          {description && (
+            <p className="middle-text text-lg leading-7">{description}</p>
+          )}
           <div className="relative max-w-lg">
             <input
               aria-label="Search articles"
@@ -90,7 +92,7 @@ export default function ListLayout({ posts, title, description }: Props) {
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
               placeholder={phrases.Blog.search}
-              className="block w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-900 transition-colors duration-500 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-900 dark:bg-gray-800 dark:text-gray-100"
+              className="duration-default block w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-900 dark:bg-gray-800 dark:text-gray-100"
             />
             <svg
               className="absolute right-3 top-3 h-5 w-5 text-gray-400 dark:text-gray-300"
