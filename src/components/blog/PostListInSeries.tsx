@@ -69,7 +69,7 @@ const PostListInSeries = ({ seriesTitle, series }: Props) => {
   );
 
   return (
-    <div className="mt-5 rounded-md bg-gray-100 px-6 py-5 duration-75 dark:bg-gray-800">
+    <div className="mt-5 rounded-md bg-gray-100 px-6 py-5 duration-200 dark:bg-gray-800">
       <ImBookmark className="absolute top-0 right-2 h-auto w-10 fill-current text-primary-500 lg:right-4 lg:w-12" />
       <header>
         <Link

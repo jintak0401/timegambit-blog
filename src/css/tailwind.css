@@ -6,7 +6,7 @@
 
 :root {
     --timing-func: cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-bg-duration: 75ms;
+    --transition-bg-duration: 200ms;
 }
 
 .task-list-item::before {
