@@ -6,6 +6,7 @@
 
 :root {
     --timing-func: cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bg-duration: 75ms;
 }
 
 .task-list-item::before {
@@ -95,6 +96,7 @@ input:-webkit-autofill:focus {
         content: ' ';
         @apply absolute -left-full h-full top-0 animate-loading shadow-[0_0_50px_9px] shadow-white dark:shadow-gray-500;
     }
+
 }
 
 ::-webkit-scrollbar {
@@ -120,7 +122,7 @@ input:-webkit-autofill:focus {
 html,
 body {
     background-color: var(--base-color);
-    transition: background-color 500ms;
+    transition: background-color var(--transition-bg-duration);
     transition-timing-function: var(--timing-func);
 }
 
