@@ -10,6 +10,8 @@ interface Props {
   alt?: string;
 }
 
+const isVideo = (path?: string) => path && path.match(/\.(mp4|webm)$/);
+
 const FallbackImage = ({ alt }: { alt: string }) => (
   <NextImage
     className="mx-auto w-auto max-w-full"
@@ -20,22 +22,33 @@ const FallbackImage = ({ alt }: { alt: string }) => (
   />
 );
 
-const CustomImage = ({ src, alt }: Props) => {
+const CustomMedia = ({ src, alt }: Props) => {
   return (
     <div className="mb-6 space-y-2 md:space-y-3">
-      <ErrorBoundary fallback={<FallbackImage alt={alt as string} />}>
-        <Zoom
+      {isVideo(src) ? (
+        <video
           className="mx-auto w-auto max-w-full"
-          priority={true}
-          src={src as string}
-          alt={alt as string}
-          width="1000"
-          height="1000"
+          src={src}
+          autoPlay
+          loop
+          muted
+          playsInline
         />
-      </ErrorBoundary>
+      ) : (
+        <ErrorBoundary fallback={<FallbackImage alt={alt as string} />}>
+          <Zoom
+            className="mx-auto w-auto max-w-full"
+            priority={true}
+            src={src as string}
+            alt={alt as string}
+            width="1000"
+            height="1000"
+          />
+        </ErrorBoundary>
+      )}
       <div className="middle-text text-center italic">{alt}</div>
     </div>
   );
 };
 
-export default CustomImage;
+export default CustomMedia;
