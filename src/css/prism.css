@@ -156,7 +156,8 @@ code[class*=language-] ::selection, code[class*=language-]::selection, pre[class
 .token.builtin,
 .token.url,
 .token.class-name,
-.token.class
+.token.class,
+.token.anchor
 {
     color: var(--cyan);
 }
@@ -182,13 +183,15 @@ code[class*=language-] ::selection, code[class*=language-]::selection, pre[class
 
 .token.arrow,
 .token.script,
-.token.operator
+.token.operator,
+.token.special-escape
 {
     color: var(--foreground);
 }
 
 .token.regex-delimiter,
-.token.regex-flags {
+.token.regex-flags
+{
     color: #6897bb;
 }
 

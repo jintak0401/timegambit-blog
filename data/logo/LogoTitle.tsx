@@ -1,5 +1,5 @@
 const LogoTitle = ({ svgkey, ...rest }: { svgkey?: string }) => {
-  const generateId = (id: string) => (svgkey ? `${id}__${svgkey}` : id);
+  const generateId = (id: string) => (svgkey ? `${svgkey}__${id}` : id);
 
   return (
     <svg
