@@ -1,12 +1,18 @@
 import navLinks from 'data/navLinks';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 interface Props {
   navShow: boolean;
   onToggleNav: () => void;
 }
 
+const isCurPath = (path: string, title: string) =>
+  path.includes(title.toLowerCase());
+
 const MobileNav = ({ navShow, onToggleNav }: Props) => {
+  const router = useRouter();
+
   return (
     <div
       className={`fixed top-0 left-0 z-40 h-screen w-screen transform bg-gray-200 opacity-95 duration-300 ease-in-out dark:bg-gray-800 sm:hidden ${
@@ -36,15 +42,16 @@ const MobileNav = ({ navShow, onToggleNav }: Props) => {
       </div>
       <nav className="fixed mt-8 h-full">
         {navLinks.map((link) => (
-          <div key={link.title} className="px-12 py-4">
-            <Link
-              href={link.href}
-              className="text-2xl font-bold tracking-widest text-gray-900 dark:text-gray-100"
-              onClick={onToggleNav}
-            >
-              {link.title}
-            </Link>
-          </div>
+          <Link
+            key={link.title}
+            href={link.href}
+            className={`mx-12 my-8 block w-fit text-2xl font-bold tracking-widest text-gray-900 decoration-primary-600 decoration-4 underline-offset-8 dark:text-gray-100 dark:decoration-primary-400 ${
+              isCurPath(router.pathname, link.title) ? 'underline' : ''
+            }`}
+            onClick={onToggleNav}
+          >
+            {link.title}
+          </Link>
         ))}
       </nav>
     </div>
