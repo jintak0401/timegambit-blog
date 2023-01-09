@@ -48,7 +48,7 @@ export default function PostLayout({
               <dl>
                 <div>
                   <dt className="sr-only">Published on</dt>
-                  <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
+                  <dd className="middle-text font-medium leading-6">
                     <time dateTime={date}>{formattedDate(date)}</time>
                   </dd>
                 </div>
@@ -99,7 +99,7 @@ export default function PostLayout({
                   />
                 </div>
               )}
-              <Comments frontMatter={content} />
+              <Comments />
             </footer>
           </div>
         </div>

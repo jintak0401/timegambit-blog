@@ -1,7 +1,7 @@
 import phrases from 'data/phrases';
 import siteMetadata from 'data/siteMetadata.mjs';
 import { useTheme } from 'next-themes';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 const Giscus = () => {
   const [enableLoadComments, setEnabledLoadComments] = useState(true);

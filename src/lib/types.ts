@@ -45,3 +45,9 @@ export interface UserType {
   name: string;
   image: string;
 }
+
+export interface AboutCardType {
+  title: string;
+  date?: string;
+  info: string[];
+}

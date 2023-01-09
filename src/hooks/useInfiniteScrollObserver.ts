@@ -7,7 +7,7 @@ interface Props {
 
 const observerOption = {
   threshold: 1,
-  rootMargin: '200px',
+  rootMargin: '200px 0px',
 };
 
 const useInfiniteScrollObserver = ({ target, onIntersect }: Props) => {

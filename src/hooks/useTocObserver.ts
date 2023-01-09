@@ -4,10 +4,10 @@ import { TocElement } from '@/lib/types';
 
 const observerOption = {
   threshold: 0.4,
-  rootMargin: '-90px 0px 0px 0px',
+  rootMargin: '-20px 0px 0px',
 };
 
-export const useIntersectionObserver = () => {
+export const useTocObserver = () => {
   const [currentId, setCurrentId] = useState<string>('');
   const [headingEls, setHeadingEls] = useState<TocElement[]>([]);
   const dirRef = useRef<string>('');
