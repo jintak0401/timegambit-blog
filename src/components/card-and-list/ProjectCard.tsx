@@ -3,6 +3,8 @@ import { useState } from 'react';
 
 import ImageWithFallback from '@/components/Image/ImageWithFallback';
 
+import phrases from '../../../data/phrases';
+
 interface Props {
   title: string;
   description: string;
@@ -27,9 +29,9 @@ const ProjectCard = ({ title, description, imgSrc, href }: Props) => {
   return (
     <div className={`p-4 md:w-1/2 ${loaded ? 'animate-card' : 'opacity-0'}`}>
       <div
-        className={`${
-          imgSrc && 'h-full'
-        }  overflow-hidden rounded-md border-2 border-gray-200 border-opacity-60 dark:border-gray-700`}
+        className={`overflow-hidden rounded-md border-2 border-gray-200 border-opacity-60 dark:border-gray-700 ${
+          imgSrc ? 'h-full' : 'h-0'
+        }`}
       >
         {imgSrc &&
           (href ? (
@@ -49,16 +51,14 @@ const ProjectCard = ({ title, description, imgSrc, href }: Props) => {
               title
             )}
           </h2>
-          <p className="prose mb-3 max-w-none text-gray-500 dark:text-gray-400">
-            {description}
-          </p>
+          <p className="middle-text prose mb-3 max-w-none">{description}</p>
           {href && (
             <Link
               href={href}
               aria-label={`Link to ${title}`}
-              className="primary-color-text text-base font-medium leading-6"
+              className="primary-color-text font-medium leading-6"
             >
-              Learn more &rarr;
+              {phrases.Projects.learnMore} &rarr;
             </Link>
           )}
         </div>

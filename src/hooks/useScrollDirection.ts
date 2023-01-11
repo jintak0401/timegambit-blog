@@ -4,6 +4,9 @@ import throttle from '@/lib/throttle';
 
 const THRESHOLD = 30;
 const TOP_BOUND = 20;
+const THROTTLE_LIMIT = 100;
+
+// detect moving scroll direction -> 'up' or 'down'
 export const useScrollDirection = () => {
   const scrollYPos = useRef(0);
   const [scrollDirection, setScrollDirection] = useState('up');
@@ -19,7 +22,7 @@ export const useScrollDirection = () => {
       scrollYPos.current = window.scrollY;
     };
 
-    const throttleHandleScroll = throttle(handleScroll, 100);
+    const throttleHandleScroll = throttle(handleScroll, THROTTLE_LIMIT);
 
     window.addEventListener('scroll', throttleHandleScroll);
     return () => window.removeEventListener('scroll', throttleHandleScroll);

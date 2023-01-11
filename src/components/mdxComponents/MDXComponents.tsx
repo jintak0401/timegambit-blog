@@ -34,6 +34,8 @@ export const MDXComponents = {
   a: CustomLink,
   pre: Pre,
   Alert,
+
+  // dynamic import
   Logo,
 };
 

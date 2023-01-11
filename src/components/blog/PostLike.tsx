@@ -35,10 +35,7 @@ const PostLike = ({ slug }: Props) => {
 
   return (
     <div className="mb-10 w-full lg:absolute lg:right-full lg:top-0 lg:mr-12 lg:h-full lg:w-fit">
-      <div
-        className="flex w-full items-center justify-center gap-x-1 dark:border-gray-700
-           lg:sticky lg:top-10 lg:w-fit lg:flex-col lg:border-r-2 lg:py-2 lg:pr-3"
-      >
+      <div className="flex w-full items-center justify-center gap-x-1 dark:border-gray-700 lg:sticky lg:top-10 lg:w-fit lg:flex-col lg:border-r-2 lg:py-2 lg:pr-3">
         <button
           onClick={increment}
           onMouseDown={() => setClicked(true)}
@@ -74,7 +71,13 @@ const PostLike = ({ slug }: Props) => {
             onMouseUp={() => setClicked(false)}
           >
             <defs>
-              <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <linearGradient
+                id="post-like-grad"
+                x1="0%"
+                y1="0%"
+                x2="100%"
+                y2="100%"
+              >
                 <stop offset="20%" className="post-like-first-grad" />
                 <stop offset="80%" className="post-like-second-grad" />
               </linearGradient>
@@ -93,7 +96,7 @@ const PostLike = ({ slug }: Props) => {
                 className="fill-current text-[#c4c1c1] dark:text-[#4b5563]"
               />
               <rect
-                fill="url(#gradient)"
+                fill="url(#post-like-grad)"
                 width="20"
                 height="20"
                 x="0"

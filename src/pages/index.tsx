@@ -28,12 +28,12 @@ export default function Home({
         title={siteMetadata.title}
         description={phrases.Seo.homeDesc || siteMetadata.description}
       />
-      <main className="flex flex-1 flex-col">
+      <div className="flex flex-1 flex-col">
         <Introduction />
         <div className="mb-2 flex justify-between">
-          <h2 className="strong-text text-2xl font-semibold">
+          <h1 className="strong-text text-2xl font-semibold">
             {phrases.Main.recentPosts}
-          </h2>
+          </h1>
           <Link
             href="/blog"
             className="rounded-md p-2 text-center font-semibold text-primary-500 hover:bg-gray-100 dark:text-primary-400 dark:hover:bg-gray-800"
@@ -42,7 +42,7 @@ export default function Home({
           </Link>
         </div>
         <PostList posts={posts} />
-      </main>
+      </div>
     </>
   );
 }

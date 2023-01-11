@@ -30,7 +30,7 @@ const GuestbookEntry = ({ entry, session }: Props) => {
     <div className="my-4 flex w-full items-start gap-6 rounded-md border px-4 py-4 md:px-10">
       <NextImage
         src={entry.image}
-        alt="프로필 사진"
+        alt={`${entry.name}'s profile image`}
         className="h-10 w-10 rounded-full object-cover"
         loading="lazy"
         width="40"
@@ -39,7 +39,9 @@ const GuestbookEntry = ({ entry, session }: Props) => {
       <div className="w-5/6 flex-1">
         <div className="flex items-center justify-between">
           <div className="max-w-full">
+            <span className="sr-only">Name</span>
             <div className="max-w-full truncate">{entry.name}</div>
+            <span className="sr-only">Creation Date</span>
             <div className="weak-text">{entry.updatedAt}</div>
           </div>
           {session?.user?.email === entry.email && (
@@ -51,7 +53,7 @@ const GuestbookEntry = ({ entry, session }: Props) => {
             </button>
           )}
         </div>
-        <div className="my-2">{entry.body}</div>
+        <p className="my-2">{entry.body}</p>
       </div>
     </div>
   );
