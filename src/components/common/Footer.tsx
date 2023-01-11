@@ -2,16 +2,14 @@ import siteMetadata from 'data/siteMetadata.mjs';
 
 import SocialIcon from '@/components/social-icons';
 
-const ICON_SIZE = 5;
+const ICON_SIZE = 20;
 
 export const Footer = () => {
   return (
     <footer>
-      <div className="my-5 flex flex-col items-center sm:my-10">
-        <div className="mb-4 text-lg text-gray-500 dark:text-gray-400">
-          {siteMetadata.description}
-        </div>
-        <div className="mb-3 flex space-x-4">
+      <div className="middle-text my-5 flex flex-col items-center sm:my-10">
+        <div className="mb-4 text-lg">{siteMetadata.description}</div>
+        <div className="mb-3 flex items-center space-x-4">
           {siteMetadata.email && (
             <SocialIcon
               kind="mail"
@@ -56,10 +54,10 @@ export const Footer = () => {
           )}
           <SocialIcon kind="rss" size={ICON_SIZE} href="/feed.xml" />
         </div>
-        <div className="mb-2 flex space-x-2 text-sm text-gray-500 dark:text-gray-400">
-          <div>{`© ${new Date().getFullYear()}`}</div>
-          <div>•</div>
-          <div>{siteMetadata.author}</div>
+        <div className="mb-2 flex space-x-2 text-sm">
+          <span>{`© ${new Date().getFullYear()}`}</span>
+          <span>•</span>
+          <span>{siteMetadata.author}</span>
         </div>
       </div>
     </footer>

@@ -8,7 +8,7 @@ import {
 
 interface Props {
   type: 'info' | 'success' | 'warning' | 'danger';
-  children: string | ReactNode;
+  children: ReactNode;
 }
 
 const typeMapping = {

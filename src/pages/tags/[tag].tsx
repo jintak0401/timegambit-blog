@@ -52,7 +52,7 @@ export default function TagPostListPage({
       <TagSEO
         title={`Tags | ${tag} - ${siteMetadata.author}`}
         description={
-          phrases.Seo.specificTagDesc?.replace('?', tag) ||
+          phrases.Seo.specificTagDesc?.replace('%s', tag) ||
           `#${tag} tags - ${siteMetadata.author}`
         }
       />

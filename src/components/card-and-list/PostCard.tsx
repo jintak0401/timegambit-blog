@@ -18,7 +18,7 @@ const PostCard = ({ post }: Props) => {
   const [loading, setLoading] = useState(true);
 
   return (
-    <article className="strong-text box-border max-w-full gap-4 space-y-2 rounded-md p-3 duration-300 hover:bg-gray-200 dark:hover:bg-gray-800 md:grid md:grid-cols-5 md:items-center md:space-y-0 xl:grid-cols-3">
+    <div className="strong-text box-border max-w-full gap-4 space-y-2 rounded-md p-3 duration-300 hover:bg-gray-200 dark:hover:bg-gray-800 md:grid md:grid-cols-5 md:items-center md:space-y-0 xl:grid-cols-3">
       <Link
         href={`/blog/${slug}`}
         className="relative md:col-span-2 xl:col-span-1"
@@ -39,9 +39,9 @@ const PostCard = ({ post }: Props) => {
       <div className="flex flex-col justify-between gap-4 md:col-span-3 md:h-full xl:col-span-2">
         <div className="space-y-2 md:space-y-1">
           <Link href={`/blog/${slug}`}>
-            <h3 className="w-fit cursor-pointer text-start text-xl font-bold leading-8 tracking-tight hover:text-primary-500 xl:text-2xl">
+            <h2 className="w-fit cursor-pointer text-start text-xl font-bold leading-8 tracking-tight hover:text-primary-500 xl:text-2xl">
               {title}
-            </h3>
+            </h2>
           </Link>
           <ul className="flex flex-wrap">
             {tags &&
@@ -53,9 +53,9 @@ const PostCard = ({ post }: Props) => {
           </ul>
           <p>{summary}</p>
         </div>
-        <dl className="flex gap-2 text-base font-medium text-gray-500 dark:text-gray-400">
+        <dl className="middle-text flex gap-2 font-medium">
           <dt className="sr-only">Creation Date</dt>
-          <dd className="text-base font-medium text-gray-500 dark:text-gray-400">
+          <dd>
             <time dateTime={date}>{formattedDate(date)}</time>
           </dd>
           <dd>-</dd>
@@ -65,7 +65,7 @@ const PostCard = ({ post }: Props) => {
           </dd>
         </dl>
       </div>
-    </article>
+    </div>
   );
 };
 

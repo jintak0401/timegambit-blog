@@ -35,7 +35,7 @@ const RoutePostBtn = ({ title, slug, direction, empty }: Props) => {
           direction === 'prev' ? 'items-start' : 'items-end'
         }`}
       >
-        <div className="text-sm font-medium text-gray-600 dark:text-gray-400">
+        <div className="middle-text text-sm font-medium">
           {phrases.Blog[direction]}
         </div>
         <div className="max-w-full truncate text-gray-700 dark:text-gray-300">

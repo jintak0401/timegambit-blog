@@ -2,20 +2,13 @@ import NextImage from 'next/image';
 import { ImageProps } from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
-interface Props extends ImageProps {
-  rate?: number;
-  backgroundOpacity?: number;
-  duration?: number;
-}
+const DURATION = 300;
+const TIMEOUT_DELAY = 100;
+const BACKGROUND_OPACITY = 0.9;
+const ZOOM_RATE = 0.9;
 
-const Zoom = (props: Props) => {
-  const {
-    className,
-    rate = 90,
-    backgroundOpacity = 0.9,
-    duration = 300,
-    ...imageProps
-  } = props;
+const Zoom = (props: ImageProps) => {
+  const { className, ...imageProps } = props;
 
   const imageRef = useRef<HTMLImageElement>(null);
 
@@ -39,19 +32,18 @@ const Zoom = (props: Props) => {
     const cL = imageRect.left;
     const cT = imageRect.top;
 
-    const zoomPerc = rate / 100;
     imageRef.current.style.zIndex = '50';
     if (
-      ((window.innerHeight * zoomPerc) / clientHeight) * clientWidth >=
+      ((window.innerHeight * ZOOM_RATE) / clientHeight) * clientWidth >=
       window.innerWidth
     ) {
       imageRef.current.style.transform = `translate(${wPrim - cL}px,${
         hPrim - cT
-      }px) scale(${(window.innerWidth * zoomPerc) / clientWidth})`;
+      }px) scale(${(window.innerWidth * ZOOM_RATE) / clientWidth})`;
     } else {
       imageRef.current.style.transform = `translate(${wPrim - cL}px,${
         hPrim - cT
-      }px) scale(${(window.innerHeight * zoomPerc) / clientHeight})`;
+      }px) scale(${(window.innerHeight * ZOOM_RATE) / clientHeight})`;
     }
 
     window.document.addEventListener('scroll', closeWrapper, { once: true });
@@ -67,7 +59,7 @@ const Zoom = (props: Props) => {
     imageRef.current.style.zIndex = '10';
     setTimeout(
       () => imageRef.current && (imageRef.current.style.zIndex = ''),
-      duration + 100
+      DURATION + TIMEOUT_DELAY
     );
     setClicked(false);
   };
@@ -76,14 +68,16 @@ const Zoom = (props: Props) => {
     <>
       {clicked && (
         <div
-          className="fixed top-0 left-0 z-30 h-full w-full cursor-zoom-out bg-black opacity-90"
+          className="fixed top-0 left-0 z-30 h-full w-full cursor-zoom-out bg-black"
+          style={{ opacity: BACKGROUND_OPACITY }}
           onClick={closeWrapper}
         />
       )}
       <NextImage
-        className={`relative my-0 block overflow-hidden duration-300 ${
+        className={`relative my-0 block overflow-hidden ${
           clicked ? '' : 'cursor-zoom-in'
         } ${className || ''}`}
+        style={{ transition: `transform ${DURATION}ms` }}
         ref={imageRef}
         onClick={handleImageZoom}
         onError={() => setError(true)}
