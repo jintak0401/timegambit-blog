@@ -12,10 +12,10 @@ import AboutList from '@/components/card-and-list/AboutList';
 import { PageSEO } from '@/components/common/SEO';
 
 const SELFIE_URL = about.Selfie;
-const EXCLUDED_FROM_SECTION_LIST = [
+const EXCLUDED_FROM_SECTION_LIST: (keyof typeof about)[] = [
   'Contact',
   'Selfie',
-] as (keyof typeof about)[];
+];
 
 export default function AboutPage() {
   const { title, description } = phrases.About;

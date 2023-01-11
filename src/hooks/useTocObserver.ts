@@ -13,7 +13,7 @@ export const useTocObserver = () => {
   const dirRef = useRef<string>('');
   const prevYpos = useRef<number>(0);
 
-  // scroll 방향 check function
+  // check scroll direction function
   const checkScrollDirection = (prevY: number) => {
     if (window.scrollY === 0 && prevY === 0) return;
     dirRef.current = window.scrollY > prevY ? 'down' : 'up';
@@ -38,7 +38,7 @@ export const useTocObserver = () => {
       Array.from(els).map(({ id, nodeName, textContent }) => ({
         id,
         nodeName,
-        textContent: textContent as string,
+        textContent,
       }))
     );
     els.forEach((h) => observer.observe(h));

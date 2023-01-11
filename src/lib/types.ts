@@ -20,7 +20,7 @@ export interface Heading extends Parent {
 export interface TocElement {
   id: string;
   nodeName: string;
-  textContent: string;
+  textContent: string | null;
 }
 
 export interface SeriesListItem {
