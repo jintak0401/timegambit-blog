@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 
 import throttle from '@/lib/throttle';
 
+const MINIMUM_CONDITION = 200;
+const THROTTLE_LIMIT = 100;
+
 interface Props {
   goTop?: boolean;
   goBottom?: boolean;
@@ -13,9 +16,9 @@ const ScrollTopAndBottom = ({ goTop = true, goBottom = true }: Props) => {
 
   useEffect(() => {
     const throttleHandleScroll = throttle(() => {
-      if (window.scrollY > 200) setShow(true);
+      if (window.scrollY > MINIMUM_CONDITION) setShow(true);
       else setShow(false);
-    }, 100);
+    }, THROTTLE_LIMIT);
 
     window.addEventListener('scroll', throttleHandleScroll);
     return () => window.removeEventListener('scroll', throttleHandleScroll);
@@ -41,7 +44,7 @@ const ScrollTopAndBottom = ({ goTop = true, goBottom = true }: Props) => {
           aria-label="Scroll To Top"
           type="button"
           onClick={handleScrollTop}
-          className="rounded-full bg-gray-200 p-2 text-gray-500 transition-all hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600"
+          className="middle-text rounded-full bg-gray-200 p-2 transition-all hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600"
         >
           <svg
             className="h-5 w-5 md:h-6 md:w-6"
@@ -61,7 +64,7 @@ const ScrollTopAndBottom = ({ goTop = true, goBottom = true }: Props) => {
           aria-label="Scroll To Bottom"
           type="button"
           onClick={handleScrollToComment}
-          className="rounded-full bg-gray-200 p-2 text-gray-500 transition-all hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600"
+          className="middle-text rounded-full bg-gray-200 p-2 transition-all hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600"
         >
           <svg
             className="h-5 w-5 md:h-6 md:w-6"

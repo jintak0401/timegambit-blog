@@ -16,6 +16,7 @@ const isNeedRestoreScroll = (asPath: string) => {
   return needRestoreScrollRegs.some((reg) => reg.test(asPath));
 };
 
+// When user does going back or forward, it restores scroll position if it needs.
 const useRestoreScrollPos = () => {
   const router = useRouter();
   const { getScrollPosState, setScrollPosState, initScrollPosState } =

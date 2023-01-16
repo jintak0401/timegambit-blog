@@ -33,15 +33,13 @@ const SeriesCard = ({ series }: Props) => {
           <h2 className="strong-text mt-3 mb-1 text-lg font-semibold">
             {title}
           </h2>
-          <div className="text-[15px]">
-            <span className="middle-text">
-              {phrases.Series.seriesLength.replace('?', length.toString())}
-            </span>
-            <span className="weak-text"> · </span>
-            <span className="weak-text">
-              {phrases.Series.lastUpdate} {formattedDate(lastmod, false)}
-            </span>
-          </div>
+          <span className="middle-text">
+            {phrases.Series.seriesLength.replace('%d', length.toString())}
+          </span>
+          <span className="weak-text"> · </span>
+          <span className="weak-text">
+            {phrases.Series.lastUpdate} {formattedDate(lastmod, false)}
+          </span>
         </div>
       </Link>
     </article>

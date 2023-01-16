@@ -105,7 +105,7 @@ const PostListInSeries = ({ seriesTitle, series }: Props) => {
           ))}
         </ol>
       )}
-      <footer className="flex items-center justify-between">
+      <div className="flex items-center justify-between">
         <button
           className="my-5 flex items-center justify-center text-gray-700 hover:text-gray-900 dark:text-gray-300"
           onClick={() => setDisclosure((prev) => !prev)}
@@ -119,7 +119,7 @@ const PostListInSeries = ({ seriesTitle, series }: Props) => {
           </span>
           {routeBtns}
         </span>
-      </footer>
+      </div>
     </div>
   );
 };

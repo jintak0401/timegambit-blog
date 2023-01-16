@@ -210,7 +210,7 @@ Axios 클래스 내에 각 메소드들의 동작이 각각 정의되어 있는 
 * prototype으로 각 메소드 동작을 정의함으로써, axios 객체를 아무리 생성해도, 각 메소드의 동작을 수행하는 함수는 항상 7개만 존재합니다.
 
 <Alert type="info">
-  **Q. 클래스 내부에 각 메소드의 함수를 static으로 정의하면 안될까요? 이렇게 정의해도 prototype으로 정의하는 것처럼 7개만 존재하게되지 않나요?**
+  Q. 클래스 내부에 각 메소드의 함수를 static으로 정의하면 안될까요? 이렇게 정의해도 prototype으로 정의하는 것처럼 7개만 존재하게되지 않나요?
 
   static 함수로 정의하게되면 객체를 생성하지 않아도 쓸 수 있도록, 객체가 고유하게 갖고 있는 값에는 접근할 수 없게 됩니다.
   Axios 클래스의 생성자에서 `this.defaults`에 객체의 고유한 설정을 저장합니다. 그리고 이 설정을
@@ -336,13 +336,13 @@ axios.interceptors.request.use(onResFulfilled2, onResRejected2);
 
 ```js
 requestInterceptorChain = [
-  onReqFulfilled2, onReqFulfilled2,
-  onReqFulfilled1, onReqFulfilled1
+  onReqFulfilled2, onReqRejected2,
+  onReqFulfilled1, onReqRejected1
 ]
 
 responseInterceptorChain = [
-  onResFulfilled1, onResFulfilled1,
-  onResFulfilled2, onResFulfilled2
+  onResFulfilled1, onResRejected1,
+  onResFulfilled2, onResRejected2
 ]
 
 synchronousRequestInterceptors === false
@@ -385,11 +385,11 @@ response 인터셉터 함수들을 위치시킵니다. 위의 예제를 수행�
 
 ```js
 chain = [
-  onReqFulfilled2, onReqFulfilled2,
-  onReqFulfilled1, onReqFulfilled1
+  onReqFulfilled2, onReqRejected2,
+  onReqFulfilled1, onReqRejected1,
   dispatchRequest.bind(this), undefined,
-  onResFulfilled1, onResFulfilled1,
-  onResFulfilled2, onResFulfilled2
+  onResFulfilled1, onResRejected1,
+  onResFulfilled2, onResRejected2
 ]
 ```
 
@@ -398,15 +398,15 @@ while문을 모두 수행하면 promise는 다음과 같아집니다.
 
 ```js
 promise = Promise.resolve(config)
-             .then(onReqFulfilled2, onReqFulfilled2)
-             .then(onReqFulfilled1, onReqFulfilled1)
+             .then(onReqFulfilled2, onReqRejected2)
+             .then(onReqFulfilled1, onReqRejected1)
              .then(dispatchRequest.bind(this), undefined)
-             .then(onResFulfilled1, onResFulfilled1)
-             .then(onResFulfilled2, onResFulfilled2)
+             .then(onResFulfilled1, onResRejected1)
+             .then(onResFulfilled2, onResRejected2)
 ```
 
 <Alert type="info">
-  **Q. Promise의 then에 함수가 왜 2개가 들어가죠? 원래 1개만 있어야 하는 것 아닌가요?**
+  Q. Promise의 then에 함수가 왜 2개가 들어가죠? 원래 1개만 있어야 하는 것 아닌가요?
 
   then함수에 함수가 2개 들어갈 수 있습니다. 앞쪽의 함수는 resolve함수, 뒤쪽의 함수는 reject함수입니다.
   catch의 역할을 then에서 해준다고 할 수 있죠. 단, 동일한 then에서 발생한 에러는 뒤 쪽의 reject 함수가 잡아주지는 않습니다.
@@ -465,8 +465,8 @@ return promise;
 newConfig = onReqFulfilled1(onReqFulfilled2(config))
 
 promise = dispatchRequest.call(this, newConfig)
-             .then(onResFulfilled1, onResFulfilled1)
-             .then(onResFulfilled2, onResFulfilled2)
+             .then(onResFulfilled1, onResRejected1)
+             .then(onResFulfilled2, onResRejected2)
 ```
 
 Promise로 다루지 않을 뿐 2번 코드와 별반 다르지 않죠? 결국 3번 코드도 request 인터셉터 함수들을 역순으로 실행시켜 설정을 변경하고,

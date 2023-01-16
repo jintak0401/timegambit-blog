@@ -17,22 +17,20 @@ export default function ProjectsPage() {
           <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
             {phrases.Projects.title}
           </h1>
-          <p className="middle-text text-lg leading-7">
+          <div className="middle-text text-lg leading-7">
             {phrases.Projects.description}
-          </p>
-        </div>
-        <div className="py-12">
-          <div className="-m-4 flex flex-wrap justify-center">
-            {projectsData.map((d) => (
-              <ProjectCard
-                key={d.title}
-                title={d.title}
-                description={d.description}
-                imgSrc={d.imgSrc}
-                href={d.href}
-              />
-            ))}
           </div>
+        </div>
+        <div className="-m-4 flex flex-wrap py-12">
+          {projectsData.map((d) => (
+            <ProjectCard
+              key={d.title}
+              title={d.title}
+              description={d.description}
+              imgSrc={d.imgSrc}
+              href={d.href}
+            />
+          ))}
         </div>
       </div>
     </>

@@ -58,7 +58,7 @@ export default function SeriesPost({
       <PageSEO
         title={`Series | ${series['title']} - ${siteMetadata.author}`}
         description={
-          phrases.Seo.specificSeriesDesc?.replace('?', series['title']) ||
+          phrases.Seo.specificSeriesDesc?.replace('%s', series['title']) ||
           `[${series['title']}] series - ${siteMetadata.author}`
         }
         image={getImageWithFallback(
