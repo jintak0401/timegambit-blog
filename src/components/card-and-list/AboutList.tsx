@@ -1,22 +1,22 @@
-import about from 'data/about';
+import { AboutCardType } from '@/lib/types';
 
 import AboutCard from './AboutCard';
 
 interface Props {
-  sectionName: Exclude<keyof typeof about, 'Contact' | 'Selfie'>;
+  sectionName: string;
+  sectionData: AboutCardType[];
 }
 
-const AboutList = ({ sectionName }: Props) => {
-  const data = about[sectionName];
+const AboutList = ({ sectionName, sectionData }: Props) => {
   return (
     <section className="my-7 md:my-10">
       <h2 className="strong-text mb-7 text-2xl font-bold md:mb-20 md:text-4xl">
         {sectionName}
       </h2>
       <ul className="space-y-11 md:space-y-16">
-        {data.map((piece) => (
-          <li key={piece.title}>
-            <AboutCard {...piece} />
+        {sectionData.map((item) => (
+          <li key={item.title}>
+            <AboutCard {...item} />
           </li>
         ))}
       </ul>

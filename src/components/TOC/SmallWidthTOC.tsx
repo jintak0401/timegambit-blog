@@ -1,3 +1,4 @@
+import phrases from 'data/phrases';
 import { useState } from 'react';
 import { IoCloseSharp } from 'react-icons/io5';
 
@@ -36,7 +37,7 @@ const SmallWidthTOC = () => {
           />
         </button>
         <div className="-mt-5 text-center text-2xl text-gray-300 dark:text-gray-700">
-          Table of Contents
+          {phrases.Blog.TOC}
         </div>
         <ul className="space-y-1.5 p-5 transition-colors">
           <TOCList onClickAnchor={() => setTocShow(false)} />

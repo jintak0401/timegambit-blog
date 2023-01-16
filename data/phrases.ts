@@ -39,6 +39,7 @@ const phrases = {
     closeSeries: '숨기기',
     loadComments: '댓글 불러오기',
     share: '공유하기',
+    TOC: 'Table of Contents',
   },
   SignIn: {
     title: 'Time Gambit 블로그에 어서오세요! 다음으로 로그인 해주세요.',
@@ -46,12 +47,13 @@ const phrases = {
   Projects: {
     title: 'Projects',
     description: '사이드 & 토이 프로젝트를 기록합니다.',
+    learnMore: '보러가기',
   },
   Series: {
     title: 'Series',
     description: '시리즈로 작성된 포스트들을 모았습니다.',
     lastUpdate: '마지막 업데이트',
-    seriesLength: '?개의 포스트', // put '?' mark at the position of number(length)
+    seriesLength: '%d개의 포스트', // put '%d' mark at the position of number(length)
     noSeries: '시리즈로 작성된 글이 없습니다!',
   },
   Seo: {
@@ -63,8 +65,8 @@ const phrases = {
     blogDesc: 'Time Gambit이 작성한 포스트 목록',
     tagDesc: 'Time Gambit 블로그에 작성된 태그 목록',
     aboutDesc: 'Time Gambit 소개',
-    specificTagDesc: 'tag #? 포스트 목록',
-    specificSeriesDesc: 'series [?] 포스트 목록',
+    specificTagDesc: 'tag #%s 포스트 목록',
+    specificSeriesDesc: 'series [%s] 포스트 목록',
   },
   Guestbook: {
     title: 'Guestbook',

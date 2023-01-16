@@ -15,8 +15,8 @@ const MobileNav = ({ navShow, onToggleNav }: Props) => {
 
   return (
     <div
-      className={`fixed top-0 left-0 z-40 h-screen w-screen transform bg-gray-200 opacity-95 duration-300 ease-in-out dark:bg-gray-800 sm:hidden ${
-        navShow ? 'translate-x-0' : 'translate-x-full'
+      className={`fixed top-0 left-full z-40 h-screen w-screen bg-gray-200 opacity-95 duration-300 dark:bg-gray-800 sm:hidden ${
+        navShow ? '-translate-x-full' : 'translate-x-0'
       }`}
     >
       <div className="flex justify-end">

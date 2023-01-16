@@ -60,7 +60,7 @@ const FootnoteTooltip = ({ idx, show }: Props) => {
     <span
       aria-label="footnote tooltip"
       ref={ref}
-      className="invisible absolute left-0 z-30 w-max whitespace-nowrap rounded-md border border-gray-700 bg-white p-3 text-base drop-shadow dark:border-gray-700 dark:border-gray-300 dark:bg-gray-900 sm:max-w-md md:max-w-xl lg:max-w-2xl xl:max-w-3xl 2xl:max-w-7xl"
+      className="invisible absolute left-0 z-30 w-max whitespace-nowrap rounded-md border border-gray-700 bg-white p-3 drop-shadow dark:border-gray-700 dark:border-gray-300 dark:bg-gray-900 sm:max-w-md md:max-w-xl lg:max-w-2xl xl:max-w-3xl 2xl:max-w-7xl"
       style={getStyle() as CSSProperties}
     >
       <span

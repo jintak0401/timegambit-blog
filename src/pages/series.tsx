@@ -28,9 +28,9 @@ export default function SeriesPage({
           <h1 className="strong-text text-3xl font-extrabold leading-9 tracking-tight sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
             {phrases.Series.title}
           </h1>
-          <p className="middle-text text-lg leading-7">
+          <div className="middle-text text-lg leading-7">
             {phrases.Series.description}
-          </p>
+          </div>
         </div>
         <div className="py-12">
           <SeriesList series={series} />

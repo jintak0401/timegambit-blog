@@ -13,7 +13,7 @@ import MobileNav from './MobileNav';
 import MobileNavButton from './MobileNavButton';
 import ThemeSwitch from './ThemeSwitch';
 
-const BOUND_INDEX = 3;
+const REDUCED_NAV_LINKS = ['Blog', 'Tags', 'Series', 'Projects'];
 
 const NavItems = () => {
   const path = useRouter().pathname.split('/')[1];
@@ -25,8 +25,8 @@ const NavItems = () => {
         {navLinks.map(({ href, title }, idx) => (
           <li
             key={idx}
-            className={`transition-all hover:scale-110 ${
-              idx > BOUND_INDEX ? 'hidden xl:inline-block' : ''
+            className={`transition-transform hover:scale-110 ${
+              !REDUCED_NAV_LINKS.includes(title) ? 'hidden xl:block' : ''
             }`}
           >
             <Link
@@ -46,7 +46,7 @@ const NavItems = () => {
   );
 };
 
-export default function Header() {
+const Header = () => {
   const scrollDirection = useScrollDirection();
   const [navShow, setNavShow] = useState(false);
 
@@ -82,16 +82,14 @@ export default function Header() {
             LightModeSvg={Logo}
             DarkModeSvg={DarkLogo}
           />
-          <div className="hidden md:block">
-            <SvgSwitcher
-              className="h-6 w-52"
-              svgkey="header_title"
-              LightModeSvg={LogoTitle}
-              DarkModeSvg={DarkLogoTitle}
-            />
-          </div>
+          <SvgSwitcher
+            className="hidden h-6 w-52 md:block"
+            svgkey="header_title"
+            LightModeSvg={LogoTitle}
+            DarkModeSvg={DarkLogoTitle}
+          />
         </Link>
-        <div className="flex items-center py-1 text-base leading-5 sm:py-0">
+        <div className="flex items-center py-1 leading-5 sm:py-0">
           <NavItems />
           <ThemeSwitch />
           <MobileNavButton onToggleNav={onToggleNav} />
@@ -100,4 +98,6 @@ export default function Header() {
       <MobileNav onToggleNav={onToggleNav} navShow={navShow} />
     </>
   );
-}
+};
+
+export default Header;

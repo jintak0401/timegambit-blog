@@ -72,7 +72,7 @@ const GuestbookInput = ({ setLoading, user }: Props) => {
         <div className="flex items-center gap-4">
           <NextImage
             src={user.image}
-            alt="프로필 사진"
+            alt="profile image"
             className="h-12 w-12 rounded-full object-cover"
             width="50"
             height="50"

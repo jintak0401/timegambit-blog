@@ -20,7 +20,7 @@ export interface Heading extends Parent {
 export interface TocElement {
   id: string;
   nodeName: string;
-  textContent: string;
+  textContent: string | null;
 }
 
 export interface SeriesListItem {
@@ -44,4 +44,10 @@ export interface UserType {
   email: string;
   name: string;
   image: string;
+}
+
+export interface AboutCardType {
+  title: string;
+  date?: string;
+  info: string[];
 }
