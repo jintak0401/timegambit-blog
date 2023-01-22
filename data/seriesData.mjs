@@ -15,6 +15,10 @@ const seriesData = {
     image: 'https://i.imgur.com/Wigx54E.png',
     slug: 'blog-log',
   },
+  '자바스크립트와 맞짱 뜨기': {
+    image: 'https://i.imgur.com/zzh0DoW.png',
+    slug: 'js'
+  }
 };
 
 export default seriesData;
