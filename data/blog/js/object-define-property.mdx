@@ -14,11 +14,9 @@ layout: PostLayout
 자바스크립트의 async/await 문법이 IE에서 돌아가기 위해 ES5문법으로 어떻게 변환되는지 분석하다가 알게된 새로운 내용을 정리합니다. 기회가 된다면 [async/await의 동작원리](https://www.timegambit.com/blog/digging/async-await/01)도 읽어보세요! 꽤나 흥미로운 점들을 알 수 있게 될지도 몰라요! 🙃
 
 ## 객체에 값을 설정하는 방법
-
 누군가 여러분에게 객체에 값을 어떻게 설정하냐고 묻는다면 거의 대부분 `obj.key = value`와 같은 방식으로 값을 설정한다고 대답할 것입니다. 그 외에 다른 방법이 있다는 것 아시나요? 그 방법은 `Object.defineProperty`입니다. 이 방법에 대해 얼마나 아시나요? 사용해본 경험은 있으신가요? 저는 있다는 것만 알고있고 사용해보지는 않았습니다. 그런데 생각보다 여러가지 기능들이 있었습니다.
 
 ## Object.defineProperty
-
 ```js
 const obj = {};
 Object.defineProperty(obj, 'key', {
@@ -28,12 +26,11 @@ Object.defineProperty(obj, 'key', {
   configurable: true,
 });
 ```
-
-`Object.defineProperty`의 3번째 인자인 descriptor에는 4개의 속성이 있습니다.
-* `value`: 값. 기본값은 undefined
+`Object.defineProperty`의 3번째 인자인 descriptor 객체에는 6개의 속성을 넣어줄 수 있습니다.
+* `value`: obj.key에 설정될 값. 기본값은 undefined
 * `writable`: 값이 변경 가능한지 여부. 기본값은 false
 * `enumerable`: 열거 가능한지 여부. 기본값은 false
-* `configurable`: enumerable, configurable, get, set을 변경할 수 있는지 여부. 기본값은 false
+* `configurable`: 객체에서의 삭제 가능 여부와 descriptor의 속성들을 추후에 변경할 수 있는지 여부. 기본값은 false
 * `get`: getter 함수로 obj.key에 접근할 때 동작하며, 이 함수의 return 값을 obj.key로 가집니다. 기본값은 undefined
 * `set`: setter 함수로 obj.key에 값을 할당할 때 동작하며, 할당할 값이 인자로 들어옵니다. 기본값은 undefined
 
@@ -64,7 +61,7 @@ console.log(Object.getOwnPropertyDescriptor(obj, 'birth')); // ⓑ
 { value: 'timegambit', writable: false, enumerable: false, configurable: false } // ⓐ
 { value: 1996, writable: true, enumerable: true, configurable: true } // ⓑ
 ```
-위에서 `writable`, `enumerable`, `configurable`의 기본값은 false라고 했습니다. 이 기본값은 `Object.defineProperty`를 사용하여 `value`를 설정할 때만 적용됩니다. `obj.birth = 1996`과 같이 값을 설정할 때는 `writable`, `enumerable`, `configurable`의 기본값이 true로 설정됩니다.
+위에서 `writable`, `enumerable`, `configurable`의 기본값은 false라고 했습니다. 이 기본값은 `Object.defineProperty`를 사용하여 `value`를 설정할 때만 적용됩니다. `obj.birth = 1996`과 같이 값을 설정할 때에는 `writable`, `enumerable`, `configurable`의 값이 true로 설정됩니다.
 
 ### writable
 ```js
@@ -95,7 +92,7 @@ console.log(obj.name); // jintak
   obj.name = 'jintak';
 })(); // 에러 발생
 ```
-`writable`이 false이면 `obj.key = value` 방식으로는 값을 변경할 수 없습니다. `writable`이 false일 때 `obj.key = value`로 값을 변경하려고 시도하면, **strict mode가 아닐 경우에는 에러가 발생하지 않고 값 할당만 되지 않으며, strict mode일 경우에는 동일한 값을 할당하려 해도 에러가 발생합니다.** 하지만 `Object.defineProperty`를 사용하여 `value`를 변경할 수는 있습니다.
+`writable`이 false이면 `obj.key = value` 방식으로는 값을 변경할 수 없습니다. `writable`이 false일 때 `obj.key = value`로 값을 변경하려고 시도하면, **strict mode가 아닐 경우에는 에러가 발생하지 않고 무시되며, strict mode일 경우에는 동일한 값을 할당하려 해도 에러가 발생합니다.** 하지만 `Object.defineProperty`를 사용하여 `value`를 변경할 수는 있습니다.
 
 ### enumerable
 ```js
@@ -144,7 +141,7 @@ Object.defineProperty(obj, 'name', {
   configurable: false,
 });
 
-delete obj.name;
+delete obj.name; // 무시, strict mode일 경우 에러 발생
 console.log(obj.name); // jintak
 
 Object.defineProperty(obj, 'name', {
@@ -179,8 +176,7 @@ Object.defineProperty(obj, 'name', {
   set() { ... },
 }); // 에러 발생
 ```
-
-`configurable`이 false이면 `delete`로 객체에서 해당 속성을 삭제할 수 없습니다.(strict mode일 경우 에러가 발생합니다.) 또한 `Object.defineProperty`를 사용하여 `enumerable`, `configurable`, `get`, `set`을 변경할 수 없습니다.
+`configurable`이 false이면 `delete`로 객체에서 해당 속성을 삭제할 수 없습니다. strict mode일 때 삭제를 시도하면 에러가 발생합니다. 또한 `enumerable`, `configurable`, `get`, `set`을 변경할 수 없습니다.
 
 `writable`과 `value`에 대해서는 다소 다르게 동작합니다. 기존의 `writable`이 true였을 경우 `writable` 및 `value`의 변경은 가능합니다. 하지만 `writable`을 false로 변경하였을 경우 `writable`을 다시 변경하는 것과 `value`를 변경할 수 없습니다.
 
@@ -205,7 +201,7 @@ const b = new MyClass();
 a.x = 1;
 console.log(b.x); // 1
 ```
-15번 라인의 `a.x = 1`을 통해 8번 라인의 `set(x)`가 호출됩니다. 이 때 x는 =의 오른쪽에 있던 값인 1이 들어가게 됩니다. 16번 라인의 `b.x`를 통해 5번 라인의 `get()`을 호출하게 됩니다. 이 함수의 return 값인 `value(= 1)`가 `b.x`가 되어 1을 출력합니다.
+15번 라인의 `a.x = 1`을 통해 8번 라인의 `set(x)`가 호출됩니다. 이 때 x에는 =의 오른쪽에 있던 값인 1이 들어가게 됩니다. 16번 라인의 `b.x`를 통해 5번 라인의 `get()`을 호출하게 됩니다. `b.x`는 `get()` 함수의 return 값인 `value(= 1)`가 되어 1을 출력합니다.
 
 ```js:2번-예제
 function MyClass() {}
@@ -224,7 +220,7 @@ const b = new MyClass();
 a.x = 1;
 console.log(b.x); // undefined
 ```
-위와 같이 `this`를 이용해 객체의 새로운 속성으로 값을 저장할 수 있습니다. `get()`과 `set()` 안의 `this`는 객체를 가리키게 됩니다.
+위와 같이 `this`를 이용해 객체의 새로운 속성으로 값을 저장할 수 있습니다. `get()`과 `set()` 안의 `this`는 객체 자체를 가리키게 됩니다.
 
 ### 상속과 관련하여 주의할 점
 ```js
