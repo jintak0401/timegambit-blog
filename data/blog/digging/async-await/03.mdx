@@ -1,0 +1,378 @@
+---
+title: '[async/await] ES5로 제너레이터 구현하기(2)'
+date: '2023-01-23'
+lastmod: '2023-01-23'
+tags: ['JavaScript', 'async/await']
+draft: false
+series: 동작원리
+summary: 제너레이터가 ES5 문법으로 어떻게 구현되어있는지 분석해보았습니다. 이 포스트에서는 closure와 switch문 등을 이용해 어떻게 제너레이터처럼 동작하도록 만드는지 설명합니다.
+images: [https://i.imgur.com/YB6XuGM.png]
+layout: PostLayout
+---
+
+## 분석하기 앞서
+[저번 포스트](https://www.timegambit.com/blog/digging/async-await/02)에서 다루었던 내용이 기억나지 않는다면 다시 한 번 읽어보시기 바랍니다. 간단히 요약하고 설명을 시작하겠지만 *왜 이런 결론이었더라?* 🤔 하신다면 읽는 재미가 반감될 거에요!
+
+### 객체들간의 관계
+![객체들간의 관계도](https://i.imgur.com/OGA0FV7.png)
+
+`_regeneratorRuntime`, `mark`, `wrap` 함수를 수행해가면서 객체들간의 관계는 위 그림처럼 되었습니다. 이 관계들 중 가장 중요한 것은 **`generator`와 `Gp`의 관계입니다**. `generator.__proto__.__proto__ === Gp`라는 것을 기억해주세요!
+
+### `asyncGeneratorStep`의 `gen`
+```js showLineNumbers
+// gen: generator
+// key: 'next'
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+  ...
+  var info = gen[key](arg);
+  ...
+}
+```
+`asyncGeneratorStep` 함수는 `gen`이라는 인자를 받습니다. 이 `gen`은 `_regeneratorRuntime` 함수가 만들어준 `generator` 객체를 가리키게 됩니다. 따라서 5번 라인에서 `generator.next` 함수를 호출하게 됩니다. 하지만 저번 설명에서 `generator` 객체에 `next` 함수를 만들어주지는 않았습니다. 이번 포스트에서는 이 떡밥을 회수하고, 무한루프와 switch문이 왜 있었는지 설명하겠습니다.
+
+## `next` 함수는 어디에?
+
+이 의문을 해결하기 위해 저번에 설명할 때에 생략했던 `_regeneratorRuntime` 함수의 일부를 다시 살펴보겠습니다.
+
+```js showLineNumbers {5}
+function _regeneratorRuntime() {
+  ...
+  return (
+    ...
+    defineIteratorMethods(Gp),
+    ...
+  )
+}
+```
+
+`_regeneratorRuntime` 함수를 실행할 때 `Gp`를 초기화해줍니다. 저번 포스트에서는 생략했지만 `defineIteratorMethods` 함수를 이용해, `Gp`의 `constructor`와 `__proto__` 뿐만 아니라 다른 것들도 초기화해줍니다. 이 함수에서는 어떤 것들을 설정해줄까요?
+
+### `defineIteratorMethods` 함수
+```js showLineNumbers {3-4,11}
+function defineIteratorMethods(prototype) {
+  ["next", "throw", "return"].forEach(function (method) {
+    define(prototype, method, function (arg) {
+      return this._invoke(method, arg);
+    });
+  });
+}
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+  ...
+  var info = gen[key](arg);
+  ...
+}
+```
+`defineIteratorMethods` 함수는 `prototype`을 인자로 받습니다. `prototype`은 `Gp`를 가리키게 됩니다. 즉, `Gp` 객체에 `next`, `throw`, `return` 메소드를 설정해줍니다. `generator.next` 함수를 어떻게 호출할 수 있는지 감이 오시나요?
+
+![next 함수를 찾기까지](https://i.imgur.com/BpIsRKZ.png)
+
+`generator` 객체에는 `next` 함수가 정의되지 않았기 때문에 프로토체이닝을 통해 `next` 함수를 찾아나갑니다. 우선 `generator`의 __proto__인 ⓐ 객체를 찾아봅니다. 하지만 여기에도 `next` 함수가 없습니다. 다시 ⓐ 객체의 __proto__인 `Gp` 객체를 찾아봅니다. 그리고 `Gp` 객체에는 `defineIteratorMethods` 함수를 통해 설정해준 `next` 함수가 있습니다. 그래서 위 코드의 11번 라인을 통해 `Gp.next` 함수를 호출하게 됩니다! 그리고 `next` 함수에서는 `this._invoke` 함수를 호출하므로 결국 `generator._invoke` 함수를 호출하게 됩니다.
+
+<Alert type="info">
+  Q. 어떻게 `this._invoke`로 `generator._invoke`를 호출할 수 있나요?
+
+  A. 자바스크립트에서 `this`는 꽤 난해한 개념이죠. 그래서 헷갈릴 때가 많습니다. 지금처럼 객체에 정의되어 있는 메소드를 사용할 때에 `this`는 해당 메소드를 호출한 객체를 가리키게 됩니다. 즉, 위 코드의 4번 라인의 `this`는 `generator` 객체를 가리키게 됩니다. 왜냐하면 11번 라인의 `gen`은 `generator` 객체이기 때문입니다.
+
+  아래 코드는 지금까지의 과정을 매우 간단히 요약하여, 정말 `this`가 `generator` 객체를 가리키는지 확인해보는 코드입니다. 직접 확인해보세요!
+
+  ```js
+  const Gp = {};
+
+  function callee() {}
+
+  callee.prototype = Object.create(Gp);
+
+  const generator = Object.create(callee.prototype);
+
+  Object.defineProperty(generator, "_invoke", {
+    value: function (method, arg) {
+      console.log(this === generator); // true
+    },
+  });
+
+  Object.defineProperty(Gp, "next", {
+    value: function (arg) {
+      console.log(this === generator); // true
+      return this._invoke("next", arg);
+    },
+  });
+
+  generator.next();
+  ```
+</Alert>
+
+## `makeInvokeMethod` 함수
+
+위에서 `Gp.next` 함수를 통해 `generator._invoke` 함수를 호출함을 알게되었습니다. `generator._invoke` 함수를 호출하면 어떻게 될까요?
+
+```js showLineNumbers {7-8}
+function _regeneratorRuntime() {
+  ...
+  function wrap(innerFn, outerFn, self, tryLocsList) {
+    ...
+    context = new Context(tryLocsList || []);
+    return (
+      defineProperty(generator, "_invoke", {
+        value: makeInvokeMethod(innerFn, self, context),
+      }),
+      generator
+    );
+  }
+  ...
+}
+```
+저번 포스트에서 `generator._invoke` 함수에 `makeInvokeMethod` 함수를 통해 생성된 함수를 할당해준다고 설명했습니다. 그러면 이제 `makeInvokeMethod` 함수를 봐야겠네요.
+
+보러가기 전에 `innerFn`에 `_callee$` 함수가 담긴다는 것을 다시 한 번 상기하고 갑시다! (왜 `innerFn`에 `_callee$`가 담기는지, `_callee$`가 무엇인지 기억이 안나시면 [이전 포스트의 wrap 설명](https://timegambit.com/blog/digging/async-await/02#wrap)을 다시 읽어주세요!)
+
+```js:makeInvokeMethod() showLineNumbers {5,8,13,20,29}
+function makeInvokeMethod(innerFn, self, context) {
+  var state = "suspendedStart";
+  return function (method, arg) {
+    ...
+    for (context.method = method, context.arg = arg; ; ) {
+      ...
+      if ("next" === context.method) {
+        context.sent = context._sent = context.arg;
+      } else {
+        "return" === context.method && context.abrupt("return", context.arg);
+      }
+      state = "executing";
+      var record = tryCatch(innerFn, self, context);
+      if ("normal" === record.type) {
+        if (
+          ((state = context.done ? "completed" : "suspendedYield"),
+          record.arg === ContinueSentinel)
+        )
+          continue;
+        return { value: record.arg, done: context.done };
+      }
+      ...
+    }
+  };
+}
+
+function tryCatch(fn, obj, arg) {
+  try {
+    return { type: "normal", arg: fn.call(obj, arg) };
+  } catch (err) {
+    return { type: "throw", arg: err };
+  }
+}
+```
+
+`makeInvokeMethod` 함수의 인자인 `innerFn`은 `_callee$`이며 `context`는 현재의 실행환경이 담기는 객체입니다. 그리고 `makeInvokeMethod` 함수가 return 해주는, 3~24번 라인에 걸쳐 정의된 함수가 `generator._invoke`에 담기는 함수입니다.(3\~24번 라인에 걸쳐 정의된 이 함수를 `_invoke` 함수라고 하겠습니다.) 그래서 `asyncGeneratorStep` 함수에서 `gen[key](arg)`를 호출하면 3번 라인의 `method`에 `'next'`가 담겨 호출됩니다. (현재 `arg`는 undefined입니다.)
+
+5번, 8번 라인을 `context`는 \{ method: 'next', arg: undefined, sent: undefined, _sent: undefined, ... \}인 객체가 됩니다. 그리고 이 `context`와 함께 `_callee$`(= `innerFn`)를 인자로 넣어 `tryCatch` 함수를 호출합니다. 그리고 `tryCatch` 함수에서 `fn.call`을 통해 `_callee$`를 호출해줍니다.
+
+<Alert type="info">
+  중요하지는 않지만 `context`에 대해 부연설명을 합니다. `context`는 `wrap` 함수에서 `new Context()`를 통해 객체를 생성합니다. 이 때 `Context` 함수에서 아래 코드의 `reset` 함수를 호출하여 `context`의 여러 속성들을 초기화해줍니다.
+
+  ```js
+  (Context.prototype = {
+    constructor: Context,
+      reset: function reset(skipTempReset) {
+        if (
+          ((this.prev = 0),
+          (this.next = 0),
+          (this.sent = this._sent = undefined),
+          (this.done = !1),
+          (this.delegate = null),
+          (this.method = "next"),
+          (this.arg = undefined),
+          this.tryEntries.forEach(resetTryEntry),
+          !skipTempReset)
+        )
+        ...
+    }
+  },
+  ```
+</Alert>
+
+## `_callee$`
+
+`generator._invoke`를 호출하면 `_callee$` 함수를 호출하게 된다는 사실을 알게되었습니다. 돌고 돌아 다시 `_callee$` 함수로 돌아왔네요. 이번에는 이 함수 안에 있던 무한루프가 무엇인지 알아보겠습니다.
+
+```js showLineNumbers
+function _callee$(_context) {
+  while (1) {
+    switch ((_context.prev = _context.next)) {
+      case 0:
+        _context.next = 2;
+        return new Promise(function (resolve) {
+          return setTimeout(resolve, 1000);
+        }).then(function () {
+          return 123;
+        });
+      case 2:
+        val = _context.sent;
+        _context.next = 5;
+        return Promise.resolve(val).then(function (v) {
+          return 3 * v;
+        });
+      case 5:
+        return _context.abrupt("return", _context.sent);
+      case 6:
+      case "end":
+        return _context.stop();
+    }
+  }
+}
+```
+
+`_context`의 `next`와 `prev`는 switch 문에서 다음에 수행해야할 코드와 이전에 수행한 코드를 기억하기 위해 존재하는 속성입니다. 그래서 `_context.next`는 처음에는 0부터 시작합니다. (위쪽의 부연설명에서 `_context.next`가 처음에 0으로 초기화됨을 설명했습니다.)
+
+`case 0`을 보니 다음에는 `case 2`를 수행하도록 `context.next`를 2로 변경해주고, Promise를 return 해주고 있네요.(아마 `_context.next`가 0, 2, 5, "end"로 순차적으로 변하면서 코드를 차례대로 실행하겠죠?) return된 Promise는 `tryCatch` 함수에서 return해주는 객체의 `arg`에 담기고, 결국 `_invoke` 함수의 `record` 변수에 \{ type: 'normal', arg: Promise \}가 담기게 됩니다. `record.arg`에 할당된 Promise는 `_callee$` 함수가 return해주었던 Promise입니다.
+
+```js showLineNumbers {8,15}
+function makeInvokeMethod(innerFn, self, context) {
+  ...
+  return function (method, arg) {
+    ...
+    var record = tryCatch(innerFn, self, context);
+    if ("normal" === record.type) {
+      ...
+      return { value: record.arg, done: context.done }; // value: Promise, done: false
+    }
+  };
+}
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+  try {
+    var info = gen[key](arg); // { value: Promise, done: false }
+    var value = info.value;
+  }
+  ...
+  if (info.done) {
+    resolve(value);
+  } else {
+    Promise.resolve(value).then(_next, _throw);
+  }
+}
+```
+`record.type`은 `normal`이기 때문에 `_invoke` 함수는 \{ value: Promise, done: false \}를 return 해주고, 이 return된 객체는 15번 라인의 `info`에 담기게 됩니다. 그리고 16번 라인의 `value`는 `_callee$`가 return 해준 Promise가 되어 22번 라인을 수행하게 됩니다.
+
+잠시 우리가 `asyncGeneratorStep` 함수가 되어 생각해봅시다. `asyncGeneratorStep` 함수인 우리는 `gen`이 어떻게 이루어져있는지는 모르겠습니다만, 그냥 제너레이터라고 생각하고 제너레이터를 사용하는 것처럼 사용하니까 제너레이터처럼 동작하고 있지 않나요? `generator._invoke()`, `tryCatch()`, `_callee$()`, `context`가 적절히 동작하여 `asyncGeneratorStep`인 우리에게 `gen`은 제너레이터라고 생각하게 만들고 있습니다! `outerFn` 함수의 2번째 Promise까지 `_context.next`를 바꿔가며 순차적으로 제너레이터처럼 동작합니다.
+
+그러면 yield 키워드로 값을 넘겨주는 부분과 제너레이터의 종료는 어떻게 구현하는지 마저보도록 하겠습니다.
+
+## yield로 값 넘겨주기는 어떻게 구현할까?
+`_callee$`의 첫 Promise에서 123이 나오므로 [async/await 동작원리 1편](https://www.timegambit.com/blog/digging/async-await/01)에서 설명했던 것처럼 `arg`가 123이 되어 `asyncGeneratorStep` 함수가 실행됩니다. 따라서 `generator.next(123)`이 실행됩니다.
+
+```js showLineNumbers {8,22}
+function makeInvokeMethod(innerFn, self, context) {
+  ...
+  return function (method, arg) {
+    ...
+    for (context.method = method, context.arg = arg; ; ) {
+      ...
+      if ("next" === context.method) {
+        context.sent = context._sent = context.arg;
+      }
+      ...
+      var record = tryCatch(innerFn, self, context);
+      ...
+    }
+  };
+}
+
+function _callee$(_context) {
+  while (1) {
+    switch ((_context.prev = _context.next)) {
+      ...
+      case 2:
+        val = _context.sent;
+        _context.next = 5;
+        return Promise.resolve(val).then(function (v) {
+          return 3 * v;
+        });
+      ...
+    }
+  }
+}
+```
+
+`generator.next(123)`은 `_invoke`함수의 `arg`에 123을 넣어 호출하게 됩니다. 그러면 8번 라인에서 `context.sent`에 123이 담기게 되고, `tryCatch()` → `_callee$()`를 거쳐가며 22번 라인에서 `val`에 123을 담게 됩니다. 마치 `yield` 키워드를 통해 값을 넘겨준 것처럼 말이죠.
+
+## 제너레이터 종료는 어떻게 구현할까?
+
+```js showLineNumbers {3,5,12,13,18,26-29,42,44}
+(Context.prototype = {
+  stop: function stop() {
+    this.done = !0;
+    ...
+    return this.rval;
+  },
+  ...
+  abrupt: function abrupt(type, arg) {
+    ...
+    var record = finallyEntry ? finallyEntry.completion : {}; // finallyEntry는 undefined 입니다
+    return (
+      (record.type = type),
+      (record.arg = arg),
+      finallyEntry
+        ? ((this.method = "next"),
+          (this.next = finallyEntry.finallyLoc),
+          ContinueSentinel)
+        : this.complete(record)
+    );
+  },
+  complete: function complete(record, afterLoc) {
+    if ("throw" === record.type) throw record.arg;
+    return (
+      "break" === record.type || "continue" === record.type
+        ? (this.next = record.arg)
+        : "return" === record.type
+        ? ((this.rval = this.arg = record.arg),
+          (this.method = "return"),
+          (this.next = "end"))
+        : "normal" === record.type && afterLoc && (this.next = afterLoc),
+      ContinueSentinel
+    );
+  },
+  ...
+}
+
+function _callee$(_context) {
+  while (1) {
+    switch ((_context.prev = _context.next)) {
+      ...
+      case 5:
+        return _context.abrupt("return", _context.sent);
+      case "end":
+        return _context.stop();
+    }
+  }
+}
+```
+42번 라인에서 `type`을 `"return"`으로, `_context.sent`는 369이므로 `arg`를 369로 하여 8번 라인의 `Context.abrupt` 함수를 호출합니다. 그리고 12~13번 라인에서 `abrupt` 함수의 `record`를 \{ type: 'return', arg: 369 \}로 만들어 `complete` 함수를 호출합니다. `complete` 함수에서는 `this.rval`에 369, `this.next`에 `'end'`를 설정해줍니다. `complete` 함수를 호출해준 객체는 `_context`이므로, `_context` 객체는 \{ rval: 369, next: 'end', ... \} 가 됩니다. 이후에 `_callee$` 함수가 다시 한 번 호출되면 `_context.stop` 함수가 호출됩니다. 그러면 3번라인을 통해 `_context`는 \{ done: true, rval: 369, ... \}가 되며, 5번 라인에서 return해준 369(= `this.rval`)를 `_callee$` 가 return하게 됩니다.
+
+```js showLineNumbers {5,12,17}
+function makeInvokeMethod(innerFn, self, context) {
+  ...
+  return function (method, arg) {
+    ...
+    return { value: record.arg, done: context.done }; // value: 369, done: true
+    ...
+  };
+}
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+  try {
+    var info = gen[key](arg); // { value: 369, done: true }
+    var value = info.value;
+  }
+  ...
+  if (info.done) {
+    resolve(value);
+  }
+  ...
+}
+```
+`_context.complete`, `_context.stop` 함수를 통해 설정된 값들로 인해 `_invoke` 함수는 \{ value: 369, done: true \}를 return 하게 됩니다. 그리고 17번 라인에서 `resolve(369)`가 호출되어 결국 `outerFn`의 `then`을 통해 등록된 `(val) => console.log(val)`이 수행되어 369가 출력됩니다.
+
+## 마무리
+지금까지 ES5 문법으로 제너레이터를 어떻게 구현하는지 알아보았습니다. 좀 어려웠나요? 저도 분석을 얼마나 오랫동안 힘들게 했는지 모르겠습니다... 하지만 그 이상으로 정리하는 것이 오래걸리고 어려웠습니다. 최대한 이 글을 읽는 모든 사람들이 이해할 수 있도록 필요한 내용을 모두 다루려고 노력했습니다. 힘들게 분석하고 어렵게 작성한만큼, 이 글을 읽어주시는 모든 분들이 이해할 수 있으면 좋겠습니다.🙃 만약 이해가 가지 않는 부분이 있다면 댓글로 남겨주세요!
+
+**오타 및 오류 지적은 언제나 환영입니다!**
