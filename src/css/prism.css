@@ -153,9 +153,10 @@ code[class*=language-] ::selection, code[class*=language-]::selection, pre[class
     color: var(--green);
 }
 
+.token.known-class-name,
+.token.class-name,
 .token.builtin,
 .token.url,
-.token.class-name,
 .token.class,
 .token.anchor
 {
