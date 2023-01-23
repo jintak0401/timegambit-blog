@@ -1,0 +1,329 @@
+---
+title: '[async/await] ES5로 제너레이터 구현하기(1)'
+date: '2023-01-22'
+lastmod: '2023-01-22'
+tags: ['async/await']
+draft: false
+series: 동작원리
+summary: 제러네이터가 ES5 문법으로 어떻게 구현되어있는지 분석해보았습니다. 이 포스트에서는 구현 과정에서 정의된 객체들간의 관계를 집중적으로 분석했습니다.
+images: [https://i.imgur.com/iUAffAG.png]
+layout: PostLayout
+---
+
+## 분석하기 앞서
+[저번 포스트](https://www.timegambit.com/blog/digging/async-await/01)에서 async/await가 제너레이터를 이용해 구현되어있다는 것을 알게되었습니다. 하지만 제너레이터도 ES5 문법은 아닙니다. 이번 포스트에서는 제너레이터가 ES5 문법으로 어떻게 구현되어있는지 분석해보겠습니다. 전체 코드를 분석하기에는 매우 길어서 많은 코드를 생략하여 설명할 예정입니다. 전체 코드를 보고 싶으시면 [Babel 온라인 트랜스파일러](https://babeljs.io/repl)에서 TARGETS를 ie 11로 설정하고 아래 코드를 입력하면 확인할 수 있습니다. 그러면 8줄짜리 코드가 557줄짜리 코드로 뻥튀기되는 마법을 보게 될겁니다. 🙃
+
+```js
+const outerFn = async () => {
+  const val = await new Promise((resolve) => setTimeout(resolve, 1000)).then(
+    () => 123
+  );
+  return await Promise.resolve(val).then((v) => 3 * v);
+};
+
+outerFn().then((val) => console.log(val));
+```
+
+## 저번 설명의 코드 차이점과 공통점
+
+### 차이점
+```js:저번-포스트
+const outerFn = /*#__PURE__*/ (function () {
+  var _ref = _asyncToGenerator(function* () {
+    const val = yield new Promise((resolve) => setTimeout(resolve, 1000)).then(
+      () => 123
+    );
+    return yield Promise.resolve(val).then((v) => 3 * v);
+  });
+  return function outerFn() {
+    return _ref.apply(this, arguments);
+  };
+})();
+```
+
+```js:이번-포스트
+var outerFn = /*#__PURE__*/ (function () {
+  var _ref = _asyncToGenerator(
+    /*#__PURE__*/ _regeneratorRuntime().mark(function _callee() {
+      var val;
+      return _regeneratorRuntime().wrap(function _callee$(_context) {
+        while (1) {
+          switch ((_context.prev = _context.next)) {
+            case 0:
+              _context.next = 2;
+              return new Promise(function (resolve) {
+                return setTimeout(resolve, 1000);
+              }).then(function () {
+                return 123;
+              });
+            case 2:
+              val = _context.sent;
+              _context.next = 5;
+              return Promise.resolve(val).then(function (v) {
+                return 3 * v;
+              });
+            case 5:
+              return _context.abrupt("return", _context.sent);
+            case 6:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    })
+  );
+  return function outerFn() {
+    return _ref.apply(this, arguments);
+  };
+})();
+```
+위쪽 코드와 아래쪽 코드가 많이 다르죠? 위 코드는 저번 포스트에 작성된 코드로, `_asyncToGenerator` 함수의 인자로 제너레이터가 들어있습니다. 반면 아래쪽 코드는 제너레이터 대신 `_regeneratorRuntime` 함수가 들어있습니다. 그리고 무한 루프와 switch 문도 보이네요. 이게 뭘까요? 🤔
+
+### 공통점
+```js showLineNumbers
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+  try {
+    var info = gen[key](arg);
+    var value = info.value;
+  } catch (error) {
+    reject(error);
+    return;
+  }
+  if (info.done) {
+    resolve(value);
+  } else {
+    Promise.resolve(value).then(_next, _throw);
+  }
+}
+
+function _asyncToGenerator(fn) {
+  return function () {
+    var self = this,
+      args = arguments;
+    return new Promise(function (resolve, reject) {
+      var gen = fn.apply(self, args);
+
+      function _next(value) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+      }
+
+      function _throw(err) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+      }
+
+      _next(undefined);
+    });
+  };
+}
+...
+outerFn().then(function (val) {
+  return console.log(val);
+});
+```
+`asyncGeneratorStep`과 `_asyncToGenerator` 함수는 저번 설명과 동일합니다. 다만 내부적으로 동작하는데 있어서 차이가 있습니다. 저번 설명의 경우 3번 라인에서 제너레이터의 `next` 함수를 호출했었습니다. 후에 자세하게 설명하겠지만 ES5 문법으로 변환된 이 코드에서는, 3번 라인을 통해 `_regeneratorRuntime` 함수에서 만들어준 `generator` 객체의 `next` 함수를 호출하게 됩니다. 그러면 본격적으로 차근차근 알아나가 봅시다.
+
+## `_regeneratorRuntime` 함수
+`_asyncToGenerator` 함수의 인자를 위해 호출되는, 이번 설명의 핵심인 `_regeneratorRuntime` 함수입니다. 매우 복잡하고 길기 때문에 제가 핵심이라고 생각하는 부분들만 남기고 나머지는 생략하여 설명하도록 하겠습니다. 생략된 부분들이 궁금하시다면 직접 분석해보는 것도 좋을 것 같아요!
+```js showLineNumbers
+function _regeneratorRuntime() {
+  "use strict";
+  _regeneratorRuntime = function _regeneratorRuntime() {
+    return exports;
+  };
+  var exports = {},
+    defineProperty =
+      Object.defineProperty ||
+      function (obj, key, desc) {
+        obj[key] = desc.value;
+      };
+
+  ...
+  var ContinueSentinel = {};
+
+  function Generator() {}
+
+  function GeneratorFunction() {}
+
+  function GeneratorFunctionPrototype() {}
+
+  var IteratorPrototype = {};
+  ...
+  var Gp =
+    (GeneratorFunctionPrototype.prototype =
+    Generator.prototype =
+      Object.create(IteratorPrototype));
+  ...
+  return (
+    (GeneratorFunction.prototype = GeneratorFunctionPrototype),
+    defineProperty(Gp, "constructor", {
+      value: GeneratorFunctionPrototype,
+      configurable: !0,
+    }),
+    defineProperty(GeneratorFunctionPrototype, "constructor", {
+      value: GeneratorFunction,
+      configurable: !0,
+    }),
+    ...,
+    exports
+  );
+```
+24~27번 라인을 수행하면서 `Generator`, `GeneratorFunction`, `GeneratorFunctionPrototype`, `IteratorPrototype`, `Gp` 객체들은 다음과 같은 관계를 가집니다.^[자바스크립트에서는 함수도 곧 객체이므로 5개 모두 객체라고 표현했습니다.]^[`Object.create(obj)`는 obj를 `__proto__`로 가지는 새로운 객체를 생성하여 return 해줍니다. **obj를 `prototype`으로 가지는 것이 아닙니다!** 자세한 내용은 [MDN](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Object/create)을 참고해주세요.]
+
+![28번 라인에서 객체들간의 관계](https://i.imgur.com/OFtPX2V.png)
+
+그리고 30~38번 라인을 수행하면서 다음과 같은 관계로 발전합니다.
+
+![39번 라인에서 객체들간의 관계](https://i.imgur.com/TxRJjbV.png)
+
+마지막으로 `exports` 객체를 return 해줍니다.
+
+<Alert type="info">
+  ```js showLineNumbers {3-5}
+  function _regeneratorRuntime() {
+    "use strict";
+    _regeneratorRuntime = function _regeneratorRuntime() {
+      return exports;
+    };
+    var exports = {},
+    ...
+    return (
+      ...,
+      exports
+    );
+}
+  ```
+  3~5번 라인도 배울점이 있는 코드라고 생각합니다. `_regeneratorRuntime` 함수를 처음 호출하면 수백줄에 걸쳐서 `exports` 객체를 설정해줍니다. 그리고 `_regeneratorRuntime` 함수를 재호출했을 때, `exports` 객체를 다시 설정해주는 것이 아닌 기존의 설정되어있던 `exports` 객체를 return해주도록 구현되어 있습니다.
+</Alert>
+
+간단하게 `_regeneratorRuntime` 함수를 살펴보았습니다. 무작정 코드를 살펴보아서 이 함수가 뭔가 싶으시죠? 이 함수를 왜 살펴보았는지 처음으로 돌아가 설명드리겠습니다.
+
+```js showLineNumbers {3,5}
+var outerFn = /*#__PURE__*/ (function () {
+  var _ref = _asyncToGenerator(
+    /*#__PURE__*/ _regeneratorRuntime().mark(function _callee() {
+      var val;
+      return _regeneratorRuntime().wrap(function _callee$(_context) {
+        ...
+      }, _callee);
+    })
+  );
+  return function outerFn() {
+    return _ref.apply(this, arguments);
+  };
+})();
+```
+저번 설명에서 제너레이터가 있던 자리에 `_regeneratorRuntime`, `mark`, `_callee`, `wrap`, `_callee$` 라는 것들이 보입니다. 아마 이 함수들로 제너레이터를 흉내내고 있을 것입니다. 위에서 살펴보아서 `_regeneratorRuntime()`을 호출하면 수백줄에 걸쳐 설정된 `exports` 객체를 가져온다는 것은 알겠습니다. 하지만 `mark`와 `wrap`은 어떤 일을 해주는지 모르겠네요. 이 함수들이 무엇을 하는지도 알아보도록하죠.
+
+### mark
+```js showLineNumbers {8,9,11}
+function _regeneratorRuntime() {
+  ...
+  return (
+    ...
+    (exports.mark = function (genFun) {
+      return (
+        Object.setPrototypeOf
+          ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype)
+          : ((genFun.__proto__ = GeneratorFunctionPrototype),
+            define(genFun, toStringTagSymbol, "GeneratorFunction")),
+        (genFun.prototype = Object.create(Gp)),
+        genFun
+      );
+    }),
+    ...
+  );
+}
+```
+7~10번 라인에서 3항 연산자를 사용하고 있지만, 어떤 경우든지 간에 `genFun`의 **\_\_proto__**로 `GeneratorFunctionPrototype`을 설정해주고 있습니다. `genFun`에는 `_callee`가 들어오기 때문에 결국에는 `_callee` 객체(= 함수)의 **\_\_proto__**는 `GeneratorFunctionPrototype`이 됩니다. 그리고 11번 라인에서 `Gp`를 __proto__로 가지는 객체(아래 그림에서 ⓐ)를 `_callee`의 **prototype**으로 할당해줍니다. 마지막으로 `_callee`(= `genFun`)를 return 해줍니다. 이 과정을 거치며 객체들은 다음과 같은 관계로 발전합니다.
+
+![mark 이후 관계](https://i.imgur.com/bERpPDW.png)
+
+### wrap
+```js showLineNumbers {4-6}
+function _regeneratorRuntime() {
+  ...
+  function wrap(innerFn, outerFn, self, tryLocsList) {
+    var protoGenerator =
+        outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator,
+      generator = Object.create(protoGenerator.prototype),
+      context = new Context(tryLocsList || []);
+    return (
+      defineProperty(generator, "_invoke", {
+        value: makeInvokeMethod(innerFn, self, context),
+      }),
+      generator
+    );
+  }
+  ...
+}
+```
+`wrap` 함수의 `innerFn`과 `outerFn`은 각각 `_callee$`와 `_callee`입니다. `_callee`(= `outerFn`)의 prototype은 `mark` 함수를 통해 ⓐ 객체가 되었습니다. 그렇기 때문에 5번 라인의 조건문은 true가 됩니다.^[`a instanceof b`는 a.\_\_proto__부터 시작하여 **\_\_proto__** 를 거슬러 올라가며 `b.prototype`과 동일한지 비교합니다. 만약 `a.__proto__ === b.prototype`이 false라면, 다음엔 `a.__proto__.__proto__ === b.prototype`을 확인합니다. 이 과정을 `a.__proto__.__proto__.⋯.__proto__`가 null이 될 때까지 반복합니다. 중간에 한 번이라도 true인 경우 true를, null이 될 때까지 계속 false였다면 false를 반환합니다.] 따라서 `protoGenerator`는 `_callee`(= `outerFn`)가 되고, `_callee`의 prototype은 ⓐ 객체이기 때문에, 6번 라인에서 `generator`는 ⓐ 객체를 __proto__로 가지는 객체가 됩니다. 그리고 return문에서 `generator._invoke`에 함수를 할당하여 `generator`를 return 해줍니다. (`makeInvokeMethod`는 함수를 return 해주는 함수입니다. 자세한 내용은 나중에 설명하겠습니다.) 이 과정을 거치면서 객체들은 다음과 같은 관계로 발전합니다.
+
+![wrap 이후 관계](https://i.imgur.com/OGA0FV7.png)
+
+다소 복잡하죠? 하지만 이제 더 이상 늘어날 관계는 없습니다. 그리고 `generator` 객체와 `Gp` 객체의 관계가 가장 중요합니다! 이 관계만 잘 기억하고 계셔도 이해하실 수 있을거에요.
+
+## 정리
+```js showLineNumbers
+function _asyncToGenerator(fn) {
+  return function () {
+    ...
+    return new Promise(function (resolve, reject) {
+      var gen = fn.apply(self, args);
+      ...
+    });
+  };
+}
+
+var outerFn = /*#__PURE__*/ (function () {
+  var _ref = _asyncToGenerator(
+    /*#__PURE__*/ _regeneratorRuntime().mark(function _callee() {
+      var val;
+      return _regeneratorRuntime().wrap(function _callee$(_context) {
+        ...
+      }, _callee);
+    })
+  );
+  return function outerFn() {
+    return _ref.apply(this, arguments);
+  };
+})();
+```
+
+1. `_regeneratorRuntime` 함수를 호출하여 제너레이터를 구현하기 위한 초기 설정을 합니다.
+2. `mark` 함수는 인자로 받은 `_callee` 함수의 __proto__와 prototype을 초기화를 해주고, `_callee`를 다시 return 해줍니다.
+3. `_asyncToGenerator` 함수는 `_regenerator().mark(...)`를 통해 전처리된 `_callee` 함수를 인자로 받습니다.
+4. 5번 라인에서 `fn` 함수를 호출합니다. 즉, 전처리된 `_callee` 함수를 호출합니다.
+5. `_callee`의 return 값에서 `wrap` 함수를 호출합니다. 이 함수는 `_callee$` 함수가 제너레이터처럼 동작할 수 있도록 `_invoke` 함수를 가진 `generator` 객체를 생성하여 return 해줍니다.
+6. 4~5번을 수행하면서 5번 라인의 `gen`에는 `generator` 객체가 담기게 됩니다.
+
+```js showLineNumbers
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+  ...
+  var info = gen[key](arg);
+  ...
+}
+
+function _asyncToGenerator(fn) {
+  return function () {
+    ...
+    return new Promise(function (resolve, reject) {
+      var gen = fn.apply(self, args);
+
+      function _next(value) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+      }
+      ...
+      _next(undefined);
+    });
+  };
+}
+```
+7. 17번 라인 → 14번 라인을 통해 `generator`(= `gen`)을 인자로 주어 `asyncGeneratorStep` 함수를 호출합니다.
+8. `key`를 next로 하여 `asyncGeneratorStep` 함수를 호출했으므로, 3번 라인에서 `generator.next`를 호출합니다.
+
+
+## 아쉽지만 다음포스트까지...
+지금까지의 흐름 중에는 `generator.next` 함수를 정의한 적이 없습니다. 하지만 호출하고 있죠. 이게 어떻게 가능할까요? 사실 이번 포스트에서 async/await 동작원리편을 마무리하려고 했는데 생각보다 많이 길어지네요. 한 호흡에 끝내고 싶었는데 좀 아쉽습니다... 다음 포스트에서 회수하지 못한 떡밥을 회수하고 이 편을 마무리하겠습니다!
+
+**오타 및 오류 지적은 언제나 환영입니다!**
