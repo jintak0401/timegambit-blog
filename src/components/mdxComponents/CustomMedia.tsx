@@ -24,7 +24,7 @@ const FallbackImage = ({ alt }: { alt: string }) => (
 
 const CustomMedia = ({ src, alt }: Props) => {
   return (
-    <div className="mb-6 space-y-2 md:space-y-3">
+    <figure className="mb-6 space-y-2 md:space-y-3">
       {isVideo(src) ? (
         <video
           className="mx-auto w-auto max-w-full"
@@ -47,7 +47,7 @@ const CustomMedia = ({ src, alt }: Props) => {
         </ErrorBoundary>
       )}
       <div className="middle-text text-center italic">{alt}</div>
-    </div>
+    </figure>
   );
 };
 
