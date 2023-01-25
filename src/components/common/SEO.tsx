@@ -1,4 +1,4 @@
-import type { Blog } from 'contentlayer/generated';
+import type { DocumentTypes } from 'contentlayer/generated';
 import siteMetadata from 'data/siteMetadata.mjs';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -119,11 +119,12 @@ export const TagSEO = ({ title, description }: PageSEOProps) => {
   );
 };
 
-interface BlogSeoProps extends CoreContent<Blog> {
+interface PostSeoProps extends CoreContent<DocumentTypes> {
   url: string;
+  date?: string;
+  lastmod?: string;
 }
-
-export const BlogSEO = ({
+export const PostSEO = ({
   title,
   summary,
   date,
@@ -131,9 +132,9 @@ export const BlogSEO = ({
   url,
   images = [],
   canonicalUrl,
-}: BlogSeoProps) => {
-  const publishedAt = new Date(date).toISOString();
-  const modifiedAt = new Date(lastmod || date).toISOString();
+}: PostSeoProps) => {
+  const publishedAt = date && new Date(date).toISOString();
+  const modifiedAt = lastmod ? new Date(lastmod).toISOString() : publishedAt;
   const imagesArr =
     images.length === 0
       ? [siteMetadata.socialBanner]
@@ -190,10 +191,10 @@ export const BlogSEO = ({
         canonicalUrl={canonicalUrl}
       />
       <Head>
-        {date && (
+        {publishedAt && (
           <meta property="article:published_time" content={publishedAt} />
         )}
-        {lastmod && (
+        {modifiedAt && (
           <meta property="article:modified_time" content={modifiedAt} />
         )}
         <script

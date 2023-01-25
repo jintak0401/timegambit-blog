@@ -42,66 +42,58 @@ export default function PostLayout({
       <ScrollIndicator />
       <ScrollTopAndBottom />
       <article>
-        <div>
-          <header>
-            <div className="space-y-1 border-b border-gray-200 pb-10 text-center dark:border-gray-700">
-              <dl>
-                <div>
-                  <dt className="sr-only">Published on</dt>
-                  <dd className="middle-text font-medium leading-6">
-                    <time dateTime={date}>{formattedDate(date)}</time>
-                  </dd>
-                </div>
-              </dl>
-              <div>
-                <PageTitle>{title}</PageTitle>
-                {isProd && <ViewCounter slug={slug} />}
-              </div>
+        <header className="space-y-1 border-b border-gray-200 pb-10 text-center dark:border-gray-700">
+          <dl>
+            <dt className="sr-only">Published on</dt>
+            <dd className="middle-text font-medium leading-6">
+              <time dateTime={date}>{formattedDate(date)}</time>
+            </dd>
+          </dl>
+          <PageTitle>{title}</PageTitle>
+          {isProd && <ViewCounter slug={slug} />}
+        </header>
+        <div
+          className="divide-y divide-gray-200 pb-2 dark:divide-gray-700"
+          style={{ gridTemplateRows: 'auto 1fr' }}
+        >
+          <div className="relative divide-gray-200 pb-5 dark:divide-gray-700 xl:col-span-3 xl:row-span-2">
+            {seriesTitle && series && (
+              <PostListInSeries seriesTitle={seriesTitle} series={series} />
+            )}
+            <div className="prose max-w-none pb-10 pt-10 dark:prose-dark sm:pb-12 xl:pb-20">
+              {children}
             </div>
-          </header>
-          <div
-            className="divide-y divide-gray-200 pb-2 dark:divide-gray-700"
-            style={{ gridTemplateRows: 'auto 1fr' }}
-          >
-            <div className="relative divide-gray-200 pb-5 dark:divide-gray-700 xl:col-span-3 xl:row-span-2">
-              {seriesTitle && series && (
-                <PostListInSeries seriesTitle={seriesTitle} series={series} />
-              )}
-              <div className="prose max-w-none pb-10 pt-10 dark:prose-dark sm:pb-12 xl:pb-20">
-                {children}
+            <LargeWidthTOC />
+            <SmallWidthTOC />
+            <PostLike slug={slug} />
+            {tags && (
+              <div className="flex flex-wrap gap-3">
+                {tags.map((tag) => (
+                  <TagInPost key={tag} title={tag} />
+                ))}
+                <ShareBtn title={title} text={summary} />
               </div>
-              <LargeWidthTOC />
-              <SmallWidthTOC />
-              <PostLike slug={slug} />
-              {tags && (
-                <div className="flex flex-wrap gap-3">
-                  {tags.map((tag) => (
-                    <TagInPost key={tag} title={tag} />
-                  ))}
-                  <ShareBtn title={title} text={summary} />
-                </div>
-              )}
-            </div>
-            <footer className="space-y-2 pt-5 md:space-y-4">
-              {(prev || next) && (
-                <div className="flex w-full flex-col-reverse gap-2 md:flex-row">
-                  <RoutePostBtn
-                    title={prev?.title}
-                    slug={prev?.slug}
-                    direction={'prev'}
-                    empty={!prev}
-                  />
-                  <RoutePostBtn
-                    title={next?.title}
-                    slug={next?.slug}
-                    direction={'next'}
-                    empty={!next}
-                  />
-                </div>
-              )}
-              <Comments />
-            </footer>
+            )}
           </div>
+          <footer className="space-y-2 pt-5 md:space-y-4">
+            {(prev || next) && (
+              <div className="flex w-full flex-col-reverse gap-2 md:flex-row">
+                <RoutePostBtn
+                  title={prev?.title}
+                  slug={prev?.slug}
+                  direction={'prev'}
+                  empty={!prev}
+                />
+                <RoutePostBtn
+                  title={next?.title}
+                  slug={next?.slug}
+                  direction={'next'}
+                  empty={!next}
+                />
+              </div>
+            )}
+            <Comments />
+          </footer>
         </div>
       </article>
     </>
