@@ -3,11 +3,9 @@ import NextImage from 'next/image';
 import { ReactNode } from 'react';
 
 import { CoreContent } from '@/lib/contentlayer';
-import { isProd } from '@/lib/isProduction';
 
 import PageTitle from '@/components/blog/PageTitle';
 import ScrollIndicator from '@/components/blog/ScrollIndicator';
-import ViewCounter from '@/components/blog/ViewCounter';
 import ScrollTopAndBottom from '@/components/common/ScrollTopAndBottom';
 import LargeWidthTOC from '@/components/TOC/LargeWidthTOC';
 import SmallWidthTOC from '@/components/TOC/SmallWidthTOC';
@@ -18,7 +16,7 @@ interface Props {
 }
 
 export default function ProjectLayout({ content, children }: Props) {
-  const { title, slug, images } = content;
+  const { title, images } = content;
 
   return (
     <>
@@ -27,7 +25,6 @@ export default function ProjectLayout({ content, children }: Props) {
       <article>
         <header className="pb-10 text-center">
           <PageTitle>{title}</PageTitle>
-          {isProd && <ViewCounter slug={`project/${slug}`} />}
         </header>
         <div
           className="divide-y divide-gray-200 pb-2 dark:divide-gray-700"
