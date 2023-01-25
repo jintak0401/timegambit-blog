@@ -5,7 +5,7 @@ import { InferGetStaticPropsType } from 'next';
 import { coreContent, sortedBlogPost } from '@/lib/contentlayer';
 
 import PageTitle from '@/components/blog/PageTitle';
-import { BlogSEO } from '@/components/common/SEO';
+import { PostSEO } from '@/components/common/SEO';
 import { MDXLayoutRenderer } from '@/components/mdxComponents/MDXComponents';
 
 const DEFAULT_LAYOUT = 'PostLayout';
@@ -84,7 +84,7 @@ export default function BlogPost({
     <>
       {'draft' in post && post['draft'] !== true ? (
         <>
-          <BlogSEO
+          <PostSEO
             url={`${siteMetadata.siteUrl}/blog/${post.slug}`}
             {...post}
           />
