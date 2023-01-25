@@ -24,8 +24,10 @@ const phrases = {
   Main: {
     name: 'Time Gambit',
     description: '호기심과 탐구심과 순수함을 잃지 않으려고 노력합니다.',
-    subDescription: '백엔드에도 관심이 많은 프론트엔드 개발자 지망생입니다.',
+    subDescription: '함께 성장하길 바라는 프론트엔드 개발자입니다.',
+    blogPosts: '블로그 포스트',
     recentPosts: '최신 포스트',
+    popularPosts: '인기 포스트',
     allPosts: 'ALL POSTS',
   },
   Blog: {
@@ -44,7 +46,7 @@ const phrases = {
   SignIn: {
     title: 'Time Gambit 블로그에 어서오세요! 다음으로 로그인 해주세요.',
   },
-  Projects: {
+  Project: {
     title: 'Projects',
     description: '사이드 & 토이 프로젝트를 기록합니다.',
     learnMore: '보러가기',
@@ -59,7 +61,7 @@ const phrases = {
   Seo: {
     homeDesc: 'Time Gambit의 블로그',
     dashboardDesc: '대시보드',
-    projectsDesc: 'Time Gambit의 프로젝트',
+    projectDesc: 'Time Gambit의 프로젝트',
     guestbookDesc: 'Time Gambit 블로그 방명록',
     seriesDesc: 'Time Gambit이 작성한 시리즈 목록',
     blogDesc: 'Time Gambit이 작성한 포스트 목록',
