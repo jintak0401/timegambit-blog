@@ -3,7 +3,7 @@ const navLinks = [
   { href: '/tags', title: 'Tags' },
   { href: '/series', title: 'Series' },
   { href: '/guestbook', title: 'Guestbook' },
-  { href: '/projects', title: 'Projects' },
+  { href: '/project', title: 'Projects' },
   { href: '/about', title: 'About' },
 ];
 
