@@ -8,6 +8,8 @@ const queries = {
   // [slug]
   READ_VIEW_COUNT: 'SELECT VIEW_COUNT as count FROM POST_TB WHERE slug=?',
   READ_ALL_VIEW_COUNT: 'SELECT SUM(VIEW_COUNT) as count FROM POST_TB',
+  READ_POPULAR_POSTS:
+    'SELECT slug FROM POST_TB ORDER BY view_count DESC LIMIT ?',
   READ_ALL_GUESTBOOK:
     'SELECT id, email, body, name, image, DATE_FORMAT(updated_at, "%Y년 %m월 %d일") AS updatedAt FROM GUESTBOOK_TB ORDER BY updated_at DESC',
   // [email, name, image, body]
