@@ -8,7 +8,9 @@ import SeriesList from '@/components/card-and-list/SeriesList';
 import { PageSEO } from '@/components/common/SEO';
 
 export const getStaticProps: GetStaticProps = async () => {
-  const series = Object.values(await getAllSeries());
+  const series = Object.values(await getAllSeries()).sort((a, b) => {
+    return Number(new Date(b.lastmod)) - Number(new Date(a.lastmod));
+  });
   return {
     props: { series },
   };
