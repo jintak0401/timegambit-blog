@@ -25,7 +25,9 @@ const phrases = {
     name: 'Time Gambit',
     description: '호기심과 탐구심과 순수함을 잃지 않으려고 노력합니다.',
     subDescription: '함께 성장하길 바라는 프론트엔드 개발자입니다.',
+    blogPosts: '블로그 포스트',
     recentPosts: '최신 포스트',
+    popularPosts: '인기 포스트',
     allPosts: 'ALL POSTS',
   },
   Blog: {
