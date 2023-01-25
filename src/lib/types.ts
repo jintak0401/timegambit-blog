@@ -40,6 +40,10 @@ export interface GuestbookEntryType extends RowDataPacket {
   updatedAt: string;
 }
 
+export interface PopularPostType extends RowDataPacket {
+  slug: string;
+}
+
 export interface UserType {
   email: string;
   name: string;

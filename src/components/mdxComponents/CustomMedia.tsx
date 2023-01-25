@@ -46,7 +46,7 @@ const CustomMedia = ({ src, alt }: Props) => {
           />
         </ErrorBoundary>
       )}
-      <div className="middle-text text-center italic">{alt}</div>
+      <figcaption className="middle-text text-center italic">{alt}</figcaption>
     </figure>
   );
 };

@@ -1,11 +1,8 @@
-import type { Blog } from 'contentlayer/generated';
+import type { DocumentTypes } from 'contentlayer/generated';
 import dynamic from 'next/dynamic';
 import { useMDXComponent } from 'next-contentlayer/hooks';
-import React, { ReactNode } from 'react';
 
 import { coreContent } from '@/lib/contentlayer';
-
-import PostLayout from '@/layouts/PostLayout';
 
 import Alert from './Alert';
 import CustomLink from './CustomLink';
@@ -14,17 +11,31 @@ import Pre from './Pre';
 
 const Logo = dynamic(() => import('data/logo/Logo'));
 
+import { ComponentType } from 'react';
+
+import PostLayout from '@/layouts/PostLayout';
+import ProjectLayout from '@/layouts/ProjectLayout';
+
+const LAYOUT_MAP: {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: ComponentType<any>;
+} = {
+  PostLayout,
+  ProjectLayout,
+};
+
 interface MDXLayout {
   layout: string;
-  content: Blog;
+  content: DocumentTypes;
   [key: string]: unknown;
 }
 
-const Wrapper = ({ layout, content, children, ...rest }: MDXLayout) => {
+const Wrapper = ({ layout, children, content, ...rest }: MDXLayout) => {
+  const Layout = LAYOUT_MAP[layout as keyof typeof LAYOUT_MAP];
   return (
-    <PostLayout content={content} {...rest}>
-      {children as ReactNode}
-    </PostLayout>
+    <Layout content={content} {...rest}>
+      {children}
+    </Layout>
   );
 };
 
