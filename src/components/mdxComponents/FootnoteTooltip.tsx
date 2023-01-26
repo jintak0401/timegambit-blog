@@ -49,9 +49,7 @@ const FootnoteTooltip = ({ idx, show }: Props) => {
   };
 
   useEffect(() => {
-    const footnotes = document.querySelector(
-      `.footnotes li:nth-child(${idx})>p`
-    );
+    const footnotes = document.querySelector(`.footnotes li:nth-child(${idx})`);
     setBody(removeBackTag(footnotes?.innerHTML ?? ''));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
