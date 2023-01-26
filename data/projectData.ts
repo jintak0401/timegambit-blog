@@ -3,7 +3,7 @@ const projectData = [
     title: 'Time Gambit 블로그',
     description: `공부한 내용을 기록하고 다른 개발자와 공유하기 위해 만든 블로그입니다.`,
     imgSrc: 'https://i.imgur.com/VIFO53Q.png',
-    href: '/project/timegambit-blog',
+    href: '/projects/timegambit-blog',
   },
   {
     title: '다크모드 vs 라이트모드',
