@@ -80,7 +80,7 @@ export default function Home({
         {popularPosts && (
           <>
             <hr />
-            <h2 className="strong-text mt-4 font-semibold xl:text-2xl">
+            <h2 className="strong-text mt-4 text-xl font-semibold xl:text-2xl">
               {phrases.Main.popularPosts}
             </h2>
             <PostList posts={popularPosts} />
