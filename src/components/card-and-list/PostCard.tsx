@@ -1,10 +1,12 @@
 import Link from 'next/link';
 import { useState } from 'react';
+import { IoEyeOutline, IoHeartOutline } from 'react-icons/io5';
 
 import formattedDate from '@/lib/formattedDate';
 import { PostListItem } from '@/lib/types';
+import { usePostLikes } from '@/hooks/usePostLikes';
+import usePostViews from '@/hooks/usePostViews';
 
-import ViewCounter from '@/components/blog/ViewCounter';
 import ImageWithFallback from '@/components/Image/ImageWithFallback';
 
 import Tag from './Tag';
@@ -12,6 +14,52 @@ import Tag from './Tag';
 interface Props {
   post: PostListItem;
 }
+
+const Counter = ({ slug }: { slug: string }) => {
+  const {
+    postLikes,
+    isLoading: likeLoading,
+    isError: likeError,
+  } = usePostLikes(slug);
+  const {
+    viewCount,
+    isLoading: viewLoading,
+    isError: viewError,
+  } = usePostViews(slug);
+
+  if (likeLoading || viewLoading) {
+    return (
+      <div className="h-5 w-28 animate-pulse rounded-md bg-gray-200 dark:bg-gray-700" />
+    );
+  } else if (likeError && viewError) {
+    return null;
+  }
+
+  return (
+    <>
+      <dt className="sr-only">Separator</dt>
+      <dd>-</dd>
+      {!viewError && (
+        <>
+          <dt className="sr-only">View Count</dt>
+          <dd className="flex items-center gap-1.5">
+            <IoEyeOutline size="1.2em" />
+            {viewCount}
+          </dd>
+        </>
+      )}
+      {!likeError && postLikes !== 0 && (
+        <>
+          <dt className="sr-only">Like Count</dt>
+          <dd className="flex items-center gap-1.5">
+            <IoHeartOutline size="1.2em" />
+            {postLikes}
+          </dd>
+        </>
+      )}
+    </>
+  );
+};
 
 const PostCard = ({ post }: Props) => {
   const { title, summary, tags, images, slug, date } = post;
@@ -53,16 +101,12 @@ const PostCard = ({ post }: Props) => {
           </ul>
           <p>{summary}</p>
         </div>
-        <dl className="middle-text flex gap-2 font-medium">
+        <dl className="middle-text flex items-center gap-2 font-medium">
           <dt className="sr-only">Creation Date</dt>
           <dd>
             <time dateTime={date}>{formattedDate(date)}</time>
           </dd>
-          <dd>-</dd>
-          <dt className="sr-only">View Count</dt>
-          <dd>
-            <ViewCounter slug={slug} type={'GET'} shown={true} />
-          </dd>
+          <Counter slug={slug} />
         </dl>
       </div>
     </div>

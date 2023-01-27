@@ -25,7 +25,10 @@ export default async function handler(
     (req.headers['x-forwarded-for'] as string)?.split(',')[0] ||
     req.socket.remoteAddress;
 
-  if (method === 'POST' && process.env.OWN_IP === ipAddress) {
+  if (
+    method === 'POST' &&
+    (ipAddress === process.env.OWN_IP || ipAddress === '127.0.0.1')
+  ) {
     return res
       .status(200)
       .json({ message: "View counts are not increased at owner's viewing" });
