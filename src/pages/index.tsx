@@ -42,11 +42,13 @@ export const getStaticProps: GetStaticProps = async () => {
     });
     popularPosts = allBlogs
       .filter((post) => post.slug in slug2Order)
-      .sort((a, b) => slug2Order[a.slug] - slug2Order[b.slug]);
+      .sort((a, b) => slug2Order[a.slug] - slug2Order[b.slug])
+      .map(pickBlogItem);
   }
 
   return {
     props: { recentPosts, popularPosts },
+    revalidate: siteMetadata.rebuildPeriod,
   };
 };
 

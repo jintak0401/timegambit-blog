@@ -24,9 +24,6 @@ export default function ProjectLayout({ content, children }: Props) {
       <ScrollIndicator />
       <ScrollTopAndBottom />
       <article>
-        <header className="pb-10 text-center">
-          <PageTitle>{title}</PageTitle>
-        </header>
         <div
           className="divide-y divide-gray-200 dark:divide-gray-700"
           style={{ gridTemplateRows: 'auto 1fr' }}
@@ -41,6 +38,9 @@ export default function ProjectLayout({ content, children }: Props) {
                 height="1000"
               />
             )}
+            <header className="mt-10 text-center xl:mt-14 xl:mb-5">
+              <PageTitle>{title}</PageTitle>
+            </header>
             <div className="prose max-w-none pt-10 pb-5 dark:prose-dark">
               {children}
             </div>

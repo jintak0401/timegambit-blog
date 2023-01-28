@@ -19,6 +19,7 @@ const siteMetadata = {
   linkedin: '',
   locale: 'ko-KR',
   needRestoreScrollPosPage: ['/blog', '/tags/[tag]', '/series/[seriesSlug]'],
+  rebuildPeriod: 10, // renewal period of popular post list at home page and guestbook logs (in seconds)
   blogPost: {
     maxLikeCount: 4,
     postsPerScroll: 10,
