@@ -19,6 +19,7 @@ const siteMetadata = {
   linkedin: '',
   locale: 'ko-KR',
   needRestoreScrollPosPage: ['/blog', '/tags/[tag]', '/series/[seriesSlug]'],
+  rebuildPeriod: 10, // renewal period of popular post list at home page and guestbook logs (in seconds)
   blogPost: {
     maxLikeCount: 4,
     postsPerScroll: 10,
@@ -26,8 +27,6 @@ const siteMetadata = {
     homePopularPostLength: 3,
     // Viewing the same article within 4 hours does not increase view count.
     viewCountTimeLimit: 4,
-    // popular post list renewal period (seconds)
-    renewalPeriod: 10,
   },
   oauth: {
     providers: ['google', 'github', 'naver', 'kakao'],
