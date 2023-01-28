@@ -48,7 +48,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
   return {
     props: { recentPosts, popularPosts },
-    revalidate: siteMetadata.blogPost.renewalPeriod,
+    revalidate: siteMetadata.rebuildPeriod,
   };
 };
 
