@@ -86,6 +86,14 @@ input:-webkit-autofill:focus {
         transition: background-color var(--transition-bg-duration), transform 500ms;
         transition-timing-function: var(--timing-func);
     }
+
+    .footnote-tooltip > :first-child {
+        @apply mt-4;
+    }
+
+    .footnote-tooltip > :last-child {
+        @apply mb-4;
+    }
 }
 
 @layer utilities {
