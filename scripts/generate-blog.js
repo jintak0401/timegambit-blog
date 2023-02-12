@@ -25,7 +25,7 @@ const genFrontMatter = (answers) => {
   const tags = "'" + tagArray.join("','") + "'";
 
   let frontMatter = dedent`---
-  title: ${answers.title ? answers.title : 'Untitled'}
+  title: '${answers.title ? answers.title : 'Untitled'}'
   date: '${date}'
   lastmod: '${date}'
   tags: [${answers.tags ? tags : ''}]
@@ -43,6 +43,11 @@ const genFrontMatter = (answers) => {
 
 inquirer
   .prompt([
+    {
+      name: 'slug',
+      message: 'Enter post slug:',
+      type: 'input',
+    },
     {
       name: 'title',
       message: 'Enter post title:',
@@ -84,15 +89,18 @@ inquirer
   ])
   .then((answers) => {
     // Remove special characters and replace space with -
-    const fileName = answers.title
+    const title = answers.title;
+    const fileName = answers.slug
       .toLowerCase()
       .replace(/ /g, '-')
       .replace(/-+/g, '-');
     const frontMatter = genFrontMatter(answers);
-    if (!fs.existsSync('data/blog'))
-      fs.mkdirSync('data/blog', { recursive: true });
-    const filePath = `data/blog/${fileName ? fileName : 'untitled'}.${
-      answers.extension ? answers.extension : 'md'
+    const tmp = fileName.split('/');
+    const dirPath = path.join(root, 'data', 'blog', ...tmp.slice(0, -1));
+    const file = tmp[tmp.length - 1];
+    if (!fs.existsSync(dirPath)) fs.mkdirSync(dirPath, { recursive: true });
+    const filePath = `${dirPath}/${file || 'untitled'}.${
+      answers.extension || 'md'
     }`;
     fs.writeFile(filePath, frontMatter, { flag: 'wx' }, (err) => {
       if (err) {
