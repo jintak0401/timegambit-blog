@@ -54,7 +54,8 @@ const GuestbookInput = ({ setLoading, user }: Props) => {
         }}
       >
         <input
-          className="duration-default w-full rounded-md border px-3 py-1 text-lg focus:border-primary-500 focus:outline-0 sm:flex-1"
+          className="duration-default strong-text w-full rounded-md border border-gray-300 bg-white px-3 py-1 text-lg focus:border-primary-500 focus:ring-primary-500 dark:border-gray-900 dark:bg-gray-800 sm:flex-1"
+          type="text"
           ref={ref}
           minLength={1}
           maxLength={500}
