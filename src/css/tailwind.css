@@ -6,7 +6,7 @@
 
 :root {
     --timing-func: cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-bg-duration: 200ms;
+    --transition-bg-duration: 300ms;
 }
 
 .task-list-item::before {
@@ -113,21 +113,9 @@ input:-webkit-autofill:focus {
     @apply bg-gray-500 dark:bg-gray-300 rounded-lg border-transparent border-2;
 }
 
-/* we define color scheme here */
-
-.dark {
-    --base-color: #171717;
-}
-
-.light {
-    --base-color: #ffffff;
-}
-
 html,
 body {
-    background-color: var(--base-color);
-    transition: background-color var(--transition-bg-duration);
-    transition-timing-function: var(--timing-func);
+    background-color: transparent;
 }
 
 * {
