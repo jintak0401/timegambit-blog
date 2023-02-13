@@ -59,7 +59,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["mdx-bundler", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:9.2.1"],\
             ["mysql2", "npm:2.3.3"],\
             ["next", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:13.1.4"],\
-            ["next-auth", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:4.18.0"],\
+            ["next-auth", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:4.19.2"],\
             ["next-contentlayer", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:0.3.0"],\
             ["next-themes", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:0.2.1"],\
             ["postcss", "npm:8.4.19"],\
@@ -10000,17 +10000,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["next-auth", [\
-        ["npm:4.18.0", {\
-          "packageLocation": "./.yarn/cache/next-auth-npm-4.18.0-650a944f2c-882ad67572.zip/node_modules/next-auth/",\
+        ["npm:4.19.2", {\
+          "packageLocation": "./.yarn/cache/next-auth-npm-4.19.2-89810f2960-7067147c80.zip/node_modules/next-auth/",\
           "packageDependencies": [\
-            ["next-auth", "npm:4.18.0"]\
+            ["next-auth", "npm:4.19.2"]\
           ],\
           "linkType": "SOFT"\
         }],\
-        ["virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:4.18.0", {\
-          "packageLocation": "./.yarn/__virtual__/next-auth-virtual-cb2f5989b0/0/cache/next-auth-npm-4.18.0-650a944f2c-882ad67572.zip/node_modules/next-auth/",\
+        ["virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:4.19.2", {\
+          "packageLocation": "./.yarn/__virtual__/next-auth-virtual-b5a610610f/0/cache/next-auth-npm-4.19.2-89810f2960-7067147c80.zip/node_modules/next-auth/",\
           "packageDependencies": [\
-            ["next-auth", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:4.18.0"],\
+            ["next-auth", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:4.19.2"],\
             ["@babel/runtime", "npm:7.19.0"],\
             ["@panva/hkdf", "npm:1.0.2"],\
             ["@types/next", null],\
@@ -10024,7 +10024,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["oauth", "npm:0.9.15"],\
             ["openid-client", "npm:5.3.0"],\
             ["preact", "npm:10.11.3"],\
-            ["preact-render-to-string", "virtual:cb2f5989b0060fa789bf737c43d63e49cfbaeb8b1ed5a45f6352d89a3ac447500d7261e4bdb5374abd72e28ab0221227738540dcf8806635e8e2a0bd1d2f1707#npm:5.2.6"],\
+            ["preact-render-to-string", "virtual:b5a610610fd7e3a833200baa510dbef064ba03b30ed4c580583680cd9e67c97a4282b4727ec68c06ad9dc92110a7ba819b18290d18f8ab4f1a72a10d526c22ee#npm:5.2.6"],\
             ["react", "npm:18.2.0"],\
             ["react-dom", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:18.2.0"],\
             ["uuid", "npm:8.3.2"]\
@@ -10780,10 +10780,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "SOFT"\
         }],\
-        ["virtual:cb2f5989b0060fa789bf737c43d63e49cfbaeb8b1ed5a45f6352d89a3ac447500d7261e4bdb5374abd72e28ab0221227738540dcf8806635e8e2a0bd1d2f1707#npm:5.2.6", {\
-          "packageLocation": "./.yarn/__virtual__/preact-render-to-string-virtual-f8d89dd99b/0/cache/preact-render-to-string-npm-5.2.6-5999db0763-be8d5d8fb5.zip/node_modules/preact-render-to-string/",\
+        ["virtual:b5a610610fd7e3a833200baa510dbef064ba03b30ed4c580583680cd9e67c97a4282b4727ec68c06ad9dc92110a7ba819b18290d18f8ab4f1a72a10d526c22ee#npm:5.2.6", {\
+          "packageLocation": "./.yarn/__virtual__/preact-render-to-string-virtual-cfbe425069/0/cache/preact-render-to-string-npm-5.2.6-5999db0763-be8d5d8fb5.zip/node_modules/preact-render-to-string/",\
           "packageDependencies": [\
-            ["preact-render-to-string", "virtual:cb2f5989b0060fa789bf737c43d63e49cfbaeb8b1ed5a45f6352d89a3ac447500d7261e4bdb5374abd72e28ab0221227738540dcf8806635e8e2a0bd1d2f1707#npm:5.2.6"],\
+            ["preact-render-to-string", "virtual:b5a610610fd7e3a833200baa510dbef064ba03b30ed4c580583680cd9e67c97a4282b4727ec68c06ad9dc92110a7ba819b18290d18f8ab4f1a72a10d526c22ee#npm:5.2.6"],\
             ["@types/preact", null],\
             ["preact", "npm:10.11.3"],\
             ["pretty-format", "npm:3.8.0"]\
@@ -12633,7 +12633,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["mdx-bundler", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:9.2.1"],\
             ["mysql2", "npm:2.3.3"],\
             ["next", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:13.1.4"],\
-            ["next-auth", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:4.18.0"],\
+            ["next-auth", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:4.19.2"],\
             ["next-contentlayer", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:0.3.0"],\
             ["next-themes", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:0.2.1"],\
             ["postcss", "npm:8.4.19"],\
