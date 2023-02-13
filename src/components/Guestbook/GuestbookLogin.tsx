@@ -39,6 +39,7 @@ const GuestbookLogin = ({ setLoading }: Props) => {
     setLoading(true);
     signIn(provider);
   };
+
   return (
     <>
       <div className="text-lg">{phrases.Guestbook.loginDescription}</div>

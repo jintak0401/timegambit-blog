@@ -40,7 +40,7 @@ const GuestbookEntry = ({ entry, session }: Props) => {
         <div className="flex items-center justify-between">
           <div className="max-w-full">
             <span className="sr-only">Name</span>
-            <div className="max-w-full truncate">{entry.name}</div>
+            <div className="strong-text max-w-full truncate">{entry.name}</div>
             <span className="sr-only">Creation Date</span>
             <div className="weak-text">{entry.updatedAt}</div>
           </div>
@@ -53,7 +53,7 @@ const GuestbookEntry = ({ entry, session }: Props) => {
             </button>
           )}
         </div>
-        <p className="my-2">{entry.body}</p>
+        <p className="strong-text my-2">{entry.body}</p>
       </div>
     </div>
   );

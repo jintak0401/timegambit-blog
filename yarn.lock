@@ -7370,9 +7370,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next-auth@npm:^4.18.0":
-  version: 4.18.0
-  resolution: "next-auth@npm:4.18.0"
+"next-auth@npm:^4.19.2":
+  version: 4.19.2
+  resolution: "next-auth@npm:4.19.2"
   dependencies:
     "@babel/runtime": ^7.16.3
     "@panva/hkdf": ^1.0.1
@@ -7391,7 +7391,7 @@ __metadata:
   peerDependenciesMeta:
     nodemailer:
       optional: true
-  checksum: 882ad675729b26f2c4c24abb021ac2780fb3d05b6a453208b59ad1239dba481b6d486c2f1c44dca05721477b812e3117cee4116d4147a2aec12f51e82cc2b9da
+  checksum: 7067147c80e4ba9ba328f27c548239895b746a04c0c4faa4f1e0c16cf82eb941ef7ed904a7d3bdf423f07791b471b55f5a2959f66b78495af4f02195d1a59c4e
   languageName: node
   linkType: hard
 
@@ -9666,7 +9666,7 @@ __metadata:
     mdx-bundler: ^9.2.1
     mysql2: ^2.3.3
     next: ^13.1.4
-    next-auth: ^4.18.0
+    next-auth: ^4.19.2
     next-contentlayer: ^0.3.0
     next-themes: ^0.2.1
     postcss: ^8.4.19
