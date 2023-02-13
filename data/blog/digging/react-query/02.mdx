@@ -1,0 +1,620 @@
+---
+title: '[React Query] useQuery 동작원리(2)'
+date: '2023-02-13'
+lastmod: '2023-02-13'
+tags: ['React Query','라이브러리 분석']
+draft: false
+series: 동작원리
+summary: Tanstack Query(React Query)의 useQuery의 동작원리를 분석했습니다. 이 포스트에서는 QueryObserver 생성 후 동작에 대해서 다룹니다.
+images: [https://i.imgur.com/31mL9jU.png]
+layout: PostLayout
+---
+
+## 분석하기 앞서
+
+[저번 포스트](https://www.timegambit.com/blog/digging/react-query/01)에서 다루었던 내용이 기억나지 않는다면 다시 한 번 읽어주세요. 그래도 간단히 정리는 한 번 하고 가겠습니다.
+
+### 객체들간의 관계
+
+![객체간의 관계](https://i.imgur.com/V8JiWvn.png)
+
+중요한 객체가 4개 있다고 했습니다. `QueryClient`, `QueryCache`, `Query`, `QueryObserver`. 이 4개의 객체 사이의 관계는 위 이미지와 같습니다. 이 객체 외에 클로저를 사용하며 singleton으로 관리되는 `notifyManager` 객체가 있었습니다. `notifyManager`는 4개의 객체 사이에 이벤트를 전달하는 역할을 합니다.
+
+### QueryObserver 생성 이후 상태
+
+![QueryObserver 생성 이후 상태](https://i.imgur.com/lgOTZad.png)
+
+저번 포스트에서 Component1이 `useQuery()`를 호출하여 `QueryObserver`가 useState를 이용해 생성된 부분까지 설명하였습니다.
+
+```ts:useBaseQuery.ts showLineNumbers {11-14,17,19,24,34}
+export function useBaseQuery<...>(
+  options: UseBaseQueryOptions<...>,
+  Observer: typeof QueryObserver,
+) {
+  const queryClient = useQueryClient({ context: options.context })
+  const defaultedOptions = queryClient.defaultQueryOptions(options)
+  ...
+
+  const [observer] = React.useState(
+    () =>
+      new Observer<TQueryFnData, TError, TData, TQueryData, TQueryKey>(
+        queryClient,
+        defaultedOptions,
+      ),
+  )
+
+  const result = observer.getOptimisticResult(defaultedOptions)
+
+  useSyncExternalStore(
+    React.useCallback(
+      (onStoreChange) =>
+        isRestoring
+          ? () => undefined
+          : observer.subscribe(notifyManager.batchCalls(onStoreChange)),
+      [observer, isRestoring],
+    ),
+    () => observer.getCurrentResult(),
+    () => observer.getCurrentResult(),
+  )
+
+  ...
+
+  return !defaultedOptions.notifyOnChangeProps
+    ? observer.trackResult(result)
+    : result
+}
+```
+
+11 ~ 14번 라인에서 `QueryObserver`가 생성되었습니다. 이번 포스트에서는 17번, 19번, 24번, 34번 라인에서 비롯되는 동작들을 다룰 것입니다.
+
+## getOptimisticResult()
+
+```ts:Observer.getOptimisticResult() {6}
+getOptimisticResult(
+  options: DefaultedQueryObserverOptions<...>
+): QueryObserverResult<TData, TError> {
+  const query = this.client.getQueryCache().build(this.client, options);
+
+  return this.createResult(query, options);
+}
+```
+
+저번 포스트에서 `QueryCache.build()` 함수를 분석했으니 이번에는 `createResult()` 함수를 분석해보겠습니다.
+
+```ts:Observer.createResult() showLineNumbers {6-7,11,17}
+protected createResult(
+  query: Query<TQueryFnData, TError, TQueryData, TQueryKey>,
+  options: QueryObserverOptions<...>
+): QueryObserverResult<TData, TError> {
+  ...
+  const { state } = query;
+  let { dataUpdatedAt, error, errorUpdatedAt, fetchStatus, status } = state;
+  ...
+  let data: TData | undefined;
+  ...
+  data = state.data as unknown as TData;
+  ...
+  const isFetching = fetchStatus === 'fetching';
+  const isLoading = status === 'loading';
+  const isError = status === 'error';
+
+  const result: QueryObserverBaseResult<TData, TError> = {
+    status,
+    fetchStatus,
+    isLoading,
+    isSuccess: status === 'success',
+    isError,
+    isInitialLoading: isLoading && isFetching,
+    data,
+    dataUpdatedAt,
+    error,
+    errorUpdatedAt,
+    failureCount: state.fetchFailureCount,
+    failureReason: state.fetchFailureReason,
+    errorUpdateCount: state.errorUpdateCount,
+    isFetched: state.dataUpdateCount > 0 || state.errorUpdateCount > 0,
+    isFetchedAfterMount:
+      state.dataUpdateCount > queryInitialState.dataUpdateCount ||
+      state.errorUpdateCount > queryInitialState.errorUpdateCount,
+    isFetching,
+    isRefetching: isFetching && !isLoading,
+    isLoadingError: isError && state.dataUpdatedAt === 0,
+    isPaused: fetchStatus === 'paused',
+    isPlaceholderData,
+    isPreviousData,
+    isRefetchError: isError && state.dataUpdatedAt !== 0,
+    isStale: isStale(query, options),
+    refetch: this.refetch,
+    remove: this.remove,
+  };
+
+  return result as QueryObserverResult<TData, TError>;
+}
+```
+
+`createResult()` 함수는 `useQuery()`의 return에 사용되는 객체를 만드는 함수입니다. (뒤에서 보겠지만 이 객체가 직접적으로 return 되지는 않습니다.) 18 ~ 44번 라인에 정의된 `result` 객체의 속성들과 [useQuery 공식문서](https://tanstack.com/query/v4/docs/react/reference/useQuery)에서 설명하는 속성들이 일치하는 것을 확인할 수 있습니다.
+
+## trackResult()
+
+`useBaseQuery.ts`의 코드에서 `getOptimisticResult()` 함수 이후에 `useSyncExternalStore()`가 호출되지만, 이 함수를 소개하기 전에 먼저 `trackResult()` 함수부터 설명하겠습니다. 이유는 2가지입니다. 첫 번째, 호출 자체는 `useSyncExternalStore()`이 `trackResult()`보다 먼저지만, 실질적인 동작은 `useSyncExternalStore()`이 `trackResult()` 이후에 이뤄지기 때문입니다. 두 번째, `useSyncExternalStore()`이 이번 설명에서 가장 중요한 부분이기 때문입니다. 맛있는건 나중에 먹어야 더 꿀맛이죠. 😋
+
+```ts:Observer.trackResult() showLineNumbers {7,11}
+trackResult(
+  result: QueryObserverResult<TData, TError>
+): QueryObserverResult<TData, TError> {
+  const trackedResult = {} as QueryObserverResult<TData, TError>;
+
+  Object.keys(result).forEach((key) => {
+    Object.defineProperty(trackedResult, key, {
+      configurable: false,
+      enumerable: true,
+      get: () => {
+        this.trackedProps.add(key as keyof QueryObserverResult);
+        return result[key as keyof QueryObserverResult];
+      },
+    });
+  });
+
+  return trackedResult;
+}
+```
+
+`trackResult()`의 return 값인 `trackedResult`가 `useBaseQuery()`의 return 값이 되므로, 결과적으로 `useQuery()`의 return 값이 됩니다.
+
+코드를 보니 `Object.defineProperty()`, 그리고 그 내부에 `get()`이 보이네요. *이게 뭐지?* 하신다면 [이 포스트](https://www.timegambit.com/blog/js/object-define-property)를 봐주세요. 저번 포스트에서 `this.trackedProps`는 라이브러리 내부에서 `useQuery()`를 통해 어떤 데이터를 요청했는지 저장한다고 했습니다. 11번 라인에서 이 동작을 수행합니다. `result`는 위에서 설명한 `createResult()`를 통해 만들어진 값입니다. `result`와 `Object.defineProperty()`를 이용해 `trackedResult`를 만들어줍니다. 다만 `value` 키워드로 값을 저장하는 것이 아닌, `get()` 함수를 정의함으로써 값을 얻기 전에 11번 라인을 수행하도록 구현되어있습니다. 11번 라인에서 `this.trackedProps`에 어떤 값들을 요청했는지 저장하여 `QueryObserver`는 `useQuery()`를 통해 어떤 값을 요청했는지 기억합니다. 저는 이것을 보고 꽤 재밌는 방법이라고 생각했습니다. 이 방식은 알아두면 언젠가 쓸모가 있을 것 같네요.
+
+## useSyncExternalStore
+
+`useSyncExternalStore`이라는 hook을 들어보신 분이 계신가요? 아마 들어보신 분보다 처음 들어보시는 분이 더 많을 것 같습니다. React 18에 새롭게 추가된 hook으로, props, useState, context api와 같이 리액트가 내부에서 관리하는 상태(Internal Store) 외에 리액트 바깥에서 관리하는 상태(External Store)가 변경되었을 때에도 리렌더링이 이뤄지도록 해주는 hook입니다. 만약 이런 기능이 필요하더라도 `useSyncExternalStore`를 직접적으로 사용하지 않고, 보통 상태관리 라이브러리를 사용하기 때문에 이 hook의 필요성을 느껴보신 분이 거의 없을 것입니다. [hyeoki!님](https://itchallenger.tistory.com/650)과 [dante님](https://velog.io/@jay/useSyncExternalStore)께서 이 hook에 대해 자세히 설명해놓으셨으니 참고하시면 좋을 것 같습니다.
+
+이 포스트에서는 `useSyncExternalStore` 자체보다 이를 사용해서 어떤 일이 이뤄지는지를 분석하겠습니다.
+
+### subscribeToStore()
+
+```ts:react-dom.subscribeToStore() showLineNumbers {2,7,12}
+function subscribeToStore(fiber, inst, subscribe) {
+  var handleStoreChange = function () {
+    // The store changed. Check if the snapshot changed since the last time we
+    // read from the store.
+    if (checkIfSnapshotChanged(inst)) {
+      // Force a re-render.
+      forceStoreRerender(fiber);
+    }
+  }; // Subscribe to the store and return a clean-up function.
+
+
+  return subscribe(handleStoreChange);
+}
+```
+
+```ts:useBaseQuery.ts showLineNumbers {8-11}
+export function useBaseQuery<...>(
+  options: UseBaseQueryOptions<...>,
+  Observer: typeof QueryObserver,
+) {
+  ...
+  useSyncExternalStore(
+    React.useCallback(
+      (onStoreChange) =>
+        isRestoring
+          ? () => undefined
+          : observer.subscribe(notifyManager.batchCalls(onStoreChange)),
+      [observer, isRestoring],
+    ),
+    () => observer.getCurrentResult(),
+    () => observer.getCurrentResult(),
+  )
+  ...
+}
+```
+
+`subscribeToStore()` 함수는 react-dom에 정의된 코드입니다.`useBaseQuery()`가 return된 이후에 `useSyncExternalStore`로 인해 `subscribeToStore()` 함수가 비동기적으로 호출됩니다. 각 함수의 변수들이 헷갈릴 수 있을 것 같아서 각 함수의 입장에서 설명드리겠습니다.
+
+#### subscribeToStore()
+
+* `inst`: 이전 상태와 현재 상태를 얻을 수 있는 함수를 지닌 객체로, 다음 값들을 갖고 있습니다.
+  * value: `QueryObserver.createResult()`를 통해 만들어진 값
+  * getSnapshot: 현재 상태를 얻는 함수로 `useSyncExternalStore()`의 두 번째 인자. QueryObserver에 저장된 `currentResult`를 가져옵니다.
+* `subscribe`: External Store에 구독을 요청하는 함수로, 위 `useBaseQuery.ts` 코드의 8 ~ 11번 라인에 정의된 함수입니다.
+
+2번 라인의 `handleStoreChange()` 함수는 이전 상태(`inst.value`)와 현재 상태(`inst.getSnapshot()`)를 비교하여 다르다면 리렌더링을 수행하는 함수입니다. 이 함수는 `subscribe()` 함수의 callback 함수로 전달됩니다.
+
+#### useBaseQuery의 useSyncExternalStore()
+
+* `onStoreChange`: `subscribeToStore()`내에 정의된 `handleStoreChange()` 함수입니다.
+
+`notifyManager.batchCalls()` 함수의 callback 함수로 `onStoreChange`, 즉 `handleStoreChange` 함수가 전달됩니다.
+
+## notifyManager
+
+### batchCalls()
+
+```ts:utils.ts
+export function sleep(timeout: number): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(resolve, timeout);
+  });
+}
+
+export function scheduleMicrotask(callback: () => void) {
+  sleep(0).then(callback);
+}
+```
+
+```ts:notifyManager.ts showLineNumbers {7,9-11,16-20}
+let notifyFn: NotifyFunction = (callback) => {
+  callback();
+};
+
+const schedule = (callback: NotifyCallback): void => {
+  if (transactions) {
+    queue.push(callback);
+  } else {
+    scheduleMicrotask(() => {
+      notifyFn(callback);
+    });
+  }
+};
+
+const batchCalls = <T extends Function>(callback: T): T => {
+  return ((...args: any[]) => {
+    schedule(() => {
+      callback(...args);
+    });
+  }) as any;
+};
+```
+
+`batchCalls()` 함수의 인자인 `callback`은 `subscribeToStore()` 함수에 정의된 `handleStoreChange` 함수입니다. 즉, `callback`은 External Store의 상태가 변경될 때, 더 자세히 말하자면 `QueryObserver.currentResult`가 변경될 때 리렌더링을 유발하는 함수입니다. 그리고 리렌더링이 한 번에 일어날 수 있도록 설계된 `schedule()`을 호출하는 함수를 `batchCalls()`가 return 합니다.
+
+`schedule()` 함수는 transaction이 진행되는 중이라면 `queue`에 리렌더링을 유발하는 `callback` 함수를 넣어주고, transaction이 진행 중이 아니라면 `scheduleMicrotask()`를 통해 태스크 큐[^이벤트 루프]에 `callback` 함수가 들어가도록 합니다.
+
+## 구독요청
+
+### subscribe()
+
+```ts:useBaseQuery.ts showLineNumbers {8-11}
+export function useBaseQuery<...>(
+  options: UseBaseQueryOptions<...>,
+  Observer: typeof QueryObserver,
+) {
+  ...
+  useSyncExternalStore(
+    React.useCallback(
+      (onStoreChange) =>
+        isRestoring
+          ? () => undefined
+          : observer.subscribe(notifyManager.batchCalls(onStoreChange)),
+      [observer, isRestoring],
+    ),
+    () => observer.getCurrentResult(),
+    () => observer.getCurrentResult(),
+  )
+  ...
+}
+```
+
+`notifyManager.batchCalls()` 함수가 return 해주는 함수를 callback으로 받아 `QueryObserver.subscribe()` 함수를 호출하고 있습니다. 이번에는 이 함수를 보겠습니다.
+
+```ts:subscribable.ts showLineNumbers {4,6}
+export class Subscribable<TListener extends Function = Listener> {
+  ...
+  subscribe(listener: TListener): () => void {
+    this.listeners.push(listener as TListener)
+
+    this.onSubscribe()
+
+    return () => {
+      this.listeners = this.listeners.filter((x) => x !== listener)
+      this.onUnsubscribe()
+    }
+  }
+  ...
+}
+```
+
+3번 라인에서 인자로 받는 `listener`가 정확히 무엇일까요? [notifyManager.ts 코드](#batchcalls)의 16 ~ 20번 라인의 함수입니다. 즉, 리렌더링을 야기하는 함수가 `listener`입니다. 이러한 리렌더링 유발 함수가 4번 라인을 통해 `QueryObserver`의 `listeners`에 추가됩니다. 그리고 `onSubscribe()` 함수가 호출되죠.
+
+<Alert type="info">
+  갑자기 못 보던 클래스인 `Subscribable`이 튀어 나왔네요. 하지만 사실 이 클래스를 자세히 다루지 않았을 뿐, 저번 포스트에서 스쳐지나가듯 보았습니다.
+
+  ```ts
+  // queryCache.ts
+  export class QueryCache extends Subscribable<QueryCacheListener> {
+  ...
+}
+
+  // queryObserver.ts
+  export class QueryObserver<...> extends Subscribable<QueryObserverListener<TData, TError>> {
+    ...
+  }
+  ```
+
+  `QueryCache`와 `QueryObserver` 클래스는 `Subscribable` 클래스를 상속받고 있습니다. 따라서 `QueryCache`와 `QueryObserver` 객체는 `Subscribable` 클래스가 가지는 `listeners`와 `subscribe()`를 가집니다.
+</Alert>
+
+### onSubscribe()
+
+```ts:QueryObserver.onSubscribe() showLineNumbers {3,6}
+protected onSubscribe(): void {
+  if (this.listeners.length === 1) {
+    this.currentQuery.addObserver(this);
+
+    if (shouldFetchOnMount(this.currentQuery, this.options)) {
+      this.executeFetch();
+    }
+
+    this.updateTimers();
+  }
+}
+```
+
+저번 포스트에서 설명했듯이, 3번 라인을 통해 `Query.observers`에 현재의 `QueryObserver`가 추가됩니다. 그리고 6번 라인의 `executeFetch()`가 실행됩니다. 이 함수가 `useQuery()`를 호출할 때 넣어주었던 `queryFn`을 실행하는 함수입니다.
+
+![3번 라인 후 객체간 관계](https://i.imgur.com/v5cJdXG.png)
+
+3번 라인을 수행하기 전에는 `QueryObserver1`만 `Query` 객체를 알고 있었지만, 3번 라인을 수행하면서 `Query`도 `QueryObserver1`을 알게 되었습니다. 이 관계의 변화가 큰 역할을 합니다. 기억해주세요! 이제 6번 라인의 `executeFetch()`를 봅시다.
+
+## queryFn 실행
+
+지금까지 길고 긴 준비를 마치고, 드디어 비동기 요청을 보낼 시간입니다!
+
+### executeFetch()
+
+```ts:QueryObserver.executeFetch() showLineNumbers {7-10}
+private executeFetch(
+  fetchOptions?: ObserverFetchOptions
+): Promise<TQueryData | undefined> {
+  this.updateQuery();
+
+  // Fetch
+  let promise: Promise<TQueryData | undefined> = this.currentQuery.fetch(
+    this.options as QueryOptions<TQueryFnData, TError, TQueryData, TQueryKey>,
+    fetchOptions
+  );
+
+  if (!fetchOptions?.throwOnError) {
+    promise = promise.catch(noop);
+  }
+
+  return promise;
+}
+```
+
+큰 역할을 하는 함수는 아닙니다. 단지 `Query.fetch()`를 호출하는 역할을 해줍니다. 빠르게 `Query.fetch()`로 넘어가시죠.
+
+### fetch()
+
+```ts:Query.fetch() showLineNumbers {8-12,16}
+fetch(
+  options?: QueryOptions<TQueryFnData, TError, TData, TQueryKey>,
+  fetchOptions?: FetchOptions,
+): Promise<TData> {
+  ...
+  this.retryer = createRetryer({
+    fn: context.fetchFn as () => TData,
+    onSuccess: (data) => {
+      ...
+      this.setData(data as TData)
+      ...
+    },
+    ...
+  })
+
+  this.promise = this.retryer.promise
+
+  return this.promise
+}
+```
+
+`Query.fetch()` 함수는 `createRetryer()` 함수를 호출합니다. 뒤에서 보겠지만 `createRetryer()` 내부에서 `useQuery()`의 인자로 넘겨준, 비동기 요청 함수인 `queryFn`을 수행합니다.
+
+`createRetryer()`를 보기 전에 2가지를 기억하고 갑시다. 10번 라인에서 `setData()` 함수를 호출하는 것, 그리고 16번 라인에서 `Query.promise`에 Promise 객체를 저장하는 것입니다. 미리 말씀드리자면 10번 라인의 `setData()`로 리렌더링을 야기하고, 16번 라인으로 Component2의 queryFn이 수행되지 않습니다. 뒤에서 이 2가지에 대해 더욱 자세히 설명하겠습니다. 먼저 `createRetryer()`부터 보겠습니다.
+
+### createRetryer()
+
+```ts:createRetryer() showLineNumbers {15,26,31-32,36,40}
+export function createRetryer<TData = unknown, TError = unknown>(
+  config: RetryerConfig<TData, TError>,
+): Retryer<TData> {
+  let promiseResolve: (data: TData) => void
+  let promiseReject: (error: TError) => void
+
+  const promise = new Promise<TData>((outerResolve, outerReject) => {
+    promiseResolve = outerResolve
+    promiseReject = outerReject
+  })
+
+  const resolve = (value: any) => {
+    if (!isResolved) {
+      isResolved = true
+      config.onSuccess?.(value)
+      continueFn?.()
+      promiseResolve(value)
+    }
+  }
+
+  const run = () => {
+
+    let promiseOrValue: any
+
+    try {
+      promiseOrValue = config.fn()
+    } catch (error) {
+      promiseOrValue = Promise.reject(error)
+    }
+
+    Promise.resolve(promiseOrValue)
+    .then(resolve)
+  }
+
+  if (canFetch(config.networkMode)) {
+    run()
+  }
+
+  return {
+    promise,
+    ...
+  }
+}
+```
+
+순서대로 설명하겠습니다.
+
+1. 36번 라인에서 21번 라인에 정의된 `run()`을 호출합니다.
+2. 26번 라인을 통해 비동기 함수인 `queryFn`을 수행합니다.
+3. 2번 동작을 수행하면서 얻은 Promise 객체가 resolve 되었을 때 12번 라인의 `resolve()` 함수가 호출됩니다.
+4. `resolve()` 함수가 호출되면 `queryFn`을 통해 얻은 데이터를 인자로 하여 [Query.fetch() 코드 8 ~ 12번 라인에 정의된](#fetch) `onSuccess()` 함수를 호출합니다.
+5. `onSuccess()` 함수에서 `queryFn`으로 얻은 데이터를 이용해 `Query.setData()`를 호출합니다.
+
+다음은 대략적인 설명만 듣고 분석하지 않은 `Query.setData()`를 보겠구나 생각하셨나요? 아쉽지만 아닙니다! 지금까지 Component1을 열심히 보았지만 Component2에 대해서는 아직 하나도 보지 않았습니다. Component1이 비동기 요청을 보냈다면 Component2는 보내지 않는 것이 효율적이며 실제로도 보내지 않습니다. Component2는 어떻게 이미 이전에 요청을 보냈다는 것을 알까요?
+
+## Component2
+
+Component2가 `useQuery()`를 사용하면 `Query.fetch()`를 수행하기 전까지, 보아온 것과 똑같이 동작합니다.
+
+![객체간 관계](https://i.imgur.com/Q0YLXTr.png)
+
+그러면 위 그림과 같이 관계가 설정됩니다. 중요한 것은 Component1과 Component2가 같은 `Query` 객체를 갖게 된다는 점입니다.
+
+```ts:Query.fetch() showLineNumbers {8-10,14,16}
+fetch(
+  options?: QueryOptions<TQueryFnData, TError, TData, TQueryKey>,
+  fetchOptions?: FetchOptions,
+): Promise<TData> {
+  if (this.state.fetchStatus !== 'idle') {
+    if (this.state.dataUpdatedAt && fetchOptions?.cancelRefetch) {
+      this.cancel({ silent: true })
+    } else if (this.promise) {
+      this.retryer?.continueRetry()
+      return this.promise
+    }
+  }
+  ...
+  this.retryer = createRetryer({ ... })
+
+  this.promise = this.retryer.promise
+  ...
+}
+```
+
+Component1이 먼저 `fetch()` 함수를 수행하면서 14, 16번 라인을 수행합니다. 따라서 QueryObserver1이 갖고 있는 Query의 `promise`에 Promise 객체가 저장된 상태입니다.
+
+이 상태로 Component2의 `fetch()` 함수를 수행하게 되면 8번 라인의 else if 문에 걸리게 됩니다. 그러므로 `queryFn`을 수행하는 14번 라인에 도달하기 전에 10번 라인에서 return 됩니다. 결과적으로 Component1이 먼저 요청을 보냈기 때문에 Component2는 요청을 보내지 않게 되는 것이죠.
+
+## 리렌더링
+
+이제 거의 다 왔습니다! `setData()`를 통해 어떻게 리렌더링되는지 보겠습니다.
+
+### setData()
+
+```ts:Query.setData() showLineNumbers {5,7-12}
+setData(
+  newData: TData,
+  options?: SetDataOptions & { manual: boolean },
+): TData {
+  const data = replaceData(this.state.data, newData, this.options)
+
+  this.dispatch({
+    data,
+    type: 'success',
+    dataUpdatedAt: options?.updatedAt,
+    manual: options?.manual,
+  })
+
+  return data
+}
+```
+
+`newData`는 `queryFn`이 resolve 되면서 얻은 값입니다. 이 데이터를 5번 라인에서 `Query.state.data`에 저장해줍니다. 그리고 요청이 성공적으로 수행되었음을 알리기 위해, 이벤트 type을 `success`로 하여 `dispatch()` 해줍니다.
+
+### dispatch()
+
+```ts:Query.dispatch() showLineNumbers {27-30}
+private dispatch(action: Action<TData, TError>): void {
+  const reducer = (
+    state: QueryState<TData, TError>,
+  ): QueryState<TData, TError> => {
+  switch (action.type) {
+    ...
+    case 'success':
+      return {
+        ...state,
+        data: action.data,
+        dataUpdateCount: state.dataUpdateCount + 1,
+        dataUpdatedAt: action.dataUpdatedAt ?? Date.now(),
+        error: null,
+        isInvalidated: false,
+        status: 'success',
+        ...(!action.manual && {
+          fetchStatus: 'idle',
+          fetchFailureCount: 0,
+          fetchFailureReason: null,
+        }),
+      }
+    ...
+  }
+
+  this.state = reducer(this.state)
+
+  notifyManager.batch(() => {
+    this.observers.forEach((observer) => {
+      observer.onQueryUpdate(action)
+    })
+
+    this.cache.notify({ query: this, type: 'updated', action })
+  })
+}
+```
+
+QueryObserver2의 `Query.fetch()`까지 모두 수행했다면 28번 라인의 `this.observers`에는 뭐가 들어있을까요? QueryObserver1과 QueryObserver2가 들어있습니다. 그리고 28번 라인의 forEach문을 통해 두 QueryObserver의 `onQueryUpdate()` 함수를 호출합니다. `onQueryUpdate()`는 `updateResult()`를 통해 `QueryObserver`의 `result`를 업데이트해주고, [저번 포스트](https://www.timegambit.com/blog/digging/react-query/01#notify)에서 설명한 `QueryObserver.notify()` 함수를 호출합니다.
+
+```ts:QueryObserver.notify() showLineNumbers {2,5-7}
+private notify(notifyOptions: NotifyOptions): void {
+  notifyManager.batch(() => {
+    ...
+    if (notifyOptions.listeners) {
+      this.listeners.forEach((listener) => {
+        listener(this.currentResult);
+      });
+    }
+    ...
+  });
+}
+```
+
+저번 포스트에서는 `QueryObserver`의 `listeners`가 비어있었기 때문에 5 ~ 7번 라인이 아무런 역할을 하지 않았습니다. 하지만 지금은 다릅니다. [notifyManager.batchCalls()](#batchcalls)가 return 해줬던, 그리고 리렌더링을 야기하는 함수가 `QueryObserver`의 `listener`로 등록되어 있습니다. 5 ~ 7번 라인을 수행하면서 `notifyManager.queue`에 리렌더링 함수가 등록됩니다. 그것도 QueryObserver1과 QueryObserver2, 각각의 리렌더링 함수가 등록되므로 `notifyManager.queue`에 2개의 리렌더링 함수가 등록됩니다. 그리고 [저번 포스트의 설명처럼](https://www.timegambit.com/blog/digging/react-query/01#batch) 모든 `batch()` 함수가 끝나 `transaction`이 0이 되었을 때 `flush()` 함수가 호출됩니다.
+
+### flush()
+
+```ts:notifyManager.flush() showLineNumbers {2,5}
+const flush = (): void => {
+  const originalQueue = queue;
+  queue = [];
+  if (originalQueue.length) {
+    scheduleMicrotask(() => {
+      batchNotifyFn(() => {
+        originalQueue.forEach((callback) => {
+          notifyFn(callback);
+        });
+      });
+    });
+  }
+};
+```
+
+5번 라인의 `scheduleMicrotask()`는 익숙하죠? [위에서](#batchcalls) 이미 봤으니까요. 리렌더링이 최대한 한번에 일어나도록 `callback` 함수들을 태스크 큐에 넣어줍니다. 현재 호출 스택에 쌓여있는 동작이 모두 수행되면 리렌더링이 발생하고, Component1과 Component2는 바뀐 `result`를 `useQuery()`로부터 return 받아 리렌더링하게 될 것입니다.
+
+## 마치며
+
+여태까지 작성한 [동작원리 시리즈](https://www.timegambit.com/series/digging) 중 분석과 포스트 작성 등 모든 방면으로 가장 어렵고 오래걸렸습니다. 실제 포스트 분량도 가장 많네요. 이 분석을 하면서 가장 많이 배운 점은 설계입니다. 예전에 우아한 테크캠프를 하면서 설계의 중요성을 알고 있었는데, 다시 한번 중요성을 느끼게 되었습니다. 이런 설계를 어렵지 않게 할 수 있는 실력이 될 때까지 동작원리 시리즈는 계속됩니다!
+
+다음 포스트에서는 캐시의 만료에 대해서 다루도록 하겠습니다.
+
+**오타 및 오류 지적은 언제나 환영입니다!**
+
+[^이벤트 루프]: 자바스크립트는 싱글스레드 기반 언어입니다. 하지만 setTimeout, Promise와 같이 비동기 기능을 지원하기 위해 [이벤트 루프](https://developer.mozilla.org/ko/docs/Web/JavaScript/EventLoop)가 있습니다. 현재 수행되어야 하는 동작들은 **호출 스택**에, setTimeout이나 Promise와 같이 비동기 동작들은 **태스크 큐**에 넣어줍니다. 호출 스택에 쌓인 동작들이 모두 수행되어 호출 스택이 비워지면, 이벤트 루프가 태스크 큐로부터 현재 실행할 수 있는 동작들을 가져와 호출 스택에 넣어줍니다.
+
+
+
+    `scheduleMicrotask()` 함수는 `setTimeout`에 0초를 설정함으로써, 호출 스택에 쌓여있는 모든 동작이 완료된 이후에 리렌더링이 바로 실행되도록 구현했습니다.
