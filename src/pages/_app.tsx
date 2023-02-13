@@ -29,17 +29,23 @@ export default function App({
 }: AppProps<{ session: Session }>) {
   useRestoreScrollPos();
   return (
-    <ThemeProvider attribute="class" defaultTheme={siteMetadata.theme}>
-      <Head>
-        <meta content="width=device-width, initial-scale=1" name="viewport" />
-      </Head>
-      <Analytics />
-      <LayoutWrapper className={`${dejavu.variable} font-sans`}>
-        <SessionProvider session={session}>
-          <Component {...pageProps} />
-        </SessionProvider>
-      </LayoutWrapper>
-      <ToastContainer />
+    <ThemeProvider
+      attribute="class"
+      defaultTheme={siteMetadata.theme}
+      enableColorScheme={false}
+    >
+      <>
+        <Head>
+          <meta content="width=device-width, initial-scale=1" name="viewport" />
+        </Head>
+        <Analytics />
+        <LayoutWrapper className={`${dejavu.variable} font-sans`}>
+          <SessionProvider session={session}>
+            <Component {...pageProps} />
+          </SessionProvider>
+        </LayoutWrapper>
+        <ToastContainer />
+      </>
     </ThemeProvider>
   );
 }
