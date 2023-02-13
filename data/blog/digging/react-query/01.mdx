@@ -1,7 +1,7 @@
 ---
 title: '[React Query] useQuery 동작원리(1)'
 date: '2023-02-09'
-lastmod: '2023-02-09'
+lastmod: '2023-02-13T05:38:24.234Z'
 tags: ['React Query','라이브러리 분석']
 draft: false
 series: 동작원리
@@ -21,7 +21,6 @@ layout: PostLayout
   │     ├── query.ts
   │     ├── queryCache.ts
   │     ├── queryClient.ts
-  │     ├── subscribable.ts
   │     └── queryObserver.ts
   │
   └── react-query
@@ -29,13 +28,13 @@ layout: PostLayout
         └── useQuery.ts
 ```
 
-react query를 사용하기 위해 `yarn add @tanstack/react-query`를 하면 @tanstack 폴더 안에 query-core와 react-query가 설치됩니다. query-core 폴더에는 라이브러리의 핵심 기능들에 대한 코드가 작성되어 있고, react-query 폴더에는 query-core의 코드들을 리액트에서 사용할 수 있도록 훅으로 만들어준 코드 등이 들어있습니다.
+react query를 사용하기 위해 `yarn add @tanstack/react-query`를 하면 @tanstack 폴더 안에 query-core와 react-query가 설치됩니다. query-core 폴더에는 라이브러리의 핵심 기능들에 대한 코드가 작성되어 있고, react-query 폴더에는 query-core의 코드들을 리액트에서 사용할 수 있도록 훅으로 만들어주는 코드 등이 들어있습니다.
 
-위의 구조는 오늘 분석에서 핵심적으로 다루게 될 파일들입니다. 그러면 분석을 시작해보겠습니다. (@tanstack/react-query 4.24.4 버전을 기준으로 작성되었습니다.)
+위의 구조는 useQuery 분석에서 핵심적으로 다루게 될 파일들입니다. 그러면 분석을 시작해보겠습니다. (이 포스트는 @tanstack/react-query 4.24.4 버전을 기준으로 작성되었습니다.)
 
 ## 4개의 주요 객체와 + α
 
-이번 포스트에서 계속해서 언급될 4개의 객체가 있습니다. `QueryClient`, `QueryCache`, `Query`, `QueryObserver`가 그것들입니다. 우선 이 객체들이 어떤 관계인지부터 알아보도록 하겠습니다.
+useQuery 분석 포스트에서 계속해서 언급될 4개의 객체가 있습니다. `QueryClient`, `QueryCache`, `Query`, `QueryObserver`가 그것들입니다. 우선 이 객체들이 어떤 관계인지부터 알아보도록 하겠습니다.
 
 ### QueryClient
 
@@ -66,7 +65,9 @@ export class QueryClient {
   }
 ```
 
-`QueryClient`는 context api를 통해 전역적으로 사용할 수 있는 객체입니다. 프로젝트에서 여러개의 Provider를 만들지 않는다면 1개만 존재하게 됩니다.
+`QueryClient`는 context api를 통해 전역적으로 사용할 수 있는 객체입니다. `QueryClientProvider`의 `client`로 넘겨주어 전역에서 사용할 수 있게 만들어줍니다. 프로젝트에서 여러개의 Provider를 만들지 않는다면 1개만 존재하게 됩니다.
+
+`QueryClient`는 생성될 때 `QueryCache` 객체를 가지게됩니다. `QueryCache`는 어떤 객체일까요?
 
 ### QueryCache
 
@@ -98,7 +99,7 @@ export class QueryCache extends Subscribable<QueryCacheListener> {
 }
 ```
 
-`QueryCache`는 `queries` 배열과 `queriesMap` 객체에 `Query` 객체들을 저장합니다. 위 코드에서 생략되었지만 `useQuery`의 인자로 넘겨준 key값을 이용해 `queriesMap` 객체의 value로 `Query` 객체가 저장되어, 이번 요청이 이전에 들어온 요청과 동일한 요청인지를 판단한다는 점 기억해주세요.
+`QueryCache`는 `queries` 배열과 `queriesMap` 객체에 `Query` 객체들을 저장합니다. 위 코드에서는 생략되었지만 `useQuery()`의 인자로 넘겨준 queryKey를 이용해 `queryHash`를 만들고 `queriesMap` 객체의 key로써 사용합니다. 그리고 value로 `Query` 객체가 저장됩니다. `queryHash`를 이용해 이번 요청이 이전에 들어온 요청과 동일한 요청인지 판단합니다. 이 부분을 다룰 때 더욱 자세히 설명하겠습니다.
 
 ### Query
 
@@ -120,7 +121,7 @@ export class Query<...> extends Removable {
 
 `Query` 객체는 자신을 가지고 있는 `QueryCache`와 자신의 상태가 변경되었을 때 호출할 옵저버들을 가집니다. 구독요청이 들어오면 `this.observers`에 옵저버가 추가되어, 상태가 변경되면 등록된 옵저버들을 호출합니다.
 
-`this.state`에는 `data`, `isLoading`, `isFetching` 등 `useQuery`를 통해 얻을 수 있는 정보들이 담겨있습니다.
+`this.state`에는 `data`, `isLoading`, `isFetching` 등 `useQuery()`를 통해 얻을 수 있는 정보들이 담겨있습니다.
 
 ### QueryObserver
 
@@ -172,11 +173,11 @@ export class QueryObserver<...> extends Subscribable<QueryObserverListener<TData
 ![객체간의 관계](https://i.imgur.com/V8JiWvn.png)
 
 * `QueryClient`는 하나만 존재합니다.^[추가적으로 생성해서 사용하면 프로젝트에 여러개가 존재할 수 있습니다만, 여기에서는 최상위에 하나만 생성하였다고 가정합니다.] `QueryClient`가 생성될 때 `QueryCache`를 새로 생성하여 `this.queryCache`에 저장합니다.
-* `QueryCache`는 `Query` 객체가 새로 생성될 때마다 `queriesMap`과 `queries`에 저장합니다.
-* `Query`는 생성될 때 자신을 소유한 `QueryCache`를 `this.cache`에 저장합니다. 그리고 `QueryObserver.onSubscribe()` 함수가 호출되면(구독요청이 들어오면), `Query.observers` 배열에 옵저버로 `QueryObserver`가 등록됩니다.
+* `QueryCache`는 `Query` 객체가 새로 생성될 때마다 `this.queriesMap`과 `this.queries`에 저장합니다.
+* `Query`는 생성될 때 자신을 소유한 `QueryCache`를 `this.cache`에 저장합니다. 그리고 `QueryObserver.onSubscribe()` 함수가 호출되면(구독요청이 들어오면), `this.observers` 배열에 옵저버로 `QueryObserver`가 등록됩니다.
 * `QueryObserver`는 생성될 때 `QueryClient`를 `this.client`에 저장합니다. 이전에 갖고 있던 쿼리가 없거나 쿼리가 새로 업데이트 되면, `this.query`를 최신화시킵니다.
 
-위 그림은 4개의 객체의 관계를 그림으로 나타낸 것입니다. 모든 관계가 중요하지만, 특히 주목해서 봐야할 점은 `Query` 객체와 `QueryObserver`의 관계입니다. `useQuery`를 사용할 때 같은 key를 사용한다면 동일한 `Query`를 여러개의 `QueryObserver`들이 공유하게 됩니다. 이렇게 Query를 공유함으로써 이전에 비동기 함수를 실행했다면 추가적으로 실행하지 않게 만들며, 요청이 완료되었을 때 등록되어 있던 옵저버들을 호출하여 리렌더링을 발생시킵니다.
+위 그림은 4개의 객체의 관계를 그림으로 나타낸 것입니다. 모든 관계가 중요하지만, 특히 주목해서 봐야할 점은 `Query` 객체와 `QueryObserver`의 관계입니다. `useQuery`를 사용할 때 같은 key를 사용한다면 동일한 `Query`를 여러개의 `QueryObserver`들이 공유하게 됩니다. 이렇게 Query를 공유함으로써 이전에 비동기 함수를 실행했다면 추가적으로 실행하지 않게 만들며, 요청이 완료되었을 때 `Query`에 등록되어 있던 옵저버들을 호출하여 리렌더링을 발생시킵니다.
 
 ### + α: NotifyManager
 
@@ -226,7 +227,7 @@ export function createNotifyManager() {
 export const notifyManager = createNotifyManager()
 ```
 
-`notifyManager`는 Singleton으로 관리되는 객체입니다. 위에서 소개한 4개의 객체가, 특히 `Query`, `QueryCache`, `QueryObserver`가 notifyManager를 이용해 상태변경, 옵저버 추가 등의 이벤트를 서로에게 알려주는 역할을 합니다. 또, notifyManager 내부에서 각 컴포넌트 리렌더링이 최대한 동시에 일어날 수 있도록 나름의 batch 기능도 구현해놓았습니다. 이 또한 뒤에서 더 자세히 다루겠습니다.
+`notifyManager`는 Singleton으로 관리되며 클로저^[**클로저**는 자바스크립트에서 매우 중요한 개념입니다. 혹시 뭔지 모르신다면 지금은 아니더라도 [꼭 공부하시기 바랍니다!](https://developer.mozilla.org/ko/docs/Web/JavaScript/Closures) ]를 사용하는 객체입니다. 위에서 소개한 4개의 객체가, 특히 `Query`, `QueryCache`, `QueryObserver`가 notifyManager를 이용해 상태변경, 옵저버 추가 등의 이벤트를 서로에게 알려주는 역할을 합니다. 또, notifyManager 내부에서 각 컴포넌트 리렌더링이 최대한 동시에 일어날 수 있도록 나름의 batch 기능도 구현해놓았습니다. 이 또한 뒤에서 더 자세히 다루겠습니다.
 
 이제 본격적으로 분석해보도록 하겠습니다!
 
@@ -292,7 +293,7 @@ export default function Home() {
 }
 ```
 
-위와 같은 구조의 Next JS 프로젝트에서 React Query를 사용한다고 하겠습니다. `Component`의 코드는 React Query의 공식문서에서 그대로 가져온 코드입니다. `_app.tsx`는 [QueryClient](#queryclient)에서 설명한 것과 동일합니다. Next JS가 익숙하지 않으신 분들은, 그냥 최상위에서 React Query Provider를 적절히 설정해주고, 서로다른 2개의 컴포넌트에서 동일한 key의 `useQuery`를 사용하고 있다고 생각하시면 됩니다.
+위와 같은 구조의 Next JS 프로젝트에서 React Query를 사용한다고 하겠습니다. `Component`의 코드는 React Query의 공식문서에서 그대로 가져온 코드입니다. `_app.tsx`는 [QueryClient](#queryclient)에서 설명한 것과 동일합니다. Next JS가 익숙하지 않으신 분들은, 그냥 최상위에서 React Query를 위한 Provider를 적절히 설정해주고, 서로다른 2개의 컴포넌트에서 동일한 queryKey의 `useQuery()`를 사용하고 있다고 생각하시면 됩니다.
 
 ## useQuery와 useBaseQuery
 
@@ -316,7 +317,7 @@ export function useQuery<
 }
 ```
 
-`useQuery`에서 크게 중요한 내용은 없습니다. 13번 라인의 `parseQueryArgs()` 함수를 이용해 \{ queryKey: ['repoData'], queryFn: () => ... \} 형태의 `parsedOptions`를 만들고, 14번 라인의 `useBaseQuery()` 함수에 `parsedOptions`와 `QueryObserver` 클래스를 넘겨주고 호출하며 return 해주고 있습니다. 즉, `useQuery()` 함수는 인자들을 파싱해주고 중요한 동작들을 해주는 `useBaseQuery()`를 호출하여 return 해주는 역할 뿐입니다.
+`useQuery` 코드에서 크게 중요한 내용은 없습니다. 13번 라인의 `parseQueryArgs()` 함수를 이용해 \{ queryKey: ['repoData'], queryFn: () => ... \} 형태의 `parsedOptions`를 만들고, 14번 라인의 `useBaseQuery()` 함수에 `parsedOptions`와 `QueryObserver` 클래스를 넘겨주고 호출하며 return 해주고 있습니다. 즉, `useQuery()` 함수는 인자들을 파싱해주고 중요한 동작들을 해주는 `useBaseQuery()`를 호출하여 return 해주는 역할 뿐입니다.
 
 ### useBaseQuery
 
@@ -359,7 +360,7 @@ export function useBaseQuery<...>(
 }
 ```
 
-정말 중요한 부분이 많은 `useBaseQuery`입니다. 먼저 5번 라인에서 Provider를 통해 전달받은 `queryClient`를 가져옵니다. 그리고 11~14번 라인에서 새로운 `QueryObserver`를 `useState`를 통해 생성해줍니다. 아마 이렇게 생각하시는 분이 계실겁니다. *왜 setState는 없지? 그러면 리렌더링을 어떻게 시키는거야?* 이 질문에 대한 해답은 24번 라인에 있습니다. 하지만 일단 `QueryObserver`가 생성될 때 어떤 일들이 벌어지나 먼저보도록 하겠습니다.
+정말 중요한 부분이 많은 `useBaseQuery`입니다. 먼저 5번 라인에서 Provider를 통해 전달받은 `queryClient`를 가져옵니다. 그리고 11~14번 라인에서 새로운 `QueryObserver`를 `useState`를 통해 생성해줍니다. 아마 이렇게 생각하시는 분이 계실겁니다. *왜 setState는 없지? 그러면 리렌더링을 어떻게 시키는거야?* 이 질문에 대한 해답은 24번 라인에 있습니다. 하지만 일단 `QueryObserver`가 생성될 때 어떤 일들이 벌어지는지부터 보도록 하겠습니다.
 
 ## QueryObserver 생성
 
@@ -400,7 +401,7 @@ setOptions(
 
 ![현재 상태](https://i.imgur.com/68eVy7c.png)
 
-6번 라인의 `updateQuery()` 함수를 호출함으로써 `Query`도 생성하고, `QueryCache`에도 해당 `Query`를 넣어주며, 지금 생성 중인 `QueryObserver`도 해당 `Query` 객체를 가지게 해줍니다.
+6번 라인의 `updateQuery()` 함수를 호출함으로써 `Query`도 생성하고, `QueryCache`도 해당 `Query`를 저장하며, 지금 생성 중인 `QueryObserver`도 해당 `Query` 객체를 가지게 해줍니다.
 
 ### updateQuery()
 
@@ -422,7 +423,7 @@ private updateQuery(): void {
 }
 ```
 
-현재 `Query` 객체가 없는 상태니까 우선 만들어야겠죠? 그 동작을 2번 라인에서 수행됩니다. `this.client.getQueryCache()`를 통해 `QueryCache` 객체를 가지고와서 `build()` 함수를 호출해줍니다.
+현재 `Query` 객체가 없는 상태니까 우선 만들어야겠죠? 그 동작을 2번 라인에서 수행합니다. `this.client.getQueryCache()`를 통해 `QueryCache` 객체를 가지고와서 `build()` 함수를 호출해줍니다.
 
 ```ts:QueryCache.build() showLineNumbers {9,12-21}
 build<TQueryFnData, TError, TData, TQueryKey extends QueryKey>(
@@ -452,11 +453,11 @@ build<TQueryFnData, TError, TData, TQueryKey extends QueryKey>(
 }
 ```
 
-`useQuery`에 넘겨준 key 값을 이용해 9번 라인에서 `QueryCache`에 해당 key로 저장된 `Query`가 존재한다면 가져옵니다. 하지만 현재는 없는 상태므로 12 ~ 20번 라인에서 새로운 `Query`가 생성됩니다. 그리고 [위에서](#query) 설명한대로 `Query` 객체가 생성되면서 `QueryCache`를 가지게됩니다. 그리고 21번 라인에서 `QueryCache`에도 `Query`를 추가해줍니다.
+`useQuery()`에 넘겨준 queryKey 값을 이용해 7 ~ 8번 라인에서 `queryHash`로 만들어줍니다. 9번 라인에서 `get()` 함수를 통해 `queriesMap` 객체에 `queryHash`를 key로 하는 `Query` 객체가 존재하는지 확인하고 존재한다면 가져옵니다. 하지만 현재는 없는 상태므로 12 ~ 20번 라인에서 새로운 `Query`가 생성됩니다. 그리고 [위에서](#query) 설명한대로 `Query` 객체가 생성됩니다. 그리고 21번 라인의 `add()` 함수를 통해 `QueryCache`의 `queriesMap` 객체와 `queries` 배열에 `Query` 객체를 추가해줍니다.
 
 이렇게 생성된 `Query` 객체를 받아와 `QueryObserver.updateQuery()` 함수의 11번 라인에서 `QueryObserver`에도 저장해줍니다.
 
-![QueryObserver.updateQuery( ) 후 상태](https://i.imgur.com/lgOTZad.png)
+![QueryObserver.updateQuery( ) 이후 상태](https://i.imgur.com/lgOTZad.png)
 
 그리고 `updateQuery()`를 마친 후 `setOptions()`로 돌아와 `updateResult()`를 수행합니다.
 
@@ -483,7 +484,7 @@ updateResult(notifyOptions?: NotifyOptions): void {
 }
 ```
 
-6번 라인의 `createResult()` 함수에서 현재의 상태와 옵션들을 이용해 `useQuery()`를 사용한 곳에 넘겨줄 값을 만들어줍니다. 이렇게 만들어진 result를 `QueryObserver`에 저장하고 notify해줄지 여부는 11번 라인에서 얕은 비교를 통해 결정합니다. 지금은 `prevResult`가 undefined이므로 15번, 17번 라인을 수행하게 됩니다.
+6번 라인의 `createResult()` 함수에서 현재의 상태와 옵션을 이용해 `useQuery()`를 사용한 곳에 return해줄 값을 만들어줍니다. 이렇게 만들어진 result를 `QueryObserver`에 저장하고 notify해줄지 여부는 11번 라인에서 얕은 비교를 통해 결정합니다. 지금은 `prevResult`가 undefined이므로 15번, 17번 라인을 수행하게 됩니다.
 
 15번 라인에서 `useQuery()`의 return을 위해 `this.currentResult`에 저장하며, 17번 라인에서 notify 해줍니다.
 
@@ -509,7 +510,7 @@ private notify(notifyOptions: NotifyOptions): void {
 }
 ```
 
-2번 라인에서 `notifyManager.batch()`를 해주고 있습니다. `batch()` 함수를 보기 전에 넘겨주는 callback 함수부터 보겠습니다. 5 ~ 7번 라인의 코드는 현재로써는 아무것도 해주지 않습니다. 왜냐하면 `QueryObserver`에 등록된 `listeners`가 없기 때문이죠. 하지만 나중에 `useQuery()`의 비동기 함수가 완료는 시점에 큰 의미가 있습니다. 지금은 그냥 넘어가고 그 때 다시 설명하겠습니다.
+2번 라인에서 `notifyManager.batch()`를 해주고 있습니다. 이 함수는 인자로 받은 callback 함수를 수행해줍니다. `batch()` 함수를 자세히 보기 전에 넘겨주는 callback 함수부터 보겠습니다. 5 ~ 7번 라인의 코드는 현재로써는 아무것도 해주지 않습니다. 왜냐하면 `QueryObserver`에 등록된 `listeners`가 없기 때문이죠. 하지만 나중에 `useQuery()`의 `queryFn`이 완료는 시점에 큰 의미가 있습니다. 지금은 그냥 넘어가고 그 때 다시 설명하겠습니다.
 
 11 ~ 14번 라인에서 `QueryCache`를 가져와 다시 `QueryCache.notify()`를 해줍니다. `QueryObserver`에도 notify가 있고 `QueryCache`에도 notify가 있고, notify가 많아서 헷갈리죠? 각 객체가 갖고 있는 `notify()` 함수의 주된 역할은 객체에 등록된 listener, observer 들을 호출하는 것입니다. `QueryObserver`는 그 외에 추가적으로 `QueryCache`에 result가 변경되었다고 알려주는 역할까지 합니다. 그러면 `QueryCache`의 notify 함수도 보겠습니다.
 
@@ -523,7 +524,7 @@ notify(event: QueryCacheNotifyEvent) {
 }
 ```
 
-별거 없죠? 위에서 얘기한대로 listener들을 호출하는 것 말고는 딱히 없습니다. 그런데 여기에서도 `notifyManager.batch()` 함수가 보이네요. 이번에는 이 함수를 보도록 하겠습니다.
+별거 없죠? 위에서 얘기한대로 listener들을 호출하는 것 말고는 딱히 없습니다. 그런데 여기에서도 `notifyManager.batch()` 함수가 보이네요. `batch()` 함수를 자세히 볼까요?
 
 ## batch()
 
@@ -549,11 +550,11 @@ export function createNotifyManager() {
 }
 ```
 
-이 함수를 보기 전에 퀴즈입니다. 현재 `batch()` 함수가 몇 번 호출 되었는지 기억하시나요? 네, 2번 호출되었습니다. QueryObserver에서 1번, QueryCache에서 1번. 총 2번 호출되었습니다. 기억하고 계신다면 QueryObserver에서의 batch()가 끝나기 전에 QueryCache의 batch()가 호출되었다는 것도 기억하시나요?
+잠시 퀴즈입니다. 현재 `batch()` 함수가 몇 번 호출 되었는지 기억하시나요? 네, 2번 호출되었습니다. QueryObserver에서 1번, QueryCache에서 1번. 총 2번 호출되었습니다. 그러면 QueryObserver에서의 `batch()`가 끝나기 전에 QueryCache의 `batch()`가 호출되었다는 것도 기억하시나요?
 
-8번 라인에서 callback 함수를 호출하여 동작을 수행합니다. 하지만 이 함수에서 더 중요한 것은, 2번의 `batch()`의 호출로 현재 7번 라인을 막 지나고 있다면 `transaction`은 2라는 사실입니다. QueryCache → QueryObserver 순으로 batch()가 호출되었으니 **QueryObserver → QueryCache 순으로 11번 라인을 지나야 비로소 `transaction`이 0이 됩니다**. `transaction`이 0이 된다면 `flush()` 함수를 호출하게 됩니다.
+9번 라인에서 callback 함수를 호출합니다. 하지만 이 함수에서 더 중요한 것은, **두 번째의 `batch()`의 호출로 현재 7번 라인을 막 지나고 있다면 `transaction`은 2라는 사실입니다**. QueryCache → QueryObserver 순으로 `batch()`가 호출되었으니 QueryObserver → QueryCache 순으로 **11번 라인을 두 번 지나야 비로소 `transaction`이 0이 됩니다**. `transaction`이 0이 된다면 13번 라인에서 `flush()` 함수를 호출하게 됩니다.
 
-`flush()` 함수는 2번 라인의 `queue`에 쌓인 함수들을 한 번에 실행해주는 함수입니다. 이 설계로 React Query는 batch^[여기서의 batch는 `notifyManager.batch()`가 아닌 더 나은 성능을 위해 여러 개의 state 업데이트를 하나의 리렌더링으로 묶는 batch를 의미합니다.]를 구현하였습니다. 뒤에서 보겠지만 `queue`에는 Component1과 Component2의 리렌더링을 수행하는 함수가 들어가게 됩니다. **만약 `queue`에 리렌더링을 모아 `flush()`를 통해 한 번에 수행하는 구조가 아니었다면, Component1의 리렌더링과 Component2의 리렌더링 사이에 다른 코드들을 수행하느라 시간이 길어졌을 때 Component1과 Component2가 동시에 바뀌지 않고 2번에 걸쳐 바뀌는 것처럼 보일 것입니다**. 이런 문제점을 클로저로 `transaction`, `queue`를 관리하며 해결한 것입니다.
+`flush()` 함수는 2번 라인의 `queue`에 쌓인 함수들을 한 번에 실행해주는 함수입니다. 나중에 보겠지만 `queue`에는 Component1과 Component2의 리렌더링을 수행하는 함수가 들어가게 됩니다. 이런 설계로 React Query는 batch^[여기서의 batch는 `notifyManager.batch()`가 아닌 더 나은 성능을 위해 여러 개의 state 업데이트를 하나의 리렌더링으로 묶는 batch를 의미합니다.]를 구현하였습니다. **만약 `queue`에 리렌더링을 모아 `flush()`를 통해 한 번에 수행하는 구조가 아니었다면, Component1의 리렌더링과 Component2의 리렌더링 사이에 다른 코드들을 수행하느라 시간이 길어졌을 때, Component1과 Component2가 동시에 바뀌지 않고 2번에 걸쳐 바뀌는 것처럼 보일 것입니다**. 이런 문제점을 클로저로 `transaction`, `queue`를 관리하며 해결한 것입니다.
 
 QueryObserver와 QueryCache의 `batch()` 함수가 종료되면 `QueryObserver` 의 `updateResult()`, `setOptions()`가 종료되고, `QueryObserver`의 생성자 함수도 종료되어 드디어 `useBaseQuery()`로 돌아갑니다.
 
