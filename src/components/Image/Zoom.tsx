@@ -68,7 +68,7 @@ const Zoom = (props: ImageProps) => {
     <>
       {clicked && (
         <div
-          className="fixed top-0 left-0 z-30 h-full w-full cursor-zoom-out bg-black"
+          className="fixed top-0 left-0 z-30 h-full w-full cursor-zoom-out bg-white dark:bg-black"
           style={{ opacity: BACKGROUND_OPACITY }}
           onClick={closeWrapper}
         />
