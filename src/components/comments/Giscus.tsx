@@ -1,11 +1,17 @@
 import phrases from 'data/phrases';
 import siteMetadata from 'data/siteMetadata.mjs';
 import { useTheme } from 'next-themes';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+
+const observerOption = {
+  threshold: 1,
+  rootMargin: '500px 0px',
+};
 
 const Giscus = () => {
   const [enableLoadComments, setEnabledLoadComments] = useState(true);
   const { theme, resolvedTheme } = useTheme();
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
   const commentsTheme =
     siteMetadata.comment.giscusConfig.themeURL === ''
       ? theme === 'dark' || resolvedTheme === 'dark'
@@ -56,15 +62,31 @@ const Giscus = () => {
 
   // Reload on theme change
   useEffect(() => {
+    let observer: IntersectionObserver;
     const iframe = document.querySelector('iframe.giscus-frame');
-    if (!iframe) return;
-    LoadComments();
-  }, [LoadComments]);
+    // when comments are loaded
+    if (iframe) {
+      LoadComments();
+    }
+    // when comments are not loaded and button is visible
+    else if (siteMetadata.comment.lazyLoad && buttonRef.current) {
+      observer = new IntersectionObserver(([entry]) => {
+        entry.isIntersecting && LoadComments();
+      }, observerOption);
+      observer.observe(buttonRef.current);
+    }
+
+    return () => observer && observer.disconnect();
+  }, [buttonRef, LoadComments]);
 
   return (
     <div className="pt-6 pb-6 text-center text-gray-700 dark:text-gray-300">
       {enableLoadComments && (
-        <button onClick={LoadComments} className="hover:underline md:text-lg">
+        <button
+          ref={buttonRef}
+          onClick={LoadComments}
+          className="hover:underline md:text-lg"
+        >
           {phrases.Blog.loadComments}
         </button>
       )}
