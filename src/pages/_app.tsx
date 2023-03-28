@@ -1,6 +1,6 @@
-import localFont from '@next/font/local';
 import siteMetadata from 'data/siteMetadata.mjs';
 import type { AppProps } from 'next/app';
+import localFont from 'next/font/local';
 import Head from 'next/head';
 import { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
