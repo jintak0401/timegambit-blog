@@ -16,13 +16,12 @@ layout: PostLayout
 
 ### 객체들간의 관계
 
-![객체간의 관계](https://i.imgur.com/V8JiWvn.png)
+![객체간의 관계](https://i.imgur.com/O6pncr8.png,https://i.imgur.com/bUkSevN.png)
 
 중요한 객체가 4개 있다고 했습니다. `QueryClient`, `QueryCache`, `Query`, `QueryObserver`. 이 4개의 객체 사이의 관계는 위 이미지와 같습니다. 이 객체 외에 클로저를 사용하며 singleton으로 관리되는 `notifyManager` 객체가 있었습니다. `notifyManager`는 4개의 객체 사이에 이벤트를 전달하는 역할을 합니다.
 
-### QueryObserver 생성 이후 상태
 
-![QueryObserver 생성 이후 상태](https://i.imgur.com/lgOTZad.png)
+![QueryObserver 생성 이후 상태](https://i.imgur.com/Ema2Q2p.png,https://i.imgur.com/g9rYuvm.png)
 
 저번 포스트에서 Component1이 `useQuery()`를 호출하여 `QueryObserver`가 useState를 이용해 생성된 부분까지 설명하였습니다.
 
@@ -351,7 +350,7 @@ protected onSubscribe(): void {
 
 저번 포스트에서 설명했듯이, 3번 라인을 통해 `Query.observers`에 현재의 `QueryObserver`가 추가됩니다. 그리고 6번 라인의 `executeFetch()`가 실행됩니다. 이 함수가 `useQuery()`를 호출할 때 넣어주었던 `queryFn`을 실행하는 함수입니다.
 
-![3번 라인 후 객체간 관계](https://i.imgur.com/v5cJdXG.png)
+![3번 라인 후 객체간 관계](https://i.imgur.com/tt2iaDY.png,https://i.imgur.com/FliMAEG.png)
 
 3번 라인을 수행하기 전에는 `QueryObserver1`만 `Query` 객체를 알고 있었지만, 3번 라인을 수행하면서 `Query`도 `QueryObserver1`을 알게 되었습니다. 이 관계의 변화가 큰 역할을 합니다. 기억해주세요! 이제 6번 라인의 `executeFetch()`를 봅시다.
 
@@ -473,7 +472,7 @@ export function createRetryer<TData = unknown, TError = unknown>(
 
 Component2가 `useQuery()`를 사용하면 `Query.fetch()`를 수행하기 전까지, 보아온 것과 똑같이 동작합니다.
 
-![객체간 관계](https://i.imgur.com/Q0YLXTr.png)
+![객체간 관계](https://i.imgur.com/dGW2rwB.png,https://i.imgur.com/xteZhC2.png)
 
 그러면 위 그림과 같이 관계가 설정됩니다. 중요한 것은 Component1과 Component2가 같은 `Query` 객체를 갖게 된다는 점입니다.
 

@@ -170,7 +170,7 @@ export class QueryObserver<...> extends Subscribable<QueryObserverListener<TData
 
 ### 정리
 
-![객체간의 관계](https://i.imgur.com/V8JiWvn.png)
+![객체간의 관계](https://i.imgur.com/O6pncr8.png,https://i.imgur.com/bUkSevN.png)
 
 * `QueryClient`는 하나만 존재합니다.^[추가적으로 생성해서 사용하면 프로젝트에 여러개가 존재할 수 있습니다만, 여기에서는 최상위에 하나만 생성하였다고 가정합니다.] `QueryClient`가 생성될 때 `QueryCache`를 새로 생성하여 `this.queryCache`에 저장합니다.
 * `QueryCache`는 `Query` 객체가 새로 생성될 때마다 `this.queriesMap`과 `this.queries`에 저장합니다.
@@ -399,7 +399,7 @@ setOptions(
 
 이 함수에서 여러 동작을 하지만 가장 중요한 동작은 6번 라인의 `updateQuery()` 함수와 8번 라인의 `updateResult()` 함수입니다. 지금 상태를 잠시 생각해보겠습니다. `QueryClient`가 context api를 위한 Provider에 넣어주기 위해 생성되었고 이와 함께 `QueryCache`도 생성된 상태입니다. `QueryObserver`는 지금 막 생성되었지만 아직 `Query`는 생성되지 않은 상태죠. 그렇기 때문에 `QueryObserver`도 아직 `Query`를 가지지 못한 상태입니다. `Query`가 아직 만들어지지 않았으니까요.
 
-![현재 상태](https://i.imgur.com/68eVy7c.png)
+![현재 상태](https://i.imgur.com/eDiJzOl.png,https://i.imgur.com/xxPAlHi.png)
 
 6번 라인의 `updateQuery()` 함수를 호출함으로써 `Query`도 생성하고, `QueryCache`도 해당 `Query`를 저장하며, 지금 생성 중인 `QueryObserver`도 해당 `Query` 객체를 가지게 해줍니다.
 
@@ -457,7 +457,7 @@ build<TQueryFnData, TError, TData, TQueryKey extends QueryKey>(
 
 이렇게 생성된 `Query` 객체를 받아와 `QueryObserver.updateQuery()` 함수의 11번 라인에서 `QueryObserver`에도 저장해줍니다.
 
-![QueryObserver.updateQuery( ) 이후 상태](https://i.imgur.com/lgOTZad.png)
+![QueryObserver.updateQuery( ) 이후 상태](https://i.imgur.com/Ema2Q2p.png,https://i.imgur.com/g9rYuvm.png)
 
 그리고 `updateQuery()`를 마친 후 `setOptions()`로 돌아와 `updateResult()`를 수행합니다.
 

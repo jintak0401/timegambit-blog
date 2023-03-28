@@ -41,6 +41,7 @@ const siteMetadata = {
   },
   comment: {
     provider: 'giscus', // supported providers: giscus, utterances, disqus
+    lazyLoad: true, // when true, comment will be loaded when user scrolls to comment box
     giscusConfig: {
       // Visit the link below, and follow the steps in the 'configuration' section
       // https://giscus.app/

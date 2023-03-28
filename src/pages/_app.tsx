@@ -1,6 +1,6 @@
-import localFont from '@next/font/local';
 import siteMetadata from 'data/siteMetadata.mjs';
 import type { AppProps } from 'next/app';
+import localFont from 'next/font/local';
 import Head from 'next/head';
 import { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
@@ -34,18 +34,16 @@ export default function App({
       defaultTheme={siteMetadata.theme}
       enableColorScheme={false}
     >
-      <>
-        <Head>
-          <meta content="width=device-width, initial-scale=1" name="viewport" />
-        </Head>
-        <Analytics />
-        <LayoutWrapper className={`${dejavu.variable} font-sans`}>
-          <SessionProvider session={session}>
-            <Component {...pageProps} />
-          </SessionProvider>
-        </LayoutWrapper>
-        <ToastContainer />
-      </>
+      <Head>
+        <meta content="width=device-width, initial-scale=1" name="viewport" />
+      </Head>
+      <Analytics />
+      <LayoutWrapper className={`${dejavu.variable} font-sans`}>
+        <SessionProvider session={session}>
+          <Component {...pageProps} />
+        </SessionProvider>
+      </LayoutWrapper>
+      <ToastContainer />
     </ThemeProvider>
   );
 }

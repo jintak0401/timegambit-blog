@@ -14,7 +14,7 @@ layout: PostLayout
 [저번 포스트](https://www.timegambit.com/blog/digging/async-await/02)에서 다루었던 내용이 기억나지 않는다면 다시 한 번 읽어보시기 바랍니다. 간단히 요약하고 설명을 시작하겠지만 *왜 이런 결론이었더라?* 🤔 하신다면 읽는 재미가 반감될 거에요!
 
 ### 객체들간의 관계
-![객체들간의 관계도](https://i.imgur.com/OGA0FV7.png)
+![객체들간의 관계도](https://i.imgur.com/HUxMoIR.png,https://i.imgur.com/yVkz3lS.png)
 
 `_regeneratorRuntime`, `mark`, `wrap` 함수를 수행해가면서 객체들간의 관계는 위 그림처럼 되었습니다. 이 관계들 중 가장 중요한 것은 **`generator`와 `Gp`의 관계입니다**. `generator.__proto__.__proto__ === Gp`라는 것을 기억해주세요!
 
@@ -65,7 +65,7 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
 ```
 `defineIteratorMethods` 함수는 `prototype`을 인자로 받습니다. `prototype`은 `Gp`를 가리키게 됩니다. 즉, `Gp` 객체에 `next`, `throw`, `return` 메소드를 설정해줍니다. `generator.next` 함수를 어떻게 호출할 수 있는지 감이 오시나요?
 
-![next 함수를 찾기까지](https://i.imgur.com/BpIsRKZ.png)
+![next 함수를 찾기까지](https://i.imgur.com/oMLUj8S.png,https://i.imgur.com/pbA2lih.png)
 
 `generator` 객체에는 `next` 함수가 정의되지 않았기 때문에 프로토체이닝을 통해 `next` 함수를 찾아나갑니다. 우선 `generator`의 __proto__인 ⓐ 객체를 찾아봅니다. 하지만 여기에도 `next` 함수가 없습니다. 다시 ⓐ 객체의 __proto__인 `Gp` 객체를 찾아봅니다. 그리고 `Gp` 객체에는 `defineIteratorMethods` 함수를 통해 설정해준 `next` 함수가 있습니다. 그래서 위 코드의 11번 라인을 통해 `Gp.next` 함수를 호출하게 됩니다! 그리고 `next` 함수에서는 `this._invoke` 함수를 호출하므로 결국 `generator._invoke` 함수를 호출하게 됩니다.
 
