@@ -18,7 +18,11 @@ const seriesData = {
   '자바스크립트와 맞짱 뜨기': {
     image: 'https://i.imgur.com/zzh0DoW.png',
     slug: 'js'
-  }
+  },
+  '문제와 해결책': {
+    image: 'https://i.imgur.com/0iTohpa.png',
+    slug: 'solve',
+  },
 };
 
 export default seriesData;

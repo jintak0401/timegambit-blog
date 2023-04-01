@@ -1,0 +1,285 @@
+---
+title: '트랜잭션 다루기 (feat. NestJS, TypeORM)'
+date: '2023-03-09'
+lastmod: '2023-04-01'
+tags: ['트랜잭션', 'NestJS', 'TypeORM']
+draft: false
+series: 문제와 해결책
+summary: Nest JS에서 트랜잭션을 올바르게 다루기 위해 겪었던 고민과 문제에 대한 해결방법을 정리한 글입니다.
+images: ['https://i.imgur.com/C4XRx7e.png']
+layout: PostLayout
+---
+
+## 이 글을 쓰게 된 계기
+
+현재 진행 중인 팀프로젝트에서 백엔드를 NestJS로 개발하고 있습니다. 순조롭게 개발을 하던 중 트랜잭션과 관련된 로직을 어디서 수행해주는 것이 좋은지 의견충돌이 있었습니다. 이에 대한 고민과 해결방법을 정리하기 위해 이 포스트를 작성합니다.
+
+### 트랜잭션
+
+본격적으로 소개하기 전에 트랜잭션이 무엇인지 간단히 정리하겠습니다. 트랜잭션이란 DB의 상태를 변화시키기 위해 수행하는 작업의 단위를 의미합니다. 트랜잭션은 하나의 작업을 수행하기 위해 필요한 연산들의 집합으로, ACID라는 특성을 가지고 있습니다.
+
+#### Atomicity(원자성)
+
+트랜잭션은 하나의 작업으로 묶여있기 때문에 트랜잭션 내부의 모든 연산들은 반드시 완료되어야 합니다. 만약 트랜잭션 내부의 연산 중 하나라도 실패하면 트랜잭션은 취소되고 이전 상태로 복구됩니다. 예를들어 계좌 이체를 생각해봅시다. 계좌 이체를 위해 출금과 입금이라는 두 가지 작업이 필요합니다. 따라서 출금 작업이 성공하고 입금 작업이 실패한다면, 출금되기 이전 상태로 복구되어야 합니다.
+
+#### Consistency(일관성)
+
+트랜잭션이 성공적으로 완료되면 DB는 일관성 있는 상태로 유지되어야 합니다. 여기서 일관성이란 데이터에 모순이 없어야 함을 의미합니다. 예를들어 제 통장은 마이너스를 허용하지 않는다고 가정해봅시다. 만약 통장에 1000원이 있고 2000원을 출금하려고 한다면 통장에는 마이너스가 발생하게 됩니다. 이러한 모순을 방지하기 위해 트랜잭션은 일관성을 유지해야 합니다.
+
+#### Isolation(독립성)
+
+트랜잭션을 수행할 때 다른 트랜잭션이 작업에 끼어들지 못하도록 보장하는 것을 의미합니다. 현재 사용하고 있는 DB를 나 혼자만 쓰는 것처럼 착각을 하게 만들어주는 특성입니다.
+
+#### Durability(지속성)
+
+트랜잭션이 성공적으로 완료되면 그 결과는 영구적으로 반영되어야 합니다. 트랜잭션이 완료되고 나면 시스템이 고장나더라도 트랜잭션의 결과는 유지되어야 합니다. 이를 위해 데이터 베이스에는 로그를 이용한 복구 기능이 있습니다.
+
+## Controller, Service, Repository
+
+팀프로젝트에서 백엔드를 [Nest JS](https://nestjs.com/)라는 프레임워크로 개발하고 있습니다. Spring은 다뤄본적도 없고, 프론트엔드를 주로 작업하여 JavaScript가 익숙한 저와 팀원들은 백엔드를 만들기 위한 프레임워크로 Express와 Nest JS 중 하나를 선택해야 했습니다. 자유도가 높은 Express는 팀프로젝트를 진행하기에는 코드의 일관성이 떨어질 가능성이 높다고 판단하여, 규칙과 제약이 강한 Nest JS를 사용하기로 했습니다.
+
+Nest JS는 Java의 Spring과 비슷한 구조를 띄고 있습니다. Controller, Service, Repository 계층을 분리하여 개발합니다. Controller는 api의 호출과 응답, Service는 비즈니스 로직, Repository는 DB 작업을 담당합니다.
+
+![대충그림](https://i.imgur.com/QsdOQay.png,https://i.imgur.com/CfbJlXB.png)
+
+* Controller: API 요청을 받아 쿼리, 파라미터 등을 Service에게 넘겨주고, Service로 부터 받은 결과를 클라이언트에게 전달하는 역할
+* Service: Controller로 부터 받은 데이터를 이용해 Repository에게 DB 작업을 요청. Repository의 응답을 이용해 비즈니스 로직을 실행하고 Controller에게 결과를 전달하는 역할
+* Repository: Service로 부터 DB 작업을 요청받아 CRUD를 수행하여 결과를 Service에게 전달하는 역할
+
+각 계층은 서로가 무슨 일을 어떻게 하는지 알 필요 없이 정해진 입력에 따라 정해진 출력을 내놓으면 됩니다. Controller와 Repository는 Service에서 어떤 비즈니스 로직을 수행하는지 몰라도 됩니다. Service는 Controller가 어떤 API를 요청받았는지, Repository가 DB 작업을 어떻게 수행하는지 몰라도 됩니다. 이렇게 각 계층이 서로의 동작 방법을 모르며, 각자 독립적으로 동작하는 것이 가장 바람직한 구조입니다.
+
+## 발견한 문제점
+
+문제는 이 독립적 계층구조를 지키고자하는 것으로부터 시작합니다. 트랜잭션은 DB 동작과 관련이 있습니다. 애초에 트랜잭션은 DB와 관련된 개념입니다. 따라서 Repository에서 관리해주어야 하는 것처럼 보입니다. 하지만 Repository에서 처리하기에는 다소 어색한 부분이 있습니다. 예를들어 한 번의 api 호출로 다음과 같은 동작이 순서대로 일어나야 한다고 가정해보겠습니다.
+
+1. A 테이블에 새로운 Record를 Create
+2. 1번이 성공하면 B 테이블에 Update
+3. 2번이 성공하면 C 테이블에서 기존 Record를 Delete
+
+이 3개의 행동들은 **트랜잭션**으로 이루어져야하는 **비즈니스 로직**입니다. 이 일련의 동작들을 다루는 것은 **트랜잭션을 생각한다면 Repository에서** 이루어져야 하며, **비즈니스 로직을 생각한다면 Service**에서 이루어져야 합니다. 이 2가지를 구체적으로 설명하면 다음과 같습니다.
+
+1. Repository의 1, 2, 3번 동작을 수행하는 함수를 Service에서 각각 호출하되, 1번 호출 전에 트랜잭션을 시작, 3번 호출 후에 트랜잭션을 종료하는 방법
+2. Repository에 3개의 동작을 모두 수행하는 하나의 함수를 만들고, 1번 수행 전에 트랜잭션을 시작하며 3번 수행 후에 트랜잭션을 종료합니다.
+
+```ts:방법1 {1,4,8}
+class Service {
+  ...
+  async doSomething() {
+    await queryRunner.startTransaction(); // 트랜잭션 시작
+    await this.repository.func1();
+    await this.repository.func2();
+    await this.repository.func3();
+    await queryRunner.commitTransaction(); // 트랜잭션 커밋
+  }
+  ...
+}
+
+class Repository {
+  ...
+  async func1() { ... }
+  async func2() { ... }
+  async func3() { ... }
+  ...
+}
+```
+
+```ts:방법2 {9,12,16}
+class Service {
+  ...
+  async doSomething() {
+    await this.repository.func();
+  }
+  ...
+}
+
+class Repository {
+  ...
+  async func() {
+    await queryRunner.startTransaction(); // 트랜잭션 시작
+    await this.func1();
+    await this.func2();
+    await this.func3();
+    await queryRunner.commitTransaction(); // 트랜잭션 커밋
+  }
+  async func1() { ... }
+  async func2() { ... }
+  async func3() { ... }
+  ...
+}
+```
+
+
+트랜잭션은 DB와 관련된 작업임에도 불구하고, **1번 방법은 Service에서 트랜잭션을 관리**하고 있습니다. 반면 2번 방법은 올바르게 트랜잭션을 DB와 관련된 계층인 Repository에서 관리하고 있습니다. 하지만 **2번 방법은 비즈니스 로직을 Respository에서 수행**한다는 문제점이 있습니다. 1번, 2번, 3번 동작이 순서대로 수행되어야한다는 비즈니스 로직과 관련된 코드가 Repository에 있기 때문입니다.
+
+## 해결방법
+
+저를 포함한 모든 팀원들 모두 둘 중 하나를 고르기에는 둘 다 너무 마음에 들지 않았습니다. 그래도 어쩔 수 없이 정해야 했기에 한 팀원은 Repository에서, 저는 Service에서 트랜잭션을 관리하자고 주장했습니다. 그러다 문뜩 Java 프레임워크인 Spring은 어떻게 트랜잭션을 관리하는지 궁금해졌습니다.
+
+```java:Spring-코드
+@Service
+@RequiredArgsConstructor
+@Transactional // 트랜잭션을 위한 데코레이터
+public class TmpService {
+    ...
+}
+```
+
+Spring에서는 `@Transactional` 데코레이터를 Service에 추가하여 트랜잭션을 관리하고 있었습니다. 이 방식은 획기적이었습니다. 결과만 놓고 보면 이 방법 또한 Service에서 트랜잭션을 관리하는 것이므로 1번 방법과 다르지 않습니다. 하지만 직접적으로 트랜잭션 관련 코드를 작성하지 않기 때문에 Service에서 관리한다는 느낌이 들지 않았습니다. 무엇보다 너무 간편해보였습니다.
+
+### @Transactional 만들기
+
+```ts:transaction.middleware.ts showLineNumbers {5-6,9,15-16}
+@Injectable()
+export class TransactionMiddleware implements NestMiddleware {
+  constructor(private readonly em: EntityManager) {}
+  use(_req: Request, _res: Response, next: NextFunction) {
+    const namespace =
+      getNamespace(PLANDAR_NAMESPACE) ?? createNamespace(PLANDAR_NAMESPACE);
+    return namespace.runAndReturn(async () => {
+      Promise.resolve()
+        .then(() => this.setEntityManager())
+        .then(next);
+    });
+  }
+
+  private setEntityManager() {
+    const namespace = getNamespace(PLANDAR_NAMESPACE) as Namespace;
+    namespace.set<EntityManager>(PLANDAR_ENTITY_MANAGER, this.em);
+  }
+}
+```
+
+우선 요청이 들어올 때마다 수행되는 `TransactionMiddleware`를 만들어주었습니다. 이 미들웨어는 `PLANDAR_NAMESPACE` namespace를 가져와서(없다면 만들어줍니다) 현재의 Entity Manager를 등록시켜줍니다.
+
+```ts:transaction.decorator.ts showLineNumbers {10,12,14-17,27}
+export function Transactional() {
+  return function (
+    _target: object,
+    _propertyKey: string | symbol,
+    descriptor: TypedPropertyDescriptor<any>,
+  ) {
+    const originMethod = descriptor.value;
+
+    async function transactionWrapped(...args: unknown[]) {
+      const nameSpace = getNamespace(PLANDAR_NAMESPACE);
+      ...
+      const em = nameSpace.get(PLANDAR_ENTITY_MANAGER) as EntityManager;
+      ...
+      return await em.transaction(async (tx: EntityManager) => {
+        nameSpace.set<EntityManager>(PLANDAR_ENTITY_MANAGER, tx);
+        return await originMethod.apply(this, args);
+      });
+    }
+    descriptor.value = transactionWrapped;
+  };
+}
+
+// 사용
+@Injectable()
+class UserService {
+  ...
+  @Transactional()
+  async getUsers() {
+    return this.userRepo.find();
+  }
+  ...
+}
+```
+
+그리고 `@Transactional()`을 만나면 미들웨어에서 등록된 Entity Manager를 가져와서 타겟 함수(위 코드에서는 `getUsers()`)를 트랜잭션으로 감싸서 수행합니다(14~17 라인).
+
+## 새로운 니즈(needs)
+
+`@Transactinal()` 데코레이터를 만들어 테스트해보았더니 잘 동작했습니다. 하지만 저희에게는 새로운 니즈가 생겼습니다.
+
+* TypeORM 0.3.0부터 deprecated된 `EntityRepository`와 같은 기능
+* TypeORM이 제공하는 함수 중 간단한 것들을 Service 계층에서 바로 사용할 수 있게 만들기
+
+이 니즈를 충족시키기 위해 `TransactionManager`와 `RootRepository`를 만들었습니다.
+
+### TransactionManager
+
+```ts:transaction.manager.ts
+@Injectable()
+export class TransactionManager {
+  getEntityManager(): EntityManager {
+    const nameSpace = getNamespace(PLANDAR_NAMESPACE);
+    if (!nameSpace || !nameSpace.active)
+      throw new InternalServerErrorException(
+        `${PLANDAR_NAMESPACE} is not active`,
+      );
+    return nameSpace.get(PLANDAR_ENTITY_MANAGER);
+  }
+}
+```
+
+`TransactionManager`는 간단합니다. 활성화된 `PLANDAR_NAMESPACE`에 등록되어 있는 Entity Manager를 가져오는 역할을 합니다.
+
+### RootRepository
+
+```ts:root.repository.ts showLineNumbers {1,3,5}
+export abstract class RootRepository<T> extends Repository<T> {
+  constructor(
+    @Inject(TransactionManager) private readonly txManager: TransactionManager,
+  ) {
+    super(RootRepository, txManager.getEntityManager());
+  }
+
+  abstract getName(): EntityTarget<T>;
+
+  protected getRepo(): Repository<T> {
+    return this.txManager.getEntityManager().getRepository(this.getName());
+  }
+}
+
+// 사용
+export class UserRepository extends RootRepository<User> {
+  getName(): EntityTarget<User> {
+    return User.name;
+  }
+  async createUser(username: string) {
+    return this.getRepo().insert({
+      username,
+    });
+  }
+}
+```
+
+3번째 줄에서 `TransactionManager`로부터 Entity Manager를 주입받아 `getRepo()` 함수를 이용해 Repository를 불러옵니다. 그리고 1번 라인을 통해 `RootRepository`에 TypeORM의 `Repository`를 상속시켜주고, 5번 라인에서 `RootRepository`에 현재의 Entity Manager를 가져와 등록시켜줍니다. 이를 통해 Service에서도 TypeORM의 함수들을 사용할 수 있게 해주었다고 **생각했습니다**.
+
+![Service에서 TypeORM 함수 사용](https://i.imgur.com/VyneWUK.png)
+
+위 사진에서 보시다시피 Service에서 TypeORM의 함수를 사용할 수 있도록 자동완성이 되길래 니즈를 충족시켰다고 착각했습니다.
+
+## 하지만 발생한 에러
+
+![Service에서의 TypeORM 함수 런타임 에러](https://i.imgur.com/jmuMT39.png)
+
+그런데 에러가 발생했습니다... JavaScript를 자주 사용하는 사람들은 자주 볼 수 있는 *Cannot read properties of undefined* 에러였습니다.
+
+### 원인은?
+
+```ts:root.repository.ts showLineNumbers {1,5}
+export abstract class RootRepository<T> extends Repository<T> {
+  constructor(
+    @Inject(TransactionManager) private readonly txManager: TransactionManager,
+  ) {
+    super(RootRepository, txManager.getEntityManager());
+  }
+  ...
+}
+```
+
+원인은 1, 5번 라인입니다. Service에서 TypeORM의 함수를 사용하기 위해서는 TypeORM에 정의된 `Repository`를 상속받아야만 합니다. 그리고 상속받으면 `super()`를 통해 `Repository`의 생성자를 호출해야만 합니다.
+
+저는 `txManager.getEntityManager()`를 통해, 현재의 namespace에 등록된 Entity Manager를 가져오고 `RootRepository`에 등록시켜주었다고 생각했습니다. 하지만 namespace에 Entity Manager가 등록되는 것은 미들웨어에서, 즉 api가 호출될 때 등록이 됩니다. 하지만 `RootRepository`는 Nest JS의 서버 구동 초기에 생성됩니다. 서버 구동 초기에는 당연히 Entity Manager가 namespace에 등록된 상태가 아니므로 `txManager.getEntityManager()`는 undefined를 반환하게 되고, `RootRepository`의 Entity Manager에는 undefined가 등록되어 발생했던 것입니다.
+
+## typeorm-transactional
+
+사실 여기까지 문제를 해결하기 위해 쏟은 시간이 너무 많았습니다. 프로젝트를 위한 시간은 한정되어 있기 때문에, 해결할 수 있을지 없을지 모르는 문제를 직접 코드적으로 해결하기보다는 라이브러리가 존재하는지 찾아보았습니다. 다행히 [typeorm-transactional](https://www.npmjs.com/package/typeorm-transactional)이라는 라이브러리가 있었습니다. 소스코드 분석 및 테스트를 통해 문제가 없는 라이브러리라는 것을 확인하였고 사용하기로 결정하였습니다. 재미있었던 점은 팀원 중 한 명이 위 문제를 해결하기 위한 방법으로 `Object.defineProperty`를 이용한 방식을 pseudo code로 제시했었는데, 이와 유사한 코드가 라이브러리 내에 존재했었습니다. 🙃
+
+이 라이브러리의 소스코드 분석은 [프로젝트 깃허브 Wiki](https://github.com/JiPyoTak/plandar-server/wiki/typeorm-transactional)에 작성하였습니다.
+
+## 마치며
+
+저는 프론트엔드 개발자지만 이런 문제를 해결할 때에는 프론트엔드, 백엔드 할 것 없이 항상 재미있는 것 같습니다. 예전부터 Nest JS를 사용하며 고민했던 문제를 팀원과 함께 논의하며 해결해나갔기 때문에, 특히 더 재밌었던 것 같습니다.
