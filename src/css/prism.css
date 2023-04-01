@@ -146,6 +146,7 @@ code[class*=language-] ::selection, code[class*=language-]::selection, pre[class
     color: rgba(189, 147, 249, 1);
 }
 
+.token.at,
 .token.function,
 .token.attr-name,
 .token.atrule
@@ -184,7 +185,7 @@ code[class*=language-] ::selection, code[class*=language-]::selection, pre[class
 
 .token.arrow,
 .token.script,
-.token.operator,
+.token.operator:not(.at),
 .token.special-escape
 {
     color: var(--foreground);
