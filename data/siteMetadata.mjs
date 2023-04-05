@@ -68,6 +68,12 @@ const siteMetadata = {
       themeURL: '',
     },
   },
+  // if blog post slug changed, add here to redirect old slug to new one (for SEO)
+  redirects: {
+    'blog-log/dynamic-import-og-error': 'solve/dynamic-import-og-error',
+    'blog-log/contribute-next-auth': 'solve/contribute-next-auth',
+    'blog-log/svg-usage-fix-bug': 'solve/svg-usage-fix-bug',
+  }
 };
 
 export default siteMetadata
