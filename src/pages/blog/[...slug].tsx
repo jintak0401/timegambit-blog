@@ -23,6 +23,7 @@ export const getStaticProps = async ({
   params: { slug: string[] };
 }) => {
   const slug = params.slug.join('/');
+
   const post: Blog = allBlogs.find((p) => p.slug === slug) as Blog;
   post.body.raw = '';
 
