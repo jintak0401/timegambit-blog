@@ -12,13 +12,7 @@ const DEFAULT_LAYOUT = 'PostLayout';
 
 export async function getStaticPaths() {
   return {
-    paths: allBlogs
-      .map((p) => ({ params: { slug: p.slug.split('/') } }))
-      .concat(
-        Object.keys(siteMetadata.redirects).map((p) => ({
-          params: { slug: p.split('/') },
-        }))
-      ),
+    paths: allBlogs.map((p) => ({ params: { slug: p.slug.split('/') } })),
     fallback: false,
   };
 }
@@ -29,17 +23,6 @@ export const getStaticProps = async ({
   params: { slug: string[] };
 }) => {
   const slug = params.slug.join('/');
-
-  if (slug in siteMetadata.redirects) {
-    return {
-      redirect: {
-        destination: `/blog/${
-          siteMetadata.redirects[slug as keyof typeof siteMetadata.redirects]
-        }`,
-        permanent: false,
-      },
-    };
-  }
 
   const post: Blog = allBlogs.find((p) => p.slug === slug) as Blog;
   post.body.raw = '';
