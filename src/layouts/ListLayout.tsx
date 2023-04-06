@@ -30,6 +30,7 @@ export default function ListLayout({ posts, title, description }: Props) {
   const [displayPosts, setDisplayPosts] = useState<PostListItem[]>(() => {
     return posts.slice(0, listLength);
   });
+  const [postsLength, setPostsLength] = useState(posts.length);
 
   useEffect(() => {
     setSearchValue('');
@@ -44,8 +45,9 @@ export default function ListLayout({ posts, title, description }: Props) {
   }, [router.asPath]);
 
   const setNextDisplayPosts = (init = false) => {
+    const _posts = filterBlogPosts(posts, searchValue);
+    setPostsLength(_posts.length);
     setDisplayPosts((prev) => {
-      const _posts = filterBlogPosts(posts, searchValue);
       const nextPosts = _posts.slice(
         0,
         (init ? 0 : prev.length) + siteMetadata.blogPost.postsPerScroll
@@ -80,7 +82,7 @@ export default function ListLayout({ posts, title, description }: Props) {
       <div className="divide-y">
         <div className="space-y-2 pt-6 pb-8 md:space-y-5">
           <h1 className="strong-text text-3xl font-extrabold leading-9 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
-            {title} ({posts.length})
+            {title} ({postsLength})
           </h1>
           {description && (
             <p className="middle-text text-lg leading-7">{description}</p>
