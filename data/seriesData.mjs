@@ -23,6 +23,10 @@ const seriesData = {
     image: 'https://i.imgur.com/0iTohpa.png',
     slug: 'solve',
   },
+  '기타 포스트': {
+    image: 'https://i.imgur.com/5WobvI9.png',
+    slug: 'etc',
+  }
 };
 
 export default seriesData;
