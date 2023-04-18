@@ -95,10 +95,12 @@ module.exports = {
               color: theme('colors.gray.900'),
             },
             h3: {
+              marginTop: '2.5rem',
               fontWeight: '600',
               color: theme('colors.gray.900'),
             },
             'h4,h5,h6': {
+              marginTop: '2rem',
               color: theme('colors.gray.900'),
             },
             pre: {
