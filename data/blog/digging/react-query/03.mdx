@@ -1,0 +1,373 @@
+---
+title: '[React Query] stale & cache 동작원리'
+date: '2023-04-24'
+lastmod: '2023-04-24'
+tags: ['React Query','라이브러리 분석']
+draft: false
+series: 동작원리
+summary: React Query의 stale과 cache의 동작원리를 분석했습니다. 이 포스트에서는 stale이 왜 필요한지, fresh 상태에서 stale로 바뀌는 원리, cache가 어떻게 삭제되는지 등을 설명합니다.
+images: [https://i.imgur.com/Uo18Ikc.png]
+layout: PostLayout
+---
+
+## 분석하기 앞서
+
+이번 포스트에서는 React Query의 stale과 cache에 대한 동작원리를 분석해보려고 합니다. 분석하기에 앞서 stale과 cache이 무엇인지 간단히 짚고 넘어가겠습니다.
+
+### 설정하는 법
+
+```tsx showLineNumbers {4-5,12}
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60,
+      cacheTime: 1000 * 60 * 5,
+    }
+  },
+});
+
+const App = ({ Component, pageProps }: AppProps) => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Component {...pageProps} />
+    </QueryClientProvider>
+  );
+};
+```
+
+설정하는 법은 간단합니다. `QueryClientProvider`의 props로 넣어주는 `QueryClient`의 옵션으로 `staleTime`과 `cacheTime`을 설정해주면 됩니다. 개별적으로 useQuery의 옵션으로 설정하고 싶다면 [공식문서](https://tanstack.com/query/v4/docs/react/guides/initial-query-data#staletime-and-initialdataupdatedat)를 참고하세요!
+
+### cache
+
+React Query는 설정한 `cacheTime`만큼(기본값은 5분) 데이터를 메모리에 저장해 놓습니다. 좀 더 자세히 설명하자면 React Query에서의 cache는 QueryCache 객체의 `queries` 배열과 `queriesInMap` 객체에 Query 객체가 존재하는 것을 말합니다. 중요한 것은 **cache가 존재한다고 해서 data refetching을 하지 않는 것이 아닙니다**. cache가 존재하더라도 해당 데이터(Query 객체)가 stale 상태라면 refetching을 수행하게 됩니다.
+
+<Alert type="info">
+  더욱 정확히 설명하자면 cache는 `cacheTime`만큼 유지되는 것은 아닙니다. 만약 현재 UI에 해당 Query 객체의 data가 필요한 상황이라면, `cacheTime`이 지났더라도 cache를 유지합니다. 그 이유와 원리는 [아래](#optionalremove)에서 자세히 설명하겠습니다.
+</Alert>
+
+### stale
+
+React Query에는 cache와는 별도로 stale이라는 개념이 있습니다. 설정한 `staleTime`만큼(기본값은 0초) 데이터가 fresh 상태로 존재하였다가 그 후에는 stale 상태로 바뀝니다. fresh와 stale 단어의 대비에서 알 수 있듯이 fresh는 데이터를 그대로 사용해도 좋을 만큼 신선한 상태라는 뜻이며, stale은 데이터를 새롭게 fetch해 오는 것이 필요할 만큼 신선하지 못한 상태라는 뜻입니다.
+
+예를들어 `staleTime`을 10,000으로 설정하였다면, data fetching이 성공한 후 10초(= 10,000ms) 동안 fresh 상태로 존재하다가 10초 이후에는 stale 상태가 됩니다. stale 상태가 된 후 특정 조건이 충족되면 refetching이 일어나게됩니다. 주의할 점은 stale 상태가 되었다고 해서 refetching이 곧바로 일어나는 것이 아니라, **stale 상태가 되고 특정조건을 만족해야 refetching이 일어난다는 것**입니다. [^refetch]
+
+### 왜 stale 개념이 필요할까?
+
+![UI, stale, cache 그래프](https://i.imgur.com/7mnSXLw.png,https://i.imgur.com/qlNjOq8.png)
+
+저는 처음에 잘 이해되지 않았습니다. *stale과 cache는 비슷한 역할을 하는 것 같은데 어째서 cache만으로 관리하지 않고, stale과 cache라는 개념으로 나누어서 관리하지?* 라고 의문이 들었습니다. 그런데 cache만으로 관리했을 때와의 차이점을 생각해보니 알겠더라구요. 위 상황은 useQuery를 이용해 캐싱된 데이터가 stale 상태로 바뀐 이후에, 페이지를 이동하여 동일한 키값의 데이터를 refetching 해야하는 상황을 나타낸 것입니다.
+
+stale과 cache로 관리할 때와 cache만으로 관리할 때의 ⓐ, ⓑ, ⓒ, ⓓ는 각각 다음과 같은 모습입니다.
+
+![stale과 cache로 관리할 경우](https://i.imgur.com/SqRxuqy.png)
+
+![cache만으로 관리할 경우](https://i.imgur.com/7KhSpAh.png)
+
+차이점은 ⓒ입니다. 현재처럼 stale과 cache로 관리하게 된다면, ⓒ에서 stale 상태의 캐싱된 데이터를 이용한 UI를 먼저 보여준 후, refetching을 완료하면 새로운 데이터를 이용한 UI로 교체해줄 수 있습니다. refetching 이전과 이후의 데이터가 많이 다르지 않다면, 사용자는 페이지 이동 후 더욱 빠르게 서비스를 이용할 수 있게됩니다.
+
+반면 cache만으로 관리하게 된다면 이와는 달라집니다. 위 그래프에서 페이지 이동 직전에 캐시가 만료되었다고 가정해보겠습니다. 캐시가 만료되어 삭제되었을테니, ⓒ에서 refetching이 완료되기 전까지 데이터가 없으므로 Loading 페이지를 보여줘야합니다. 그리고 refetching이 완료되면 그제야 데이터를 이용한 UI를 보여줄 수 있습니다. 이렇게 되면 사용자는 페이지 이동 후 더욱 느리게 서비스를 이용하게 됩니다.
+
+이러한 이유로 인해 React Query는 stale과 cache를 따로 분리하였고 UX를 높일 수 있습니다. 그러면 이제 본격적으로 stale과 cache가 React Query 내부에서 동작하는지 설명하겠습니다.
+
+<Alert type="warning">
+  #### 1편과 2편을 읽고 와주세요!
+
+  이번 포스트는 useQuery 동작원리 포스트 [1편](https://timegambit.com/blog/digging/react-query/01)과 [2편](https://timegambit.com/blog/digging/react-query/02)를 읽었다는 것을 전제로 작성하였습니다. 그래서 1편과 2편에서 설명한 내용들은 생략하였으니, 만약 잘 이해가 안가신다면 1편과 2편을 읽고 오시는 것을 추천드립니다.
+</Alert>
+
+## stale 동작원리
+
+```ts:queryObserver.ts showLineNumbers {7,11,16}
+export class QueryObserver<...> extends Subscribable<QueryObserverListener<TData, TError>> {
+  ...
+  protected onSubscribe(): void {
+    if (this.listeners.length === 1) {
+      this.currentQuery.addObserver(this);
+
+      if (shouldFetchOnMount(this.currentQuery, this.options)) {
+        this.executeFetch();
+      }
+
+      this.updateTimers();
+    }
+  }
+
+  private updateTimers(): void {
+    this.updateStaleTimeout();
+    this.updateRefetchInterval(this.computeRefetchInterval());
+  }
+  ...
+}
+```
+
+useQuery의 동작원리를 설명하는 저번 포스트에서는 `onSubscribe()`에서 데이터를 fetching 하는 8번 라인의 `executeFetch()`가 중요했습니다. stale을 다루는 이번 설명에서는 7번 라인의 `shouldFetchOnMount()`와 11번 라인의 `updateTimers()`이 중요합니다.
+
+`shouldFetchOnMount()` 함수는 뒤에서 자세히 다루도록 하고, 우선 `updateTimers()` 함수부터 설명하겠습니다. `updateTimers()`는 16번 라인의 `updateStaleTimeout()` 함수를 호출하게 됩니다. 이 함수는 이름을 통해 예상할 수 있듯이 `setTimeout`을 이용해 fresh 상태에서 stale 상태로 바꿔주는 동작을 합니다.
+
+### updateStaleTimeout()
+
+```ts:queryObserver.updateStaleTimeout() showLineNumbers {21-25}
+  private updateStaleTimeout(): void {
+    this.clearStaleTimeout();
+
+    if (
+      isServer ||
+      this.currentResult.isStale ||
+      !isValidTimeout(this.options.staleTime)
+    ) {
+      return;
+    }
+
+    const time = timeUntilStale(
+      this.currentResult.dataUpdatedAt,
+      this.options.staleTime
+    );
+
+    // 유효시간이 만료되기 1ms 이전에 타입아웃이 트리거되는 경우가 있습니다.
+    // 이 문제를 해결하기 위해 항상 타입아웃에 1ms를 추가합니다.
+    const timeout = time + 1;
+
+    this.staleTimeoutId = setTimeout(() => {
+      if (!this.currentResult.isStale) {
+        this.updateResult();
+      }
+    }, timeout);
+  }
+```
+
+12번 라인과 19번 라인을 통해 현 시점부터 stale 상태가 될 때까지 남은 시간을 계산하여 `timeout`에 저장합니다. 그리고 `setTimeout`을 이용해 `timeout`ms 만큼의 시간이 지난 후에 `currentResult`가 stale 상태가 아니라면, fresh에서 stale로 상태를 바꿔주는 `updateResult()`를 호출합니다. 이를 통해 fresh 상태에서 설정한 `staleTime`ms 만큼의 시간이 지나면 stale 상태로 바뀌게 됩니다.
+
+<Alert type="warning">
+  `updateResult()` 함수를 통해 data refetching이 일어나는 것은 아닙니다! 위에서 설명했다시피 refetching이 일어나려면 특정 조건을 만족해야합니다. 여기서는 단지 useQuery의 결과 중 `isStale`값만 변경시킵니다. 아래 사진은 `updateResult()` 함수 내에서 현재의 result(= `prevResult`)와 새로운 result(= `nextResult`)를 비교한 사진입니다. 다른 값은 모두 동일하지만 `isStale` 값만 바뀐 것을 알 수 있습니다.
+
+  ![prevResult와 nextResult 차이](https://i.imgur.com/mjoIq3w.png)
+
+</Alert>
+
+<Alert type="info">
+  `staleTime`은 지정해주지 않으면 기본값인 0으로 설정됩니다. 이 설정은 위 코드 12번 라인의 `timeUntilStale()`에서 이루어집니다.
+
+  ```ts:utils.ts
+  export function timeUntilStale(updatedAt: number, staleTime?: number): number {
+    return Math.max(updatedAt + (staleTime || 0) - Date.now(), 0);
+  }
+  ```
+
+  이 함수의 역할은 이름 그대로 현재시점부터 stale 상태가 될 때까지 남은 시간을 계산해주는 것입니다. `updateStaleTimeout()` 에서는 이 함수의 인자로, data fetching 완료된 시점을 나타내는 `this.currentResult.dataUpdatedAt`과 `QueryClient`의 옵션으로 설정한 `this.options.staleTime`을 넘겨주고 있습니다. 만약 `staleTime`를 설정해주지 않았다면, 이 함수의 `(staleTime || 0)`을 통해 기본값인 0이 설정됩니다.
+</Alert>
+
+### shouldFetchOnMount()
+
+지금까지는 어떻게 fresh에서 stale로 바뀌는지 알아보았습니다. 이제는 stale 상태로 바뀐 이후에 refetching이 어떻게 이루어지는지 알아보도록 하겠습니다.
+
+```ts:QueryObserver.shouldFetchOnMount() showLineNumbers {7,24,34}
+export class QueryObserver<...> extends Subscribable<QueryObserverListener<TData, TError>> {
+  ...
+  protected onSubscribe(): void {
+    if (this.listeners.length === 1) {
+      this.currentQuery.addObserver(this);
+
+      if (shouldFetchOnMount(this.currentQuery, this.options)) {
+        this.executeFetch();
+      }
+
+      this.updateTimers();
+    }
+  }
+  ...
+}
+
+function shouldFetchOnMount(
+  query: Query<any, any, any, any>,
+  options: QueryObserverOptions<any, any, any, any, any>
+): boolean {
+  return (
+    shouldLoadOnMount(query, options) ||
+    (query.state.dataUpdatedAt > 0 &&
+      shouldFetchOn(query, options, options.refetchOnMount))
+  );
+}
+
+function shouldFetchOn(
+  query: Query<any, any, any, any>,
+  options: QueryObserverOptions<any, any, any, any, any>,
+  ...
+) {
+  ...
+  return value === 'always' || (value !== false && isStale(query, options));
+}
+```
+
+`onSubscribe()` 함수가 언제 실행되었는지 기억하시나요? [저번 포스트](https://www.timegambit.com/blog/digging/react-query/02#usesyncexternalstore)에서 설명했다시피, `useSyncExternalStore()` 훅에 의해 react-dom의 렌더링 함수가 구독요청을 할 때 호출되었습니다. 이번 설명에서는 새로운 Query Instance가 mount 되어 렌더링 함수가 구독요청을 했다고 가정하고 설명하겠습니다.
+
+새로운 Query Instance가 mount되면 `onSubscribe()` 함수가 실행되고, 7번 라인의 `shouldFetchOnMount()`, 24번 라인의 `shouldLoadOnMount()`, 34번 라인의 `shouldFetchOn()` 순으로 차례대로 호출되어, 최종적으로는 `isStale()`를 통해 `query`의 stale 상태 여부를 판단합니다. 만약 stale 상태라면 true를 반환하게되고, 결국 7번 라인의 if문 조건은 true가 되어 8번 라인의 `executeFetch()` 가 호출되어 refetching이 일어납니다. 그리고 refetching이 완료되면 새로 받아온 데이터를 이용해 렌더링하게 됩니다.
+
+## cache 동작원리
+
+지금까지 stale을 알아보았습니다. 이제 cache의 동작원리를 분석해보겠습니다.
+
+```ts:query.ts showLineNumbers {5-6,15,23,32,44}
+export class Query<...> extends Removable {
+  ...
+  constructor(config: QueryConfig<TQueryFnData, TError, TData, TQueryKey>) {
+    ...
+    this.setOptions(config.options);
+    this.scheduleGc();
+    ...
+  }
+
+  private setOptions(
+    options?: QueryOptions<TQueryFnData, TError, TData, TQueryKey>
+  ): void {
+    this.options = { ...this.defaultOptions, ...options };
+
+    this.updateCacheTime(this.options.cacheTime);
+  }
+
+  fetch(...): Promise<TData> {
+    ...
+
+    const onError = (error: TError | { silent?: boolean }) => {
+      ...
+      this.scheduleGc();
+      ...
+      }
+      this.isFetchingOptimistic = false;
+    };
+
+    this.retryer = createRetryer({
+      onSuccess: (data) => {
+        ...
+        this.scheduleGc();
+        ...
+      },
+      ...
+    })
+    ...
+  }
+
+  removeObserver(observer: QueryObserver<any, any, any, any, any>): void {
+    ...
+    if (!this.observers.length) {
+      ...
+      this.scheduleGc();
+    }
+    ...
+  }
+  ...
+}
+```
+
+Query 객체를 생성할 때 5번 라인의 `setOptions()`, 15번 라인의 `updateCacheTime()`을 통해 `cacheTime`을 설정합니다. 그리고 Query 객체가 생성될 때(6번 라인), 데이터 fetching에 실패하거나 성공했을 때(23번, 32번 라인), Observer를 제거할 때(44번 라인) `scheduleGc()`를 호출하여 cache를 제거합니다.
+
+<Alert type="info">
+  ```ts:Removable.updateCacheTime() showLineNumbers {4}
+  protected updateCacheTime(newCacheTime: number | undefined): void {
+    this.cacheTime = Math.max(
+      this.cacheTime || 0,
+      newCacheTime ?? (isServer ? Infinity : 5 * 60 * 1000),
+    )
+  }
+  ```
+  `cacheTime`의 기본값은 5분(= 5 * 60 * 1000 ms)입니다. 이 기본값은 Query 클래스가 상속받고 있는 Removable 클래스의 `updateCacheTime()` 함수에서 설정됩니다. 함수 호출시 인자로 넘겨주는 `this.options.cacheTime`가 undefined일 경우(설정하지 않은 경우), 4번 라인을 통해 기본값인 5분이 설정됩니다.
+</Alert>
+
+### scheduleGc()
+
+```ts:removable.ts showLineNumbers {9-11,22}
+export abstract class Removable {
+  cacheTime!: number
+  private gcTimeout?: ReturnType<typeof setTimeout>
+
+  protected scheduleGc(): void {
+    this.clearGcTimeout()
+
+    if (isValidTimeout(this.cacheTime)) {
+      this.gcTimeout = setTimeout(() => {
+        this.optionalRemove()
+      }, this.cacheTime)
+    }
+  }
+
+  protected clearGcTimeout() {
+    if (this.gcTimeout) {
+      clearTimeout(this.gcTimeout)
+      this.gcTimeout = undefined
+    }
+  }
+
+  protected abstract optionalRemove(): void
+
+  ...
+}
+```
+
+`scheduleGc()` 함수 자체는 그렇게 어렵지 않습니다. 호출되었을 때 기존의 `gcTimeout`을 clear하고(6번, 15 ~ 20번 라인), `setTimeout`을 이용하여 새로운 `gcTimeout`을 만들어줍니다(9 ~ 11번 라인). 중요한 것은 22번 라인에 선언되고 10번 라인에서 호출되는 `optionalRemove()` 입니다. `abstract` 키워드로 인해 `Removable` 클래스를 상속받는 클래스에서 `optionalRemove()`를 구현해주어야 합니다. 즉, Removable 클래스를 상속받는 Query 클래스에서 `optionalRemove()` 함수를 구현해주어야 합니다.
+
+### optionalRemove()
+
+함수 이름을 보니 그냥 `remove`가 아닌 `optionalRemove`이네요. optional인 것을 보니 무조건 cache를 제거해주는 것이 아닌, 경우에 따라서 제거해주는 것 같습니다. 그렇다면 어떤 경우에 cache를 제거해주는 것일까요?
+
+```ts:Query.optionalRemove() showLineNumbers {2}
+protected optionalRemove() {
+  if (!this.observers.length && this.state.fetchStatus === 'idle') {
+    this.cache.remove(this);
+  }
+}
+```
+
+if 문을 보니 2개의 조건이 있습니다. 이 중 첫 번째 조건이 중요합니다. 만약 이 조건이 없었다면 어떻게 되었을까요?
+
+![해당 조건이 없을 경우](https://i.imgur.com/lNUj7gq.png,https://i.imgur.com/i7J4aHS.png)
+
+해당 조건이 없을 경우에 벌어질 상황을 생각해봅시다.
+
+1. ⓐ: `cacheTime`이 지나기 전까지 사용자는 cache 데이터가 적용된 컴포넌트를 보고 있습니다.
+
+2. ⓑ: `cacheTime`이 지나면 **현재 UI에 cache 데이터를 사용하고 있는 컴포넌트가 있음에도 불구하고** cache를 삭제합니다.
+
+3. 2번으로 인해 데이터가 더 이상 메모리에 없으므로, **컴포넌트는 올바르게 UI를 렌더링해줄 수 없습니다**.
+
+이런 상황을 막기 위해, 현재 UI에서 해당 cache 데이터를 필요로 하는 컴포넌트가 존재한다면 cache 제거를 해주면 안됩니다. 이를 위해 `!this.observers.length` 조건이 필요한 것입니다. `this.observers.length`가 0이 아니라는 뜻은 사용자가 보고 있는 UI에서 해당 Query 객체를 필요로하는 컴포넌트가 있다는 뜻이기 때문이죠.[^observer]
+
+### remove()
+
+이번에는 `optionalRemove()`에 의해 호출되는 `remove()` 함수를 보도록 하겠습니다.
+
+```ts:QueryCache.remove() showLineNumbers {7,10}
+remove(query: Query<any, any, any, any>): void {
+  const queryInMap = this.queriesMap[query.queryHash];
+
+  if (queryInMap) {
+    query.destroy();
+
+    this.queries = this.queries.filter((x) => x !== query);
+
+    if (queryInMap === query) {
+      delete this.queriesMap[query.queryHash];
+    }
+
+    this.notify({ type: 'removed', query });
+  }
+}
+```
+
+**React Query에서의 cache는, 클래스로 정의된 QueryCache 객체의 `queries` 배열과 `queriesMap` 객체를 이용하여 Query 객체들을 관리하는 것을 의미합니다.** 그래서 캐싱된 데이터를 제거하는 `remove()` 함수는, 인자로 받은 `query` 객체를 QueryCache 객체의 `queries` 배열과 `queriesMap` 객체에서 제거해주는 역할(7번, 10번 라인)을 함으로써 캐싱된 데이터를 제거합니다.
+
+## 마치며
+
+오랜만에 동작원리 포스트를 작성했네요. 진작에 하고 싶었는데 진행 중인 프로젝트가 있어서 늦었습니다...
+
+이번 포스트는 로직이 크게 어렵지 않았고, useQuery 동작원리 포스트에서 이미 많은 부분을 설명했기 때문에 꽤나 쉽게 작성할 수 있었습니다. (그래도 시간은 오래 걸리네요...) 이 포스트를 통해 React Query의 stale과 cache의 차이와 어째서 stale 개념이 필요한지, 어떻게 동작하는지 알 수 있게 되었길 바랍니다! 다음 포스트에서는 useMutation의 동작원리를 알아보도록 하겠습니다!
+
+**오타 및 오류 지적은 언제나 환영입니다!**
+
+
+[^refetch]: refetching이 일어나는 특정조건은 다음과 같습니다.
+
+    * 새로운 Query Instance가 마운트 될 때 (페이지 이동 후 등의 상황)
+    * 브라우저 화면을 다시 focus 할 때
+    * 인터넷이 재연결되었을 때
+    * refetchInterval이 설정되어있을 때
+
+[^observer]: `this.observers`가 무엇인지 잘 모르겠다면 [이전 포스트](https://timegambit.com/blog/digging/react-query/02#onsubscribe)를 읽고 와주세요!
