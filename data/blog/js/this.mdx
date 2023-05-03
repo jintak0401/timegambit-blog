@@ -1,0 +1,677 @@
+---
+title: '[JavaScript] this 개념 정리 및 연습 문제'
+date: '2023-05-03'
+lastmod: '2023-05-03'
+tags: ['JavaScript','this']
+draft: false
+series: 자바스크립트와 맞짱 뜨기
+summary: JavaScript에서 this는 꽤 어렵고 헷갈리는 개념입니다. this에 대해 확실히 깨달을 수 있도록, this 바인딩에 대한 설명과 몇 가지 예시 문제를 작성한 포스트입니다.
+images: [https://i.imgur.com/v6SHVNm.png]
+layout: PostLayout
+---
+
+## 이 글을 쓰게 된 계기
+
+자바스크립트로 개발하면서 this를 사용할 때가 있습니다. 자바스크립트의 this는 다른 언어와는 조금 다르게 동작하기 때문에 헷갈릴 때가 잦았습니다. 그럴 때마다 공부하고 깨달았다고 생각했지만 그래도 헷갈릴 때가 있었습니다. 앞으로는 더 이상 헷갈리지 않도록 확실히 개념을 정립하고, 제가 헷갈렸던 부분을 확실히 짚어 설명함으로써 이 포스트를 보는 분들이 최대한 this 개념을 헷갈려하지 않았으면 하는 마음에 이 포스트를 작성합니다.
+
+## 함수와 메소드
+
+뒤에서 설명할 때 함수와 메소드라는 단어를 구분하여 사용합니다. 각 의미는 다음과 같습니다.
+
+* 함수: `function func() { }` 과 같은 형태로 정의되어, `func()` 형태로 호출할 수 있는 함수를 의미합니다.
+* 메소드: `obj.func()` 형태로 호출할 수 있도록, 객체 내에 정의된 함수를 의미합니다.
+
+설명에서 함수라는 단어를 사용하였는지, 메소드라는 단어를 사용하였는지 유의하며 봐주세요.
+
+## 동적으로 바인딩
+
+기본적으로 함수는 동적으로 this가 바인딩됩니다.(뒤에서 설명할 화살표 함수 제외) 여기서 말하는 **동적**이라는 말의 의미는 **호출** 시에 this가 결정된다는 것입니다. 따라서 this가 무엇을 가리키는지 알기 위해서는 함수의 정의가 어떻게 되었는지가 아닌 **누가 어떻게 호출하였는지를 유의해서 보아야 합니다**.
+
+## 기본 바인딩
+
+먼저 기본적인 바인딩에 대해 설명하겠습니다. 기본 바인딩은 아래의 5번 라인처럼 함수가 단순히 호출되는 형태를 이야기합니다.
+
+```js showLineNumbers {5}
+function func() {
+  console.log(this);
+}
+
+func();
+
+console.log(this);
+```
+
+각 경우에 따라 2번, 7번 라인의 this가 가리키는 것이 조금씩 다릅니다. 각 경우에 어떻게 다른지 설명하겠습니다.
+
+### 엄격모드(strict mode)
+
+|       |    브라우저     | Node.js (REPL) |  Node.js (IDE)   |
+|:-----:|:-----------:|:--------------:|:----------------:|
+| 2번 라인 | `undefined` |  `undefined`   |   `undefined`    |
+| 7번 라인 |  `window`   |    `global`    | `module.exports` |
+
+엄격모드에서는 함수가 5번 라인처럼 **단순호출되는 경우 함수 내에서의 this는 `undefined`입니다**. 반면 7번 라인처럼 함수 안이 아닌 전역 스코프에서의 this는 각 경우에 따라 가리키는 것이 다릅니다. **브라우저는 `window` 객체를, Node.js의 REPL에서는 `global` 객체를, Node.js의 IDE에서는 `module.exports`를 가리킵니다**.
+
+<Alert type="info">
+  IDE에서 직접 실행해보면 7번 라인의 결과가 `{}`로 나올 것입니다. 이 빈 객체가 `module.exports`를 가리키는 것입니다. 실제로 다음을 실행해보면 true가 나옵니다.
+
+  ```js
+  console.log(this === module.exports); // true
+  ```
+</Alert>
+
+### 비엄격모드(non-strict mode)
+
+|       |    브라우저     | Node.js (REPL) |  Node.js (IDE)   |
+|:-----:|:-----------:|:--------------:|:----------------:|
+| 2번 라인 | `window` |  `global`   |   `global`    |
+| 7번 라인 |  `window`   |    `global`    | `module.exports` |
+
+7번 라인의 결과는 엄격모드일 때와 같지만, 함수 내에서의 this는 조금 달라집니다. **비엄격모드에서 함수 내 this가 `undefined` 혹은 `null`인 경우 브라우저는 `window` 객체를, Node.js의 경우 `global` 객체를 가리킵니다**. 따라서 엄격모드에서 `undefined` 였던 2번 라인의 this는 실행환경에 따라 `window` 객체 또는 `global` 객체를 가리키게 됩니다.
+
+<Alert type="warning">
+
+  ```js showLineNumbers {2,6,12,15}
+  function func2() {
+    console.log(this);
+  }
+
+  function func() {
+    func2();
+  }
+
+  const target = {};
+
+  const obj = {
+    func: func.bind(target),
+  };
+
+  obj.func();
+  ```
+
+  **함수를 단순 호출하면 항상 기본 바인딩 규칙을 따릅니다**. 어디에서 어떤 과정을 거쳐 호출되든지 상관없이, 기본 바인딩 형태로 호출되면 말입니다.
+
+  예를 들어 위 코드에서 `func()` 함수가 12번 라인에서 명시적 바인딩되기도 하고, 15번 라인에서 암시적 바인딩 형태인 메소드로 호출되기도 했지만, 결국 6번 라인에서 기본 바인딩 형태로 `func2()`가 호출되었습니다. 따라서 2번 라인의 this는 `obj` 객체도, `func()`에 바인딩된 `target` 객체도 아닌 `undefined`(엄격모드) 혹은 `global`, `window` 객체(비엄격모드)가 됩니다.
+</Alert>
+
+## 암시적 바인딩
+
+암시적 바인딩이란 아래 코드의 8번 라인처럼, 속성 접근자(점 연산자)를 통해 객체의 메소드를 호출하는 형태를 의미합니다.
+
+```js showLineNumbers {8}
+const obj = {
+  name: 'timegambit',
+  sayName() {
+    console.log(this.name);
+  },
+};
+
+obj.sayName(); // timegambit
+```
+
+암시적 바인딩에서 중요한 것은 메소드가 어디에 정의되어 있는가가 아니라 **메소드를 누가 호출하는가**입니다. 위의 예시에서 `sayName()` 메소드가 `obj` 객체 내에 정의되어 있다는 점이 아니라, 8번 라인에서 속성 접근자를 이용해 **`obj` 객체가 `sayName()` 메소드를 호출** 했다는 점을 주목해서 봐야합니다. **암시적 바인딩에서 호출된 메소드 내에서 this는 메소드를 호출한 객체를 가리킵니다**.
+
+위의 경우 8번 라인에서 `obj`에 의해 `sayName()` 메소드가 호출되었기 때문에, 4번 라인의 `this`는 `obj` 객체가 되고 결국 `this.name`은 `obj.name` 인 `timegambit`이 되는 것입니다.
+
+하지만 이 예시로는 누가 호출했는지가 중요하다라는 점이 잘 와닿지 않을 수 있을 것 같아서 아래의 예시를 준비했습니다.
+
+```js showLineNumbers {4,10,13}
+const obj1 = {
+  name: 'obj1',
+  sayName() {
+    console.log(this.name);
+  },
+};
+
+const obj2 = {
+  name: 'obj2',
+  sayName: obj1.sayName,
+}
+
+obj2.sayName(); // obj2
+```
+
+`obj2.sayName()` 메소드는 `obj1.sayName()` 에 정의되어있습니다. 이 때문에 13번 라인의 출력 결과가 obj1이 될지 obj2가 될지 다소 헷갈릴 수 있습니다.
+
+하지만 **누가 메소드를 호출하는가가 중요**하다고 했습니다. 메소드의 정의 과정이 조금 복잡하지만, 결국 `obj2`가 `sayName()` 메소드를 호출하고 있습니다. 따라서 4번 라인의 this는 `obj2`가 되어 13번 라인의 결과로 obj2(= `obj2.name`)가 출력됩니다.
+
+## 명시적 바인딩
+
+명시적 바인딩은 `Function.prototype`에 정의되어 있는 `call`, `apply`, `bind` 메소드를 이용해 this를 바인딩하는 것을 말합니다. *명시적 바인딩* 이라는 이름 그대로 this를 가리키는 것이 무엇인지 명시적으로 지정하는 것입니다. 각 함수의 구체적인 차이를 설명하기 전에 간단히 설명하자면 아래와 같습니다.
+
+* `call` : 함수를 호출하면서 this를 바인딩합니다. 인자를 쉼표로 구분하여 받습니다.
+* `apply` : 함수를 호출하면서 this를 바인딩합니다. 인자를 배열로 받습니다.
+* `bind` : 함수를 호출하지 않고 this를 바인딩한 새로운 함수를 반환합니다.
+
+### call
+
+```js showLineNumbers
+function sayName(a, b) {
+  console.log(this.name, a, b);
+}
+
+const obj = {
+  name: 'timegambit',
+};
+
+sayName.call(obj, 1, 2); // timegambit 1 2
+```
+
+`call`의 첫 번째 인자로 this에 바인딩할 객체를 넣어줍니다.^[객체 대신 `null`이나 `undefined`를 넣어줄 수도 있습니다. 이 경우에는 함수 내에서 this는 `null`과 `undefined`로 바인딩됩니다. 만약 엄격모드였다면 그대로 `null`과 `undefined`이 바인딩된 상태가 유지되지만, 만약 비엄격모드였다면 [기본 바인딩의 비엄격모드에서 설명한대로](#비엄격모드non-strict-mode) this는 브라우저의 경우 `window`, Node.js의 경우 `global`이 바인딩됩니다.] 그 뒤에 함수의 인자를 콤마로 구분지어 넣어줍니다.
+
+위의 경우 `call`의 첫 번째 인자로 `obj`를 넣어주었으므로 `sayName()` 함수 내에서 this는 `obj`가 됩니다. 그리고 두 번째, 세 번째 인자로 1과 2를 넣어주었으므로 `a`와 `b`는 각각 1과 2가 됩니다.
+
+### apply
+
+```js showLineNumbers
+function sayName(a, b) {
+  console.log(this.name, a, b);
+}
+
+const obj = {
+  name: 'timegambit',
+};
+
+sayName.apply(obj, [1, 2]); // timegambit 1 2
+```
+
+`apply`는 `call`과 매우 유사합니다. 다른 점은 함수 호출시 인자를 배열로 받는다는 점입니다.
+
+위의 경우 바인딩되는 객체는 `call`과 동일하게 `obj`입니다. 그리고 두 번째 인자인 배열 `[1, 2]`의 첫 번째, 두 번째 원소가 `sayName()` 함수의 첫 번째, 두 번째 인자가 되어 `a`는 1, `b`는 2가 됩니다.
+
+<Alert type="success">
+  `apply`와 `call`은 비슷해서 헷갈립니다. 기억하기 좋은 팁을 알려드리겠습니다! **a**pply는 **a**rray, **c**all은 **c**omma로 기억하세요!
+</Alert>
+
+### bind
+
+```js showLineNumbers
+function sayName(a, b) {
+  console.log(this.name, a, b);
+}
+
+const obj = {
+  name: 'timegambit',
+};
+
+const bound = sayName.bind(obj, 1);
+bound(2); // timegambit 1 2
+```
+
+`bind`는 `call`과 `apply`와는 다르게 함수를 호출하지 않고 this를 바인딩하여 새로운 함수를 반환합니다. 이 때, `bind`의 두 번째 인자부터는 바인딩된 함수의 인자로 들어갑니다.
+
+위의 경우 `bound`는 `sayName()` 함수를 바인딩한 새로운 함수입니다. `bound`를 호출하면 `sayName()` 함수가 호출되는데, 이 때 `sayName()` 함수의 첫 번째 인자는 1이고, 두 번째 인자는 `bound`를 호출할 때 넣어준 2가 됩니다.
+
+<Alert type="warning">
+  `bind`로 한 번 바인딩되면 그 이후로 바뀌지 않습니다.
+
+  ```js showLineNumbers {6,10}
+  function sayName() {
+    return this.name;
+  }
+
+  const boundSayName1 = sayName.bind({ name: 'jintak' });
+  const boundSayName2 = boundSayName1.bind({ name: 'timegambit' }); // 새롭게 바인딩되지 않습니다!
+
+  console.log(boundSayName1()); // jintak
+  console.log(boundSayName2()); // jintak
+  console.log(boundSayName1.apply({ name: 'apply' })); // jintak
+
+  const obj = {
+    name: 'obj',
+    sayName,
+    boundSayName1,
+    boundSayName2,
+  };
+
+  console.log(obj.name, obj.sayName(), obj.boundSayName1(), obj.boundSayName2()); // obj obj jintak jintak
+  ```
+  5번 라인에서 바인딩된 함수 `boundSayName1` 을 6번 라인처럼 한 번 더 `bind` 으로 바인딩하려고 해도 바인딩되지 않습니다. `bind` 함수를 호출하여도 기존의 바인딩된 객체를 여전히 유지합니다. 10번 라인처럼 `apply` 혹은 `call` 을 이용하여 새롭게 바인딩하려고 시도해도 바인딩되지 않습니다.
+</Alert>
+
+### 언제 사용할까?
+
+```js showLineNumbers
+const obj = {
+  name: 'timegambit',
+  sayName() {
+    console.log(this.name);
+  },
+};
+
+function callCB(cb) {
+  cb();
+}
+
+callCB(obj.sayName);
+```
+
+위 코드를 실행하면 무엇이 출력될까요? timegambit이 출력될 것 같나요? 그렇지 않습니다. 엄격모드라면 `undefined`로부터 `name` 속성을 읽어들일 수 없다는 에러가 발생하고, 비엄격모드라면 undefined가 출력됩니다. 왜 그럴까요?
+
+12번 라인에서 `callCB()` 함수의 인자로 `obj.sayName`을 넣어줄 때, `obj.` 때문에 `sayName` 메소드에서 `this`가 `obj`로 바인딩되어 `callCB`로 넘어갈 것처럼 느껴집니다. 하지만 그렇지 않습니다. 위에서 설명할 때 함수의 정의보다 **함수의 호출**에 유의해야한다고 했습니다. `obj.` 때문에 바인딩된 것처럼 느껴지지만 호출된 것이 아니므로 `this`가 `obj`가 되지 않습니다. 엄격모드인 경우 `this`는 `undefined`, 비엄격모드인 경우 `global` 혹은 `window` 객체가 되어 위와 같은 결과가 발생합니다. 만약 위의 코드가 아래처럼 짜여져있었다면 덜 헷갈렸을 것 같나요?
+
+```js showLineNumbers
+function sayName() {
+  console.log(this.name);
+}
+
+function callCB(cb) {
+  cb(); // sayName(); 과 동일합니다.
+}
+
+callCB(sayName);
+```
+
+실제로 `callCB`의 입장에서 인자로 받는 `cb`는 `sayName`으로 받나 `obj.sayName`으로 받으나 동일합니다. 결국 기본 바인딩 형태인 `sayName()`으로 함수를 호출하는 것과 다름없습니다.
+
+짐작하건데 이 코드를 작성한 사람은 아마 timegambit이 출력되도록 짜고 싶었을 것입니다. 이 때 사용할 수 있는 것이 `bind`입니다.
+
+```js showLineNumbers
+function sayName() {
+  console.log(this.name);
+}
+
+function callCB(cb) {
+  cb();
+}
+
+const obj = {
+  name: 'timegambit',
+};
+
+callCB(sayName.bind(obj));
+```
+
+`bind`를 통해 호출시 바인딩될 this를 미리 지정해줄 수 있습니다. 6번 라인에서 호출될 `sayName` 함수의 this를 13번 라인에서 미리 `obj`로 바인딩하여, 2번라인이 실행될 때 timegambit이 출력되도록 만들 수 있습니다.
+
+## new 바인딩
+
+`new` 키워드를 통해 생성자 함수를 호출할 때, 생성자 함수 내부의 `this`는 새로 생성되는 객체를 가리킵니다.
+
+```js showLineNumbers
+function Person(name) {
+  this.name = name;
+}
+
+Person.prototype.sayName = function () {
+  console.log(this.name);
+};
+
+const person = new Person('timegambit');
+person.sayName();
+```
+
+위 코드는 `new` 키워드를 이용해 새로운 `Person` 객체를 만드는 코드입니다. 이 때, `Person` 함수 내부의 `this`는 새로 생성되는 객체를 가리킵니다. 따라서 `person` 객체의 `name` 프로퍼티에 timegambit이 할당됩니다.
+
+### `bind`와 함께 사용 (심화)
+
+this 바인딩과 직접적으로 관련된 내용은 아니지만 MDN에 재밌는 예제가 있어 소개하겠습니다.
+
+```js showLineNumbers
+function Point(x, y) {
+  this.x = x;
+  this.y = y;
+  return this;
+}
+
+var emptyObj = {};
+var YAxisPoint = Point.bind(emptyObj, 0/*x*/);
+
+var axisPoint = new YAxisPoint(5);
+
+console.log(axisPoint instanceof Point); // true
+console.log(axisPoint instanceof YAxisPoint); // true
+console.log(new Point(17, 42) instanceof YAxisPoint); // true
+```
+
+12 ~ 14번 라인의 결과를 예상할 수 있으셨나요? 맞히셨다면 과연 올바르게 이해하고 맞히신 것일까요?
+
+#### YAxisPoint.prototype
+
+```js
+console.log(YAxisPoint.prototype); // undefined
+```
+
+`YAxisPoint.prototype`을 출력하면 무엇이 나올 것 같나요? `Point.prototype`이 나올 것 같나요? 사실 undefined가 출력됩니다. 즉, `YAxisPoint.prototype.constructor`란 존재하지 않습니다. 그런데 위 코드의 10번 라인에서는 `new YAxisPoint`를 이용해 객체를 잘 생성해줍니다. 어떻게 이게 가능할까요?
+
+> Note.1 &nbsp;&nbsp; Function objects created using Function.prototype.bind are exotic objects. They also do not have a "prototype" property.
+
+[ECMA 명세서 20.2.3.2 Function.prototype.bind 부분](https://262.ecma-international.org/#sec-function.prototype.bind)에 의하면 `bind`를 사용하여 만든 새로운 함수(객체)는 `prototype`이라는 속성을 갖지 않는다고 합니다. 그렇다면 `YAxisPoint`의 프로토타입은 정말 없는 것일까요? 사실 그것은 또 아닙니다. 자바스크립트 내부적으로 사용되는 `[[Prototype]]` 속성으로 프로토타입을 갖고 있습니다. 아래 사진은 디버거를 통해 확인한 `YAxisPoint` 의 속성들입니다. (`[[...]]` 처럼 2개의 대괄호로 묶여있는 속성들은 모두 자바스크립트 내부에서만 사용되는 속성들입니다.)
+
+![YAxisPoint 속성들](https://i.imgur.com/p6RzplN.png)
+
+그리고 [ECMA](https://262.ecma-international.org/#sec-new-operator) [명세서에](https://262.ecma-international.org/#sec-isconstructor) [의하면](https://262.ecma-international.org/#sec-bound-function-exotic-objects-construct-argumentslist-newtarget) `new` 연산자는 키워드를 통해 새로운 객체를 생성할 때 생성자 함수가 존재하는지 확인합니다. 이 때, `bind`로 바인딩된 함수의 경우 생성자 함수 존재여부 판단을, `prototype.constructor()` 가 아닌 `[[TargetFunction]].prototype.constructor()` 를 통해 판단한다고 합니다. (`[[TargetFunction]]` 이란 `bind` 하기 전 원래의 함수입니다.) 따라서 위의 경우 `YAxisPoint.prototype.constructor()`는 존재하지 않지만, `YAxisPoint.[[TargetFunction]]`은 `Point` 함수이며 `Point.prototype.constructor()` 가 존재하므로 10번 라인에서 새로운 객체를 생성할 수 있었던 것입니다.
+
+#### `instanceof` 연산자
+
+[명세서에 의하면](https://262.ecma-international.org/#sec-instanceofoperator) `a instanceof b` 연산자는 다음과 같이 동작합니다. (여기서 a와 b는 모두 객체라고 가정합니다.)
+
+1. `b` 객체에 `Symbol.hasInstance`라는 메소드가 존재하지 않는다면 2번을 실행하고, 존재한다면 `b[Symbol.hasInstance](a)`를 호출합니다. 이 결과가 `a instanceof b`의 결과가 됩니다.
+2. a.\_\_proto__부터 시작하여 **\_\_proto__** 를 거슬러 올라가며 `b.prototype`과 동일한지 비교합니다. 만약 `a.__proto__ === b.prototype`이 false라면, 다음엔 `a.__proto__.__proto__ === b.prototype`을 확인합니다. 이 과정을 `a.__proto__.__proto__.⋯.__proto__`가 null이 될 때까지 반복합니다. 중간에 한 번이라도 true인 경우 true를, null이 될 때까지 계속 false였다면 false를 반환합니다.
+
+위 코드의 13번, 14번 라인에서 true가 나온 이유는 위의 1번 과정을 거쳤기 때문입니다. `YAxisPoint` 객체의 프로토타입에는 `Symbol.hasInstance` 메소드가 존재합니다. 다만 `YAxisPoint.prototype[Symbol.hasInstance]` 가 아닌 `YAxisPoint.[[Prototype]].[Symbol.hasInstance]`를 통해 호출합니다.
+
+## 바인딩 우선순위
+
+위에서 소개한 4가지 바인딩에도 우선순위가 있습니다. 우선순위는 아래와 같습니다.
+
+> new 바인딩 > 명시적 바인딩 > 암시적 바인딩 > 기본 바인딩
+
+new 바인딩과의 우선 순위를 예제를 통해 직접 확인해보겠습니다.
+
+### new 바인딩 > 명시적 바인딩
+
+```js showLineNumbers {7,11}
+function func(name) {
+  this.name = name;
+}
+
+const obj1 = {};
+
+const boundFunc = func.bind(obj1);
+boundFunc('jintak');
+console.log(obj1.name); // jintak
+
+const obj2 = new boundFunc('timegambit');
+console.log(obj1.name); // jintak
+console.log(obj2.name); // timegambit
+```
+
+7번 라인에서 바인딩된 함수 `boundFunc()`을 이용해 8번 라인에서는 `obj1.name`에 `jintak`을 할당하고, 11번 라인에서 `new` 키워드를 이용하여 새로운 객체를 생성했습니다. 12번 라인에서 `obj1.name`은 변함없이 `jintak`이지만, 13번 라인에서 `obj2.name`은 `timegambit`인 것을 통해 `new` 키워드를 이용한 바인딩이 `bind`를 이용한 명시적 바인딩보다 우선한다는 것을 알 수 있습니다.
+
+### new 바인딩 > 암시적 바인딩
+
+```js showLineNumbers {12}
+function func(name) {
+  this.name = name;
+}
+
+const obj1 = {
+  func,
+};
+
+obj1.func('jintak');
+console.log(obj1.name); // jintak
+
+const obj2 = new obj1.func('timegambit');
+console.log(obj1.name); // jintak
+console.log(obj2.name); // timegambit
+```
+
+9번 라인에서 암시적 바인딩을 이용해 `obj1.name` 에 `jintak`을 할당하고, 12번 라인에서 암시적 바인딩된 `obj1.func()` 메소드와 `new` 키워드를 이용하여 새로운 객체를 생성했습니다. 13번 라인에서 `obj1.name`은 변함없이 `jintak`이지만, 14번 라인에서 `obj2.name`은 `timegambit`인 것을 통해 `new` 키워드를 이용한 바인딩이 암시적 바인딩보다 우선한다는 것을 알 수 있습니다.
+
+## 화살표 함수
+
+여태까지 보아온 `function`을 이용한 함수들은 **호출**시점에 **동적**으로 this가 정해졌습니다. **화살표 함수는 정의 시점에 상위 스코프의 this를 가리키는 정적인 방식으로 this가 결정됩니다**.
+
+```js showLineNumbers {4,9}
+const obj = {
+  name: 'timegambit',
+  arrowFn() {
+    setTimeout(() => {
+      console.log(this.name);
+    }, 1000);
+  },
+  normalFn() {
+    setTimeout(function () {
+      console.log(this.name);
+    }, 1000);
+  },
+};
+
+obj.arrowFn(); // timegambit
+obj.normalFn(); // undefined
+```
+
+**`setTimeout()` 함수의 콜백함수 내에서 this를 사용해야한다면 `function`이 아닌 화살표함수를 이용해야합니다**. 위의 코드를 작성한 사람은 16번 라인의 결과가 아닌 15번 라인의 `arrowFn()` 메소드를 호출했을 때의 결과를 얻고 싶어했을 것입니다.
+
+`setTimeout()`의 콜백함수를 `function` 키워드로 정의해준다면 이 콜백함수 내에서의 this는, 16번 라인에서 `obj.`로 `normalFn()` 메소드를 호출했지만 `obj` 객체를 가리키지 않을 것입니다. 하지만 화살표 함수로 정의해준다면 상위 스코프의 this를 바라보게 됩니다. 즉, 15번 라인에서 `obj.`로 호출해주었기 때문에 `setTimeout()` 함수의 콜백함수인 화살표 함수 내에서 this는 `arrowFn()` 메소드의 this, 즉 `obj` 객체를 바라보게 됩니다.
+
+<Alert type="info">
+  9번 라인의 함수 내에서 this는 무엇을 가리키고 있을까요? `function` 키워드로 정의되어 있으니까 브라우저의 경우 `window`, Node.js의 경우 `global` (엄격모드라면 `undefined`) 객체가 될 것 같지 않나요? 브라우저의 경우는 맞지만 Node.js의 경우는 아닙니다.
+
+  ```js
+  Timeout {
+    _idleTimeout: 1000,
+    _idlePrev: null,
+    _idleNext: null,
+    _idleStart: 23,
+    _onTimeout: [Function (anonymous)],
+    _timerArgs: undefined,
+    _repeat: null,
+    _destroyed: false,
+    [Symbol(refed)]: true,
+    [Symbol(kHasPrimitive)]: false,
+    [Symbol(asyncId)]: 3,
+    [Symbol(triggerId)]: 1
+  }
+  ```
+  9번 라인의 함수 내 this는 위와 같은 `Timeout` 객체입니다. 어째서일까요? Node.js의 `Timeout` [소스코드](https://github.com/nodejs/node/blob/main/lib/internal/timers.js#L557)를 보면 이유를 알 수 있습니다.
+
+  ```js:node/lib/internal/timers.js {4,10}
+  class Timeout {
+    constructor(callback, after, args, isRepeat, isRefed) {
+      ...
+      this._onTimeout = callback;
+    }
+  }
+
+  function listOnTimeout(list, now) {
+    ...
+    timer._onTimeout();
+    ...
+  }
+  ```
+  `setTimeout` 함수를 호출하면 `Timeout` 객체를 생성하고 `_onTimeout`에 콜백 함수를 메소드로 등록합니다. 그리고 실행해야할 시점에 `timer._onTimeout()`을 통해 호출합니다. 그렇기 때문에 위의 9번 라인의 함수 내에서 this는 `timer`, 즉 `Timeout` 객체가 되는 것입니다.
+</Alert>
+
+<Alert type="success">
+  ```js {4}
+  const obj = {
+    name: 'timegambit',
+    normalFn() {
+      const self = this;
+      setTimeout(function () {
+        console.log(self.name);
+      }, 1000);
+    },
+  };
+
+  obj.normalFn(); // timegambit
+  ```
+
+  굳이 `function`을 이용하고 싶다면, 위와 같이 상위 스코프에서 `this`를 미리 변수에 저장하고 사용할 수 있습니다. 혹은 아래와 같이 `bind`를 이용해 명시적 바인딩을 이용할 수도 있습니다.
+
+  ```js {7}
+  const obj = {
+    name: 'timegambit',
+    normalFn() {
+      setTimeout(
+        function () {
+          console.log(this.name);
+        }.bind(this),
+        1000
+      );
+    },
+  };
+
+  obj.normalFn(); // timegambit
+  ```
+
+
+</Alert>
+
+## 예시 문제
+
+위에서 설명한 내용을 이해했는지 확인할 수 있는 몇 가지 예시 문제를 내겠습니다. 다소 억지스러운 문제도 있지만 확실히 이해했는지 검증하기 위함이니 한 번 풀어보세요!
+
+### 1번 문제
+
+해답 [^ex1]
+
+```js showLineNumbers
+function func(cb) {
+  this.cb = cb;
+  return this;
+}
+
+function sayName() {
+  console.log(this.name);
+}
+
+const origin = func(sayName);
+const boundFunc = func.bind({ name: 'timegambit' }, sayName);
+const obj = new boundFunc();
+
+origin.cb();
+boundFunc().cb();
+obj.cb();
+```
+
+비엄격모드에서 14 ~ 16번 라인의 결과로 무엇이 출력될지 말해보세요.
+
+
+### 2번 문제
+
+해답 [^ex2]
+
+```js showLineNumbers
+const obj = {
+  name: 'timegambit',
+  setSayName(targetObj) {
+    targetObj.sayName = function () {
+      console.log(this.name);
+    };
+  },
+};
+
+const target = {
+  name: 'jintak',
+};
+
+obj.setSayName(target);
+
+target.sayName();
+```
+
+16번 라인의 결과로 무엇이 출력될지 말해보세요. 그리고 만약 4번 라인에서 `function`이 아닌 화살표 함수를 할당해주었다면 결과가 어떻게 바뀔지 말해보세요.
+
+### 3번 문제
+
+해답 [^ex3]
+
+```js showLineNumbers
+const obj1 = {
+  name: 'timegambit',
+  retName() {
+    return () => this.name;
+  },
+};
+
+const obj2 = {
+  name: 'jintak',
+  retName: obj1.retName(),
+};
+
+console.log(obj2.retName());
+```
+
+13번 라인의 결과로 무엇이 출력될지 말해보세요.
+
+### 4번 문제
+
+해답 [^ex4]
+
+```js showLineNumbers
+let obj1, obj2, obj3;
+
+Object.prototype.sayName = function () {
+  console.log(this.name);
+};
+
+obj1 = {
+  name: 'obj1',
+  getNext() {
+    return obj2;
+  },
+};
+
+obj2 = {
+  name: 'obj2',
+  getNext() {
+    return obj3;
+  },
+};
+
+obj3 = {
+  name: 'obj3',
+  getNext() {
+    return obj1;
+  },
+};
+
+obj1.getNext().getNext().sayName();
+```
+
+28번 라인에서 무엇이 출력될지 말해보세요.
+
+
+### 5번 문제
+
+해답 [^ex5]
+
+```js
+Array.prototype.findLastIndex = (el) => {
+  for (let i = this.length; i >= 0; i++) {
+    if (this[i] === el) return i;
+  }
+  return -1;
+}
+
+const arr = [0, 1, 2, 3];
+console.log(arr.findLastIndex(1));
+```
+
+위 코드는 배열에서 뒤에서부터 일치하는 인자를 찾아 index를 return해주는 함수를 `Array.prototype`에 정의해준 코드입니다. 잘못된 점을 지적하고 그 이유를 설명하세요.
+
+## 마무리
+
+이미 수많은 블로그에 자바스크립트의 this에 대해 설명한 포스트들이 작성되어 있습니다. 그럼에도 불구하고 굳이 포스트를 작성하는만큼, 다른 포스트에서 제공해주지 않는 내용도 제공하며 최대한 자세히 설명하고자 노력했습니다. 이 포스트를 보고 this에 대한 개념이 잘 이해되셨으면 좋겠네요. 🙃
+
+**오타 및 오류 지적은 언제나 환영입니다!**
+
+
+## 참조
+
+* [ECMAScript® 2022 Language Specification](https://262.ecma-international.org/)
+* [MDN](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/this)
+* [김정환님 블로그](https://jeonghwan-kim.github.io/2017/10/22/js-context-binding.html)
+
+[^ex1]: |14번 라인|15번 라인|16번 라인|
+    |:---:|:---:|:---:|
+    |undefined|timegambit|undefined|
+
+    14번 ~ 16번 라인의 `cb()` 메소드는 모두 `sayName()` 함수입니다. 14번 라인의 `origin`은 10번 라인에서 `global` 혹은 `window`로 할당받게 됩니다. 이 객체에는 `name`이 할당되지 않았으므로 undefined가 출력됩니다.
+
+    15번 라인의 `boundFun()`은 11번 라인에서 `bind()` 함수의 첫 번째 인자인 객체가 this로 바인딩된 상태의 객체입니다. 이 객체로 `cb()` 메소드를 호출하였으니 timegambit이 출력됩니다.
+
+    16번 라인의 `obj` 객체는 12번 라인에서 `new` 키워드를 통해 새로운 객체로 this가 바인딩됩니다. 명시적 바인딩보다 new 바인딩이 우선순위가 더 높기 때문에 새로 생성된 `obj` 객체의 `name`은 아무 값도 할당되지 않은 상태입니다. 따라서 undefined가 출력됩니다.
+
+[^ex2]: jintak이 출력됩니다. 화살표 함수를 할당할 경우 timegambit이 출력됩니다.
+
+    `function`으로 정의된 지금 같은 경우, 16번 라인을 통해 `sayName()` 메소드 내 this는 `target`으로 암시적 바인딩이 됩니다. 따라서 jintak이 출력됩니다.
+
+    화살표 함수로 정의한 경우, 14번 라인을 통해 this가 `obj`로 바인딩된 상태로 `target.sayName()` 에 메소드가 할당됩니다. 따라서 `obj.name`인 timegambit이 출력됩니다.
+
+[^ex3]: timegambit이 출력됩니다.
+
+    10번 라인에서 `obj1.retName()` 을 호출하면서 this가 `obj1`으로 바인딩 된 상태의 `() => this.name` 화살표 함수를 return 해주었습니다. 이 화살표 함수는 `obj2.retName()` 메소드로 할당되었습니다. 따라서 `obj2.retName()` 으로 메소드를 호출하여도 `this.name`은 `obj1.name`을 가리키게 되므로 timegambit이 출력됩니다.
+
+[^ex4]: obj3가 출력됩니다.
+
+    `obj1`부터 시작하여 메소드를 호출했지만 결국 `sayName()` 메소드를 호출하는 것은 `obj1.getNext().getNext()`, 즉 `obj3` 객체입니다. 따라서 28번 라인은 `obj3.sayName()`이 되므로 `obj3.name`인 obj3가 출력됩니다.
+
+
+[^ex5]: 화살표함수로 정의하면 안됩니다. 이처럼 코드를 짤 경우 `findLastIndex` 메소드 내에서 this는 `arr`이 아닌 엄격모드라면 `undefined`, 비엄격모드라면 `window`, `global` 혹은 `module.exports`를 가리키게 됩니다.
+
+    올바르게 수정하려면 화살표 함수가 아닌 암시적으로 바인딩되도록 `function` 키워드를 이용하여 함수를 정의하여야 합니다.
