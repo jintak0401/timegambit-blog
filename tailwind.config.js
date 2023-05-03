@@ -148,6 +148,12 @@ module.exports = {
               borderLeftColor: theme('colors.gray.200'),
               fontStyle: 'normal',
             },
+            'blockquote > p::before': {
+              content: 'none',
+            },
+            'blockquote > p::after': {
+              content: 'none',
+            },
           },
         },
         dark: {

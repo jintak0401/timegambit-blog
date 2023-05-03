@@ -52,7 +52,6 @@ const FootnoteTooltip = ({ idx, show }: Props) => {
     const footnotes = document.querySelector(
       `.footnotes ol>li:nth-child(${idx})`
     );
-    console.log(footnotes);
     setBody(removeBackTag(footnotes?.innerHTML ?? ''));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
