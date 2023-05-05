@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 const observerOption = {
   threshold: 1,
-  rootMargin: '0px 0px 600px',
+  rootMargin: '850px 0px',
 };
 
 const Giscus = () => {

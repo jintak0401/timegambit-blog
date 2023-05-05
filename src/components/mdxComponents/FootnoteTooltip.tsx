@@ -1,23 +1,17 @@
-import { CSSProperties, useEffect, useRef, useState } from 'react';
+import { CSSProperties, useEffect, useRef } from 'react';
+
+import useGetFootnoteBody from '@/hooks/useGetFootnoteBody';
 
 interface Props {
   idx: string;
   show: boolean;
 }
 
-const OFFSET_BOUNDARY = 200;
-const Y_OFFSET = 20;
+const Y_OFFSET = 30;
 const X_OFFSET = 20;
 
-const removeBackTag = (innerHtml: string) => {
-  return innerHtml.replace(
-    /<a href="#user-content-fnref-[0-9a-zA-Z%]+" aria-label="Back to content".*>↩<\/a>/g,
-    ''
-  );
-};
-
 const FootnoteTooltip = ({ idx, show }: Props) => {
-  const [body, setBody] = useState('');
+  const body = useGetFootnoteBody(idx);
   const ref = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
@@ -30,31 +24,33 @@ const FootnoteTooltip = ({ idx, show }: Props) => {
       return { transform: 'translateX(-50%)', top: Y_OFFSET };
     }
     const ret: CSSProperties = {};
-    const viewWidth = window.innerWidth;
-    const width = ref.current.offsetWidth;
+
     const { left, top } = ref.current.parentElement.getBoundingClientRect() || {
       left: 0,
       top: 0,
     };
+
+    // x-axix
+    const viewWidth = window.innerWidth;
+    const width = ref.current.offsetWidth;
     let translateX = -width / 2;
     if (left - width / 2 < 0) {
       translateX += width / 2 - left + X_OFFSET;
     } else if (left + width / 2 > viewWidth) {
       translateX -= left + width / 2 - viewWidth + X_OFFSET;
     }
-    ret.transform = `translateX(${translateX}px)`;
-    ret[top > OFFSET_BOUNDARY ? 'bottom' : 'top'] = Y_OFFSET;
+
+    // y-axis
+    const height = ref.current.offsetHeight;
+    let translateY = -height;
+    if (top - height - Y_OFFSET < 0) {
+      translateY += height + Y_OFFSET;
+    }
+
+    ret.transform = `translate(${translateX}px, ${translateY}px)`;
 
     return ret;
   };
-
-  useEffect(() => {
-    const footnotes = document.querySelector(
-      `.footnotes ol>li:nth-child(${idx})`
-    );
-    setBody(removeBackTag(footnotes?.innerHTML ?? ''));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return body ? (
     <span
