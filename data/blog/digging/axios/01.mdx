@@ -410,7 +410,7 @@ promise = Promise.resolve(config)
 
   then함수에 함수가 2개 들어갈 수 있습니다. 앞쪽의 함수는 resolve함수, 뒤쪽의 함수는 reject함수입니다.
   catch의 역할을 then에서 해준다고 할 수 있죠. 단, 동일한 then에서 발생한 에러는 뒤 쪽의 reject 함수가 잡아주지는 않습니다.
-  위의 경우, onReqFulfilled2에서 에러가 발생하면 onReqFulfilled2가 아닌 onReqFulfilled1에서 잡아줍니다.
+  위의 경우, onReqFulfilled2에서 에러가 발생하면 onReqRejected2가 아닌 onReqRejected1에서 잡아줍니다.
 </Alert>
 
 그렇다면 promise는 어떻게 동작하게 될까요? interceptor를 수행하기 전 설정인 config로 시작해서
