@@ -1,4 +1,6 @@
-import { CSSProperties, useEffect, useRef, useState } from 'react';
+import { CSSProperties, useEffect, useRef } from 'react';
+
+import useGetFootnoteBody from '@/hooks/useGetFootnoteBody';
 
 interface Props {
   idx: string;
@@ -9,15 +11,8 @@ const OFFSET_BOUNDARY = 200;
 const Y_OFFSET = 20;
 const X_OFFSET = 20;
 
-const removeBackTag = (innerHtml: string) => {
-  return innerHtml.replace(
-    /<a href="#user-content-fnref-[0-9a-zA-Z%]+" aria-label="Back to content".*>↩<\/a>/g,
-    ''
-  );
-};
-
 const FootnoteTooltip = ({ idx, show }: Props) => {
-  const [body, setBody] = useState('');
+  const body = useGetFootnoteBody(idx);
   const ref = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
@@ -47,14 +42,6 @@ const FootnoteTooltip = ({ idx, show }: Props) => {
 
     return ret;
   };
-
-  useEffect(() => {
-    const footnotes = document.querySelector(
-      `.footnotes ol>li:nth-child(${idx})`
-    );
-    setBody(removeBackTag(footnotes?.innerHTML ?? ''));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return body ? (
     <span
