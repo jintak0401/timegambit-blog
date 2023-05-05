@@ -38,6 +38,7 @@ class MyDocument extends Document {
         </Head>
         <body className="overflow-x-hidden antialiased">
           <Main />
+          <div id="modal" />
           <NextScript />
         </body>
       </Html>

@@ -13,7 +13,7 @@ const phrases = {
   delete: '삭제',
   cancel: '취소',
   toc: 'Table of contents',
-  delete_successful: '성공적으로 삭제했습니다',
+  close: '닫기',
   formattingDate: {
     today: '오늘',
     daysAgo: '일 전',
