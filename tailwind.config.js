@@ -61,14 +61,24 @@ module.exports = {
           '0%': { left: '-100%' },
           '100%': { left: '150%' },
         },
+        modalOpenAnimation: {
+          '0%': { opacity: 0 },
+          '100%': { opacity: 1 },
+        },
+        modalCloseAnimation: {
+          '0%': { opacity: 1 },
+          '100%': { opacity: 0 },
+        },
       },
       animation: {
-        'bounce-left': 'bounceLeft 0.5s ease-in-out',
-        'bounce-right': 'bounceRight 0.5s ease-in-out',
+        'bounce-left': 'bounceLeft 500ms ease-in-out',
+        'bounce-right': 'bounceRight 500ms ease-in-out',
         emoji: 'postLikeEmojiAnimation 1s ease-in-out forwards',
         heart: 'postLikeHeartAnimation 1s ease-in-out',
         card: 'cardLoadedAnimation 500ms ease-in-out',
         loading: 'loadingAnimation 1.5s infinite',
+        'modal-open': 'modalOpenAnimation 150ms ease-in-out forwards',
+        'modal-close': 'modalCloseAnimation 100ms ease-in-out forwards',
       },
       typography: (theme) => ({
         DEFAULT: {
