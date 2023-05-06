@@ -39,9 +39,9 @@ const FootnoteModal = ({ onClose, idx }: Props) => {
           }`}
           onClick={closeModal}
         >
-          <div className="flex w-full translate-y-[15vh] flex-col">
+          <div className="mx-auto flex max-w-3xl translate-y-[15vh] flex-col xl:max-w-5xl">
             <div
-              className="prose inline-block max-h-[70vh] w-full overflow-y-auto whitespace-normal rounded-t-sm bg-white px-3 py-4 scrollbar-hide dark:prose-dark dark:bg-gray-800"
+              className="prose max-h-[70vh] w-full max-w-none overflow-y-auto whitespace-normal rounded-t-sm bg-white px-3 py-4 scrollbar-hide dark:prose-dark dark:bg-gray-800"
               onClick={(e) => e.stopPropagation()}
               dangerouslySetInnerHTML={{ __html: body as string }}
             />

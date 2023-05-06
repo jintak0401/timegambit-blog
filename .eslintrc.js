@@ -12,17 +12,15 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:@next/next/recommended',
     'plugin:prettier/recommended',
     'next',
-    'next/core-web-vitals',
   ],
   rules: {
     'prettier/prettier': [
       'off',
       {
         endOfLine: 'auto',
-        singleQuote: true
+        singleQuote: true,
       },
     ],
     'react/react-in-jsx-scope': 'off',
@@ -51,7 +49,6 @@ module.exports = {
           ['^@?\\w', '^\\u0000'],
           ['^.+\\.s?css$'],
           ['^@/lib', '^@/hooks'],
-          ['^@/data'],
           ['^@/components'],
           ['^@/'],
           [
