@@ -1,5 +1,7 @@
-import siteMetadata from 'data/siteMetadata.mjs';
 import { useState } from 'react';
+
+import siteMetadata from 'data/siteMetadata.mjs';
+
 import useSWR, { SWRConfiguration } from 'swr';
 
 import useDebounce from './useDebounce';
