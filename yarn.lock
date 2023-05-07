@@ -2909,6 +2909,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@wits/next-themes@npm:^0.2.16":
+  version: 0.2.16
+  resolution: "@wits/next-themes@npm:0.2.16"
+  peerDependencies:
+    next: "*"
+    react: "*"
+    react-dom: "*"
+  checksum: 8217966ecb1d9da3f51bd28ecce4e9b9c053b3e893211f34e412b849ee065487414f0faa5ffeaeb6a40dbf00cfba8eb8fc848125af29b63cc065865f030695e1
+  languageName: node
+  linkType: hard
+
 "abbrev@npm:^1.0.0":
   version: 1.1.1
   resolution: "abbrev@npm:1.1.1"
@@ -7491,7 +7502,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mysql2@npm:^3.2.0":
+"mysql2@npm:^3.2.4":
   version: 3.2.4
   resolution: "mysql2@npm:3.2.4"
   dependencies:
@@ -7564,7 +7575,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next-auth@npm:^4.19.2":
+"next-auth@npm:^4.22.1":
   version: 4.22.1
   resolution: "next-auth@npm:4.22.1"
   dependencies:
@@ -7600,17 +7611,6 @@ __metadata:
     react: "*"
     react-dom: "*"
   checksum: 03296aec6f12f19a5d66d8ff233b9c9345b00422d738f455671044ba199469894e0049a2a3bcf57dec2297266dfb21a0249f77a1a3d089c58229d1f29cae7629
-  languageName: node
-  linkType: hard
-
-"next-themes@npm:^0.2.1":
-  version: 0.2.1
-  resolution: "next-themes@npm:0.2.1"
-  peerDependencies:
-    next: "*"
-    react: "*"
-    react-dom: "*"
-  checksum: ebc248b956138e73436c4ed0a0f0a877a0a48a33156db577029b8b8469e48b5c777d61abf2baeb75953378febea74e067a4869ff90b4a3e94fce123289b862ba
   languageName: node
   linkType: hard
 
@@ -9913,6 +9913,7 @@ __metadata:
     "@types/unist": ^2.0.6
     "@typescript-eslint/eslint-plugin": ^5.38.1
     "@typescript-eslint/parser": ^5.38.1
+    "@wits/next-themes": ^0.2.16
     autoprefixer: ^10.4.13
     contentlayer: ^0.3.2
     cross-env: ^7.0.3
@@ -9928,11 +9929,10 @@ __metadata:
     inquirer: 8.0.0
     js-yaml: ^4.1.0
     mdx-bundler: ^9.2.1
-    mysql2: ^3.2.0
+    mysql2: ^3.2.4
     next: ^13.4.1
-    next-auth: ^4.19.2
+    next-auth: ^4.22.1
     next-contentlayer: ^0.3.2
-    next-themes: ^0.2.1
     postcss: ^8.4.19
     prettier: ^2.8.0
     prettier-plugin-tailwindcss: ^0.2.8
