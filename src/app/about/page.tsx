@@ -1,15 +1,22 @@
+import { Fragment } from 'react';
+import { Metadata } from 'next';
+import NextImage from 'next/image';
+import Link from 'next/link';
+
 import about from 'data/about';
 import phrases from 'data/phrases';
 import siteMetadata from 'data/siteMetadata.mjs';
-import NextImage from 'next/image';
-import Link from 'next/link';
-import { Fragment } from 'react';
 
 import { omit } from '@/lib/contentlayer';
 import { AboutCardType } from '@/lib/types';
 
 import AboutList from '@/components/card-and-list/AboutList';
-import { PageSEO } from '@/components/common/SEO';
+
+export const metadata: Metadata = {
+  title: 'About',
+
+  description: phrases.Seo.aboutDesc || siteMetadata.description,
+};
 
 const SELFIE_URL = about.Selfie;
 const EXCLUDED_FROM_SECTION_LIST: (keyof typeof about)[] = [
@@ -17,20 +24,16 @@ const EXCLUDED_FROM_SECTION_LIST: (keyof typeof about)[] = [
   'Selfie',
 ];
 
-export default function AboutPage() {
+const AboutPage = () => {
   const { title, description } = phrases.About;
   const sectionList = omit(about, EXCLUDED_FROM_SECTION_LIST);
   return (
     <>
-      <PageSEO
-        title={`About - ${siteMetadata.author}`}
-        description={phrases.Seo.aboutDesc || siteMetadata.description}
-      />
       <h1 className="strong-text text-3xl font-extrabold md:text-5xl">
         {title}
       </h1>
       {description && <div className="text-gray-500">{description}</div>}
-      <section className="mb-7 mt-12 flex flex-col space-x-0 space-y-5 md:mt-20 md:mb-10 md:flex-row md:space-y-0 md:space-x-7">
+      <section className="mb-7 mt-12 flex flex-col space-x-0 space-y-5 md:mb-10 md:mt-20 md:flex-row md:space-x-7 md:space-y-0">
         <NextImage alt="selfie" src={SELFIE_URL} width="250" height="250" />
         <div className="flex flex-col justify-center">
           <h2 className="strong-text mb-4 text-2xl font-bold md:text-4xl">
@@ -67,4 +70,6 @@ export default function AboutPage() {
       ))}
     </>
   );
-}
+};
+
+export default AboutPage;
