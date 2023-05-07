@@ -23,12 +23,7 @@ const convertLike2PosY = (like?: number) =>
 
 const PostLike = ({ slug }: Props) => {
   const timeout = useRef<ReturnType<typeof setTimeout>>();
-  const {
-    userLikes = 0,
-    postLikes = 0,
-    increment,
-    isLoading,
-  } = usePostLikes(slug);
+  const { userLikes, postLikes, increment, isLoading } = usePostLikes(slug);
   const [clicked, setClicked] = useState(false);
   const [posY, setPosY] = useState(convertLike2PosY(userLikes));
 

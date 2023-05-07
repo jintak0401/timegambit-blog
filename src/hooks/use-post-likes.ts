@@ -79,8 +79,8 @@ export const usePostLikes = (slug: string, config?: SWRConfiguration) => {
   );
 
   return {
-    userLikes: data?.userLikes,
-    postLikes: data?.postLikes,
+    userLikes: data?.userLikes || 0,
+    postLikes: data?.postLikes || 0,
     isLoading: !error && !data,
     isError: !!error,
     increment,
