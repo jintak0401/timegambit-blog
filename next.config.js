@@ -15,6 +15,10 @@ const nextConfig = withContentlayer(
   withBundleAnalyzer({
     reactStrictMode: true,
     swcMinify: true,
+    experimental: {
+      appDir: true,
+      serverComponentsExternalPackages: ['mysql2'],
+    },
 
     async redirects() {
       return Object.entries(REDIRECT).map(([source, destination]) => ({
