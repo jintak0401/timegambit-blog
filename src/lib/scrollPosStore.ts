@@ -12,6 +12,18 @@ interface StoreType {
 export const scrollPosStore = (() => {
   const store: StoreType = {};
 
+  const needRestoreScrollRegs = (() => {
+    const convertUrl2Regs = (url: string) => {
+      const regStr = url.replace(/\[.+\]/gi, '.+');
+      return new RegExp(regStr);
+    };
+    return siteMetadata.needRestoreScrollPosPage.map(convertUrl2Regs);
+  })();
+
+  const isNeedRestoreScroll = (asPath: string) => {
+    return needRestoreScrollRegs.some((reg) => reg.test(asPath));
+  };
+
   const initScrollPosState = (
     path: string,
     storeElement?: { scrollPos?: number; listLength?: number }
@@ -44,10 +56,29 @@ export const scrollPosStore = (() => {
     return store[path];
   };
 
+  const onStartCb = (before: string, after: string) => {
+    if (isNeedRestoreScroll(after)) {
+      initScrollPosState(after);
+    }
+    if (isNeedRestoreScroll(before)) {
+      setScrollPosState(before, window.scrollY);
+    }
+  };
+
+  const onCompleteCb = (after: string) => {
+    if (isNeedRestoreScroll(after)) {
+      window.scrollTo({
+        top: getScrollPosState(after).scrollPos,
+      });
+    }
+  };
+
   return {
     initScrollPosState,
     setListLengthState,
     setScrollPosState,
     getScrollPosState,
+    onStartCb,
+    onCompleteCb,
   };
 })();
