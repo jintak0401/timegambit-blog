@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import siteMetadata from 'data/siteMetadata.mjs';
 
-import { usePostLikes } from '@/hooks/usePostLikes';
+import { usePostLikes } from '@/hooks/use-post-likes';
 
 interface Props {
   slug: string;
@@ -23,9 +23,13 @@ const convertLike2PosY = (like?: number) =>
 
 const PostLike = ({ slug }: Props) => {
   const timeout = useRef<ReturnType<typeof setTimeout>>();
-  const { userLikes, postLikes, increment, isLoading } = usePostLikes(slug);
+  const {
+    userLikes = 0,
+    postLikes = 0,
+    increment,
+    isLoading,
+  } = usePostLikes(slug);
   const [clicked, setClicked] = useState(false);
-
   const [posY, setPosY] = useState(convertLike2PosY(userLikes));
 
   useEffect(() => {
