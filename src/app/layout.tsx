@@ -96,7 +96,11 @@ const dejavu = localFont({
 
 const RootLayout = async ({ children }: PropsWithChildren) => {
   return (
-    <ServerThemeProvider>
+    <ServerThemeProvider
+      attribute="class"
+      defaultTheme={siteMetadata.theme}
+      enableColorScheme={false}
+    >
       <html lang={siteMetadata.language} className="scroll-smooth">
         <body className="antialiased">
           <Analytics />
