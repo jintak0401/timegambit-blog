@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 
 const ScrollIndicator = () => {
@@ -22,7 +24,7 @@ const ScrollIndicator = () => {
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-30 h-1 w-full">
+    <div className="fixed left-0 right-0 top-0 z-30 h-1 w-full">
       <div
         className={`h-full bg-primary-600 dark:bg-primary-500 `}
         style={{ width: `${(scrollY / pageHeight) * 100}%` }}

@@ -1,5 +1,9 @@
-import phrases from 'data/phrases';
+'use client';
+
 import { useState } from 'react';
+
+import phrases from 'data/phrases';
+
 import { IoCloseSharp } from 'react-icons/io5';
 
 import { useScrollDirection } from '@/hooks/useScrollDirection';
@@ -22,7 +26,7 @@ const SmallWidthTOC = () => {
         TOC
       </button>
       <article
-        className={`fixed top-[59px] right-0 z-20 h-fit max-h-[85vh] w-80 overflow-y-scroll rounded-l-lg border-y-2 
+        className={`fixed right-0 top-[59px] z-20 h-fit max-h-[85vh] w-80 overflow-y-scroll rounded-l-lg border-y-2 
         border-l-2 border-primary-700 bg-white duration-500 scrollbar-hide dark:bg-gray-900 
         sm:top-[50px] ${tocShow ? 'translate-x-0' : 'translate-x-80'}
         `}
@@ -32,7 +36,7 @@ const SmallWidthTOC = () => {
           onClick={() => setTocShow(false)}
         >
           <IoCloseSharp
-            className="h-8 w-8 rounded-bl-md border-l-2 border-b-2 border-primary-700
+            className="h-8 w-8 rounded-bl-md border-b-2 border-l-2 border-primary-700
             bg-primary-500 text-gray-100 dark:text-gray-200"
           />
         </button>

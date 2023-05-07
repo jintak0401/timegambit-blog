@@ -1,5 +1,8 @@
-import siteMetadata from 'data/siteMetadata.mjs';
+'use client';
+
 import { useEffect, useRef, useState } from 'react';
+
+import siteMetadata from 'data/siteMetadata.mjs';
 
 import { usePostLikes } from '@/hooks/usePostLikes';
 

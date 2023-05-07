@@ -1,7 +1,8 @@
+'use client';
+
 import { AnchorHTMLAttributes, DetailedHTMLProps, useState } from 'react';
 
 import { isTouchDevice } from '@/lib/utils';
-import useIsClient from '@/hooks/useIsClient';
 
 import FootnoteModal from '@/components/mdxComponents/FootnoteModal';
 
@@ -15,9 +16,8 @@ const InlineFootnote = ({
   HTMLAnchorElement
 >) => {
   const [show, setShow] = useState(false);
-  const isClient = useIsClient();
 
-  if (isTouchDevice() && isClient) {
+  if (isTouchDevice()) {
     return (
       <>
         <span

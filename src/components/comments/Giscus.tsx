@@ -1,7 +1,11 @@
+'use client';
+
+import { useCallback, useEffect, useRef, useState } from 'react';
+
 import phrases from 'data/phrases';
 import siteMetadata from 'data/siteMetadata.mjs';
-import { useTheme } from 'next-themes';
-import { useCallback, useEffect, useRef, useState } from 'react';
+
+import { useTheme } from '@wits/next-themes';
 
 const observerOption = {
   threshold: 1,
@@ -80,7 +84,7 @@ const Giscus = () => {
   }, [buttonRef, LoadComments]);
 
   return (
-    <div className="pt-6 pb-6 text-center text-gray-700 dark:text-gray-300">
+    <div className="pb-6 pt-6 text-center text-gray-700 dark:text-gray-300">
       {enableLoadComments && (
         <button
           ref={buttonRef}

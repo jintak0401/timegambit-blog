@@ -1,6 +1,7 @@
-import NextImage from 'next/image';
-import { ImageProps } from 'next/image';
+'use client';
+
 import { useEffect, useRef, useState } from 'react';
+import NextImage, { ImageProps } from 'next/image';
 
 const DURATION = 300;
 const TIMEOUT_DELAY = 100;
@@ -68,7 +69,7 @@ const Zoom = (props: ImageProps) => {
     <>
       {clicked && (
         <div
-          className="fixed top-0 left-0 z-30 h-full w-full cursor-zoom-out bg-white dark:bg-black"
+          className="fixed left-0 top-0 z-30 h-full w-full cursor-zoom-out bg-white dark:bg-black"
           style={{ opacity: BACKGROUND_OPACITY }}
           onClick={closeWrapper}
         />

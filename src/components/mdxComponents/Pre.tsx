@@ -1,3 +1,5 @@
+'use client';
+
 import { ReactNode, useRef, useState } from 'react';
 
 interface Props {

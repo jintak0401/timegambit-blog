@@ -1,3 +1,5 @@
+'use client';
+
 import { useTocObserver } from '@/hooks/useTocObserver';
 
 interface Props {

@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useRef, useState } from 'react';
 
 import throttle from '@/lib/throttle';
@@ -35,7 +37,7 @@ const ScrollTopAndBottom = ({ goTop = true, goBottom = true }: Props) => {
   };
   return (
     <div
-      className={`fixed right-3 bottom-3 z-20 flex flex-col gap-2 opacity-60 md:right-8 md:bottom-8 md:opacity-100 ${
+      className={`fixed bottom-3 right-3 z-20 flex flex-col gap-2 opacity-60 md:bottom-8 md:right-8 md:opacity-100 ${
         show ? '' : 'hidden'
       }`}
     >

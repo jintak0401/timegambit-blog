@@ -1,5 +1,8 @@
-import siteMetadata from 'data/siteMetadata.mjs';
+'use client';
+
 import { useEffect } from 'react';
+
+import siteMetadata from 'data/siteMetadata.mjs';
 
 import usePostViews from '@/hooks/usePostViews';
 

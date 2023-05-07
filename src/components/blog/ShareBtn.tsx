@@ -1,6 +1,10 @@
-import phrases from 'data/phrases';
-import { useRouter } from 'next/router';
+'use client';
+
 import { useEffect, useRef } from 'react';
+import { useRouter } from 'next/router';
+
+import phrases from 'data/phrases';
+
 import { FaShareAlt } from 'react-icons/fa';
 
 interface Props {
