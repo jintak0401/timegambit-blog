@@ -3,7 +3,7 @@ import siteMetadata from 'data/siteMetadata.mjs';
 
 import { isProd } from '@/lib/isProduction';
 
-import GA from './GoogleAnalytics';
+import GA from './google-analytics';
 
 declare global {
   interface Window {

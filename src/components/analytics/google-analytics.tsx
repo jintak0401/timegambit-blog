@@ -1,5 +1,6 @@
-import siteMetadata from 'data/siteMetadata.mjs';
 import Script from 'next/script';
+
+import siteMetadata from 'data/siteMetadata.mjs';
 
 const GAScript = () => {
   return (
@@ -8,7 +9,6 @@ const GAScript = () => {
         strategy="lazyOnload"
         src={`https://www.googletagmanager.com/gtag/js?id=${siteMetadata.analytics.googleAnalyticsId}`}
       />
-
       <Script strategy="lazyOnload" id="ga-script">
         {`
             window.dataLayer = window.dataLayer || [];
