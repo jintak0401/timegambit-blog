@@ -7,14 +7,13 @@ import siteMetadata from 'data/siteMetadata.mjs';
 import { ThemeProvider } from '@wits/next-themes';
 import { ToastContainer } from 'react-toastify';
 
-import clsx from '@/lib/clsx';
 import { useRestoreScroll } from '@/hooks/use-restore-scroll';
 
 import Footer from '@/components/common/Footer';
 import Header from '@/components/common/Header';
 
 interface Props extends PropsWithChildren {
-  className?: string;
+  className: string;
 }
 
 const BodyLayout = ({ children, className }: Props) => {
@@ -24,7 +23,7 @@ const BodyLayout = ({ children, className }: Props) => {
       <div className="w-section">
         <div className="flex h-screen flex-col justify-between">
           <Header />
-          <main className={clsx('mb-auto mt-24', className)}>{children}</main>
+          <main className={`mb-auto mt-24 ${className}`}>{children}</main>
           <hr />
           <Footer />
         </div>
