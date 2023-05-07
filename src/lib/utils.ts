@@ -1,5 +1,11 @@
-const getImageWithFallback = (url: string, fallbackUrl: string) =>
-  url.startsWith('http') ? url : fallbackUrl;
+import siteMetadata from 'data/siteMetadata.mjs';
+
+const getImageWithFallback = (
+  url: string,
+  fallbackUrl = `${siteMetadata.siteUrl}${url}`
+) => {
+  return url.startsWith('http') ? url : fallbackUrl;
+};
 
 const sameAllElements = (a: unknown[], b: unknown[]) => {
   if (a.length !== b.length) return false;
