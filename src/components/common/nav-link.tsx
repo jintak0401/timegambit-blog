@@ -3,7 +3,7 @@
 import { ComponentProps, forwardRef, MouseEvent } from 'react';
 import NextLink from 'next/link';
 
-import { onStart } from '@/lib/router-events';
+import { scrollPosStore } from '@/lib/scrollPosStore';
 
 const isModifiedEvent = (event: MouseEvent): boolean => {
   const eventTarget = event.currentTarget as HTMLAnchorElement | SVGAElement;
@@ -18,6 +18,7 @@ const isModifiedEvent = (event: MouseEvent): boolean => {
   );
 };
 
+const { onStartCb } = scrollPosStore;
 const NavLink = forwardRef<HTMLAnchorElement, ComponentProps<'a'>>(
   function Link({ href, onClick, ...rest }, ref) {
     const useLink = href && href.startsWith('/');
@@ -30,7 +31,7 @@ const NavLink = forwardRef<HTMLAnchorElement, ComponentProps<'a'>>(
           if (!isModifiedEvent(event)) {
             const { pathname, search, hash } = window.location;
             const curPath = pathname + search + hash;
-            if (href !== pathname + search + hash) onStart(curPath, href);
+            if (href !== pathname + search + hash) onStartCb(curPath, href);
           }
           if (onClick) onClick(event);
         }}
