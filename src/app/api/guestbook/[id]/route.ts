@@ -8,13 +8,17 @@ import { UserType } from '@/lib/types';
 
 import queries from '@/app/api/queries';
 
-export const DELETE = async (req: NextRequest, context: { id: string }) => {
+export const DELETE = async (
+  req: NextRequest,
+  context: { params: { id: string } }
+) => {
   const session = await getServerSession();
 
   if (!session) {
     return NextResponse.json('Unauthorized', { status: 403 });
   }
-  const { id } = context;
+  const id = context.params.id;
+
   const { email } = session.user as UserType;
 
   let connection = null;
