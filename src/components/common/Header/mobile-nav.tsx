@@ -1,6 +1,8 @@
+import { usePathname } from 'next/navigation';
+
 import navLinks from 'data/navLinks';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
+
+import NavLink from '@/components/common/nav-link';
 
 interface Props {
   navShow: boolean;
@@ -11,11 +13,11 @@ const isCurPath = (path: string, title: string) =>
   path.includes(title.toLowerCase());
 
 const MobileNav = ({ navShow, onToggleNav }: Props) => {
-  const router = useRouter();
+  const pathname = usePathname();
 
   return (
     <div
-      className={`fixed top-0 left-full z-40 h-screen w-screen bg-gray-200 opacity-95 duration-300 dark:bg-gray-800 sm:hidden ${
+      className={`fixed left-full top-0 z-40 h-screen w-screen bg-gray-200 opacity-95 duration-300 dark:bg-gray-800 sm:hidden ${
         navShow ? '-translate-x-full' : 'translate-x-0'
       }`}
     >
@@ -42,16 +44,16 @@ const MobileNav = ({ navShow, onToggleNav }: Props) => {
       </div>
       <nav className="fixed mt-8 h-full">
         {navLinks.map((link) => (
-          <Link
+          <NavLink
             key={link.title}
             href={link.href}
             className={`mx-12 my-8 block w-fit text-2xl font-bold tracking-widest text-gray-900 decoration-primary-600 decoration-4 underline-offset-8 dark:text-gray-100 dark:decoration-primary-400 ${
-              isCurPath(router.pathname, link.title) ? 'underline' : ''
+              isCurPath(pathname, link.title) ? 'underline' : ''
             }`}
             onClick={onToggleNav}
           >
             {link.title}
-          </Link>
+          </NavLink>
         ))}
       </nav>
     </div>
