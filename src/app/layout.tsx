@@ -18,7 +18,10 @@ import RootLayoutClient from './layout.client';
 export const metadata: Metadata = {
   viewport: 'width=device-width, initial-scale=1',
   metadataBase: siteMetadata.siteUrl as unknown as URL,
-  title: siteMetadata.title,
+  title: {
+    absolute: siteMetadata.title,
+    template: siteMetadata.titleTemplate,
+  },
   description: phrases.Seo.homeDesc || siteMetadata.description,
   applicationName: siteMetadata.applicationName,
   themeColor: '#ffffff',
