@@ -1,11 +1,14 @@
-import { useSession } from 'next-auth/react';
+'use client';
+
+import { DefaultSession } from 'next-auth';
 import useSWR from 'swr';
 
 import { GuestbookEntryType } from '@/lib/types';
 
-import GuestbookEntry from './GuestbookEntry';
+import GuestbookEntry from './entry';
 
 interface Props {
+  user: DefaultSession['user'];
   fallbackData: GuestbookEntryType[];
 }
 
@@ -20,8 +23,7 @@ const getGuestbooks = async (): Promise<GuestbookEntryType[]> => {
   return res.json();
 };
 
-const GuestbookEntries = ({ fallbackData }: Props) => {
-  const { data: session } = useSession();
+const GuestbookEntries = ({ user, fallbackData }: Props) => {
   const { data: entries } = useSWR('/api/guestbook', getGuestbooks, {
     dedupingInterval: DEDUPING_INTERVAL,
     fallbackData,
@@ -29,8 +31,8 @@ const GuestbookEntries = ({ fallbackData }: Props) => {
 
   return (
     <div>
-      {(entries as GuestbookEntryType[]).map((entry: GuestbookEntryType) => (
-        <GuestbookEntry key={entry.id} entry={entry} session={session} />
+      {entries.map((entry: GuestbookEntryType) => (
+        <GuestbookEntry key={entry.id} entry={entry} user={user} />
       ))}
     </div>
   );

@@ -1,7 +1,9 @@
-import phrases from 'data/phrases';
-import NextImage from 'next/image';
-import { signOut } from 'next-auth/react';
 import { useRef } from 'react';
+import NextImage from 'next/image';
+
+import phrases from 'data/phrases';
+
+import { signOut } from 'next-auth/react';
 import { toast } from 'react-toastify';
 import { mutate } from 'swr';
 
@@ -12,7 +14,7 @@ interface Props {
   setLoading: (loading: boolean) => void;
 }
 
-const GuestbookInput = ({ setLoading, user }: Props) => {
+const GuestbookForm = ({ setLoading, user }: Props) => {
   const ref = useRef<HTMLInputElement | null>(null);
 
   const onSubmitEntry = async () => {
@@ -96,4 +98,4 @@ const GuestbookInput = ({ setLoading, user }: Props) => {
   );
 };
 
-export default GuestbookInput;
+export default GuestbookForm;

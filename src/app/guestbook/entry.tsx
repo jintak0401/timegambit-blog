@@ -1,17 +1,20 @@
-import phrases from 'data/phrases';
 import NextImage from 'next/image';
-import { Session } from 'next-auth';
+
+import phrases from 'data/phrases';
+
+import { DefaultSession } from 'next-auth';
 import { toast } from 'react-toastify';
-import { mutate } from 'swr';
+import { useSWRConfig } from 'swr';
 
 import { GuestbookEntryType } from '@/lib/types';
 
 interface Props {
   entry: GuestbookEntryType;
-  session: Session | null;
+  user: DefaultSession['user'];
 }
 
-const GuestbookEntry = ({ entry, session }: Props) => {
+const GuestbookEntry = ({ entry, user }: Props) => {
+  const { mutate } = useSWRConfig();
   const deleteEntry = async () => {
     try {
       await fetch(`/api/guestbook/${entry.id}`, {
@@ -44,7 +47,7 @@ const GuestbookEntry = ({ entry, session }: Props) => {
             <span className="sr-only">Creation Date</span>
             <div className="weak-text">{entry.updatedAt}</div>
           </div>
-          {session?.user?.email === entry.email && (
+          {user?.email === entry.email && (
             <button
               className="duration-default h-fit rounded-md border-2 border-primary-200 px-3 py-1 hover:bg-primary-200 dark:border-primary-700 dark:hover:bg-primary-700"
               onClick={deleteEntry}

@@ -1,5 +1,6 @@
 import phrases from 'data/phrases';
 import siteMetadata from 'data/siteMetadata.mjs';
+
 import { signIn } from 'next-auth/react';
 import { FcGoogle } from 'react-icons/fc';
 import { SiGithub } from 'react-icons/si';
