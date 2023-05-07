@@ -1,9 +1,14 @@
 const siteMetadata = {
+  // for meta tags
   title: 'Time Gambit Blog',
   author: 'Time Gambit',
+  titleTemplate: '%s - Time Gambit',
+  applicationName: 'Time Gambit Blog',
   headerTitle: 'Time Gambit',
   description: 'Time Gambit의 블로그',
-  language: 'ko-KR',
+  keywords: ['Time Gambit', '기술 블로그'],
+  locale: 'ko-KR',
+  language: 'ko',
   theme: 'system', // system, dark or light
   siteUrl: 'https://www.timegambit.com',
   siteRepo: 'https://github.com/jintak/timegambit-blog',
@@ -11,13 +16,14 @@ const siteMetadata = {
   image: '/static/images/logo.png',
   socialBanner: '/static/images/twitter-card.png',
   fallbackImage: '/static/images/fallback.webp',
+
   email: 'jintak0401@naver.com',
   github: 'https://github.com/jintak0401',
   twitter: '',
   facebook: '',
   youtube: '',
   linkedin: '',
-  locale: 'ko-KR',
+
   needRestoreScrollPosPage: ['/blog', '/tags/[tag]', '/series/[seriesSlug]'],
   rebuildPeriod: 10, // renewal period of popular post list at home page and guestbook logs (in seconds)
   blogPost: {
