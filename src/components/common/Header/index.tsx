@@ -1,22 +1,23 @@
+import { useState } from 'react';
+import { usePathname } from 'next/navigation';
+
 import { DarkLogo, DarkLogoTitle, Logo, LogoTitle } from 'data/logo';
 import navLinks from 'data/navLinks';
 import siteMetadata from 'data/siteMetadata.mjs';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useState } from 'react';
 
 import { useScrollDirection } from '@/hooks/useScrollDirection';
 
+import NavLink from '@/components/common/nav-link';
 import SvgSwitcher from '@/components/Image/SvgSwitcher';
 
-import MobileNav from './MobileNav';
+import MobileNav from './mobile-nav';
 import MobileNavButton from './MobileNavButton';
-import ThemeSwitch from './ThemeSwitch';
+import ThemeSwitch from './theme-switch';
 
 const REDUCED_NAV_LINKS = ['Blog', 'Tags', 'Series', 'Projects'];
 
 const NavItems = () => {
-  const path = useRouter().pathname.split('/')[1];
+  const path = usePathname().split('/')[1];
   const isSamePath = (title: string) => path === title.toLowerCase();
 
   return (
@@ -29,7 +30,7 @@ const NavItems = () => {
               !REDUCED_NAV_LINKS.includes(title) ? 'hidden xl:block' : ''
             }`}
           >
-            <Link
+            <NavLink
               href={href}
               className={`duration-default mx-1 rounded p-1 font-semibold sm:px-4 sm:py-2 ${
                 isSamePath(title)
@@ -38,7 +39,7 @@ const NavItems = () => {
               }`}
             >
               {title}
-            </Link>
+            </NavLink>
           </li>
         ))}
       </ul>
@@ -71,7 +72,7 @@ const Header = () => {
             : 'translate-y-0'
         }`}
       >
-        <Link
+        <NavLink
           href="/"
           aria-label={siteMetadata.headerTitle}
           className="flex cursor-pointer items-center justify-between"
@@ -88,7 +89,7 @@ const Header = () => {
             LightModeSvg={LogoTitle}
             DarkModeSvg={DarkLogoTitle}
           />
-        </Link>
+        </NavLink>
         <div className="flex items-center py-1 leading-5 sm:py-0">
           <NavItems />
           <ThemeSwitch />
