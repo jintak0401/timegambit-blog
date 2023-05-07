@@ -2,7 +2,7 @@ const siteMetadata = {
   // for meta tags
   title: 'Time Gambit Blog',
   author: 'Time Gambit',
-  titleTemplate: '%s - Time Gambit',
+  titleTemplate: '%s | Time Gambit',
   applicationName: 'Time Gambit Blog',
   headerTitle: 'Time Gambit',
   description: 'Time Gambit의 블로그',
