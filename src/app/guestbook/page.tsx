@@ -13,6 +13,9 @@ import Guestbook from './guestbook';
 export const metadata: Metadata = {
   title: 'Guestbook',
   description: phrases.Seo.guestbookDesc || siteMetadata.description,
+  alternates: {
+    canonical: `${siteMetadata.siteUrl}/guestbook`,
+  },
 };
 
 const getGuestbooks = async () => {
