@@ -13,6 +13,9 @@ import NavLink from '@/components/common/nav-link';
 export const metadata: Metadata = {
   title: 'Tags',
   description: phrases.Seo.tagDesc || siteMetadata.description,
+  alternates: {
+    canonical: `${siteMetadata.siteUrl}/tags`,
+  },
 };
 
 const getTags = async () => {
