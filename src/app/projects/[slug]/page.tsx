@@ -59,7 +59,6 @@ export const generateMetadata = ({ params: { slug } }: Props): Metadata => {
       title: post.title,
       description,
       images,
-      site: siteMetadata.twitter,
     },
   };
 };
