@@ -14,8 +14,10 @@ import AboutList from '@/components/card-and-list/AboutList';
 
 export const metadata: Metadata = {
   title: 'About',
-
   description: phrases.Seo.aboutDesc || siteMetadata.description,
+  alternates: {
+    canonical: `${siteMetadata.siteUrl}/about`,
+  },
 };
 
 const SELFIE_URL = about.Selfie;
