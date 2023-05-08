@@ -9,6 +9,9 @@ import ProjectCard from '@/components/card-and-list/ProjectCard';
 export const metadata: Metadata = {
   title: 'Projects',
   description: phrases.Seo.projectDesc || siteMetadata.description,
+  alternates: {
+    canonical: `${siteMetadata.siteUrl}/projects`,
+  },
 };
 
 const ProjectPage = () => {
