@@ -2,13 +2,10 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 
 import phrases from 'data/phrases';
-import siteMetadata from 'data/siteMetadata.mjs';
 
-const metadata: Metadata = {
-  title: {
-    default: '404',
-    template: siteMetadata.titleTemplate,
-  },
+export const metadata: Metadata = {
+  title: 'Not Found',
+  description: phrases._404.description || 'Not Found',
 };
 
 const _404Page = () => {
