@@ -4,7 +4,7 @@ import seriesData from "../../data/seriesData.mjs";
 
 const tagCount = {};
 
-export async function getAllTags() {
+export const getAllTags = async () => {
   if (Object.keys(tagCount).length) return tagCount;
   allBlogs.forEach((file) => {
     if (file.tags && file.draft !== true) {
@@ -22,7 +22,7 @@ export async function getAllTags() {
 
 const seriesInfo = {};
 
-export async function getAllSeries() {
+export const getAllSeries = async () => {
 
   if (Object.keys(seriesInfo).length) return seriesInfo;
   for (const { series, lastmod, images } of allBlogs) {
