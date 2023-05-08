@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, Suspense } from 'react';
 import { Metadata } from 'next';
 import localFont from 'next/font/local';
 
@@ -104,9 +104,11 @@ const RootLayout = async ({ children }: PropsWithChildren) => {
       <html lang={siteMetadata.language} className="scroll-smooth">
         <body className="antialiased">
           <Analytics />
-          <RootLayoutClient className={`${dejavu.variable} font-sans`}>
-            {children}
-          </RootLayoutClient>
+          <Suspense>
+            <RootLayoutClient className={`${dejavu.variable} font-sans`}>
+              {children}
+            </RootLayoutClient>
+          </Suspense>
           <div id="modal" />
         </body>
       </html>
