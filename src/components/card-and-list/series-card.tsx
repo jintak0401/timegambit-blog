@@ -1,10 +1,13 @@
-import phrases from 'data/phrases';
-import Link from 'next/link';
+'use client';
+
 import { useState } from 'react';
+
+import phrases from 'data/phrases';
 
 import formattedDate from '@/lib/formattedDate';
 import { SeriesListItem } from '@/lib/types';
 
+import NavLink from '@/components/common/nav-link';
 import ImageWithFallback from '@/components/Image/ImageWithFallback';
 
 interface Props {
@@ -20,7 +23,7 @@ const SeriesCard = ({ series }: Props) => {
         loaded ? 'animate-card' : 'opacity-0'
       }`}
     >
-      <Link href={`/series/${href}`} aria-label={`Link to ${title}`}>
+      <NavLink href={`/series/${href}`} aria-label={`Link to ${title}`}>
         <ImageWithFallback
           src={image}
           alt={title}
@@ -30,7 +33,7 @@ const SeriesCard = ({ series }: Props) => {
           }}
         />
         <div className="px-2 py-3">
-          <h2 className="strong-text mt-3 mb-1 text-lg font-semibold">
+          <h2 className="strong-text mb-1 mt-3 text-lg font-semibold">
             {title}
           </h2>
           <span className="middle-text">
@@ -41,7 +44,7 @@ const SeriesCard = ({ series }: Props) => {
             {phrases.Series.lastUpdate} {formattedDate(lastmod, false)}
           </span>
         </div>
-      </Link>
+      </NavLink>
     </article>
   );
 };
