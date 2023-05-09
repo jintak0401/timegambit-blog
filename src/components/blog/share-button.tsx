@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { useRouter } from 'next/router';
+import { usePathname } from 'next/navigation';
 
 import phrases from 'data/phrases';
 
@@ -14,8 +14,8 @@ interface Props {
 
 const removeFragment = (url: string) => url.replace(/#.*$/, '');
 
-const ShareBtn = ({ title, text }: Props) => {
-  const router = useRouter();
+const ShareButton = ({ title, text }: Props) => {
+  const pathname = usePathname();
   const ref = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -27,7 +27,7 @@ const ShareBtn = ({ title, text }: Props) => {
   const onClick = () => {
     if (typeof navigator?.share === 'undefined') return;
     navigator.share({
-      url: removeFragment(router.asPath),
+      url: removeFragment(pathname),
       title,
       text,
     });
@@ -45,4 +45,4 @@ const ShareBtn = ({ title, text }: Props) => {
   );
 };
 
-export default ShareBtn;
+export default ShareButton;
