@@ -5,10 +5,11 @@ import { useState } from 'react';
 import phrases from 'data/phrases';
 
 import formattedDate from '@/lib/formattedDate';
-import { SeriesListItem } from '@/lib/types';
 
 import NavLink from '@/components/common/nav-link';
 import ImageWithFallback from '@/components/Image/ImageWithFallback';
+
+import { SeriesListItem } from '@/types';
 
 interface Props {
   series: SeriesListItem;

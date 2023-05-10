@@ -4,9 +4,9 @@ import { AnchorHTMLAttributes, DetailedHTMLProps, useState } from 'react';
 
 import { isTouchDevice } from '@/lib/utils';
 
-import FootnoteModal from '@/components/mdxComponents/FootnoteModal';
+import FootnoteModal from '@/components/mdx-components/footnote-modal';
 
-import FootnoteTooltip from './FootnoteTooltip';
+import FootnoteTooltip from './footnote-tooltip';
 
 const InlineFootnote = ({
   href,

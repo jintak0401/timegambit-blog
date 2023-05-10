@@ -8,9 +8,9 @@ import { IoCloseSharp } from 'react-icons/io5';
 
 import { useScrollDirection } from '@/hooks/useScrollDirection';
 
-import TOCList from './TOCList';
+import TocList from './toc-list';
 
-const SmallWidthTOC = () => {
+const SmallWidthToc = () => {
   const scrollDirection = useScrollDirection();
   const [tocShow, setTocShow] = useState(false);
 
@@ -44,11 +44,11 @@ const SmallWidthTOC = () => {
           {phrases.Blog.TOC}
         </div>
         <ul className="space-y-1.5 p-5 transition-colors">
-          <TOCList onClickAnchor={() => setTocShow(false)} />
+          <TocList onClickAnchor={() => setTocShow(false)} />
         </ul>
       </article>
     </div>
   );
 };
 
-export default SmallWidthTOC;
+export default SmallWidthToc;

@@ -1,11 +1,11 @@
 'use client';
 
-import { useTocObserver } from '@/hooks/useTocObserver';
+import { useTocObserver } from '@/hooks/use-toc-observer';
 
 interface Props {
   onClickAnchor?: () => void;
 }
-const TOCList = ({ onClickAnchor }: Props) => {
+const TocList = ({ onClickAnchor }: Props) => {
   const { headingEls, currentId } = useTocObserver();
 
   return (
@@ -34,4 +34,4 @@ const TOCList = ({ onClickAnchor }: Props) => {
   );
 };
 
-export default TOCList;
+export default TocList;

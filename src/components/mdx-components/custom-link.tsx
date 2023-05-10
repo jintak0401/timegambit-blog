@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-has-content */
-import Link from 'next/link';
 import { AnchorHTMLAttributes, DetailedHTMLProps } from 'react';
+import NextLink from 'next/link';
 
-import InlineFootnote from './InlineFootnote';
+import InlineFootnote from './inline-footnote';
 
 const CustomLink = ({
   href,
@@ -16,9 +16,9 @@ const CustomLink = ({
 
   if (isInternalLink) {
     return (
-      <Link legacyBehavior href={href}>
+      <NextLink legacyBehavior href={href}>
         <a {...rest} />
-      </Link>
+      </NextLink>
     );
   }
 

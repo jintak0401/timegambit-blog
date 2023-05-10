@@ -1,6 +1,6 @@
 import phrases from 'data/phrases';
 
-import { SeriesListItem } from '@/lib/types';
+import { SeriesListItem } from '@/types';
 
 import SeriesCard from './series-card';
 

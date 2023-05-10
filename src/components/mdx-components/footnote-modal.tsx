@@ -1,5 +1,7 @@
-import phrases from 'data/phrases';
 import { useEffect, useRef, useState } from 'react';
+
+import phrases from 'data/phrases';
+
 import { createPortal } from 'react-dom';
 
 import useGetFootnoteBody from '@/hooks/useGetFootnoteBody';
@@ -34,7 +36,7 @@ const FootnoteModal = ({ onClose, idx }: Props) => {
   return element && body
     ? createPortal(
         <div
-          className={`animate-modal fixed top-0 left-0 z-50 h-screen w-screen bg-black bg-opacity-40 ${
+          className={`animate-modal fixed left-0 top-0 z-50 h-screen w-screen bg-black bg-opacity-40 ${
             opened ? 'animate-modal-open' : 'animate-modal-close'
           }`}
           onClick={closeModal}
