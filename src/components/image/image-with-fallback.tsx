@@ -1,6 +1,7 @@
-import siteMetaData from 'data/siteMetadata.mjs';
-import NextImage, { ImageProps } from 'next/image';
 import { useState } from 'react';
+import NextImage, { ImageProps } from 'next/image';
+
+import siteMetaData from 'data/siteMetadata.mjs';
 
 const ImageWithFallback = ({
   src,
