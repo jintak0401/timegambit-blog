@@ -4,9 +4,9 @@ import { ResultSetHeader } from 'mysql2';
 import { getServerSession } from 'next-auth';
 
 import { db } from '@/lib/db';
-import { UserType } from '@/lib/types';
 
 import queries from '@/app/api/queries';
+import { UserType } from '@/types';
 
 export const DELETE = async (
   req: NextRequest,

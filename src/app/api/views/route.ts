@@ -3,9 +3,9 @@ import { NextResponse } from 'next/server';
 import siteMetadata from 'data/siteMetadata.mjs';
 
 import { db } from '@/lib/db';
-import { PopularPostType } from '@/lib/types';
 
 import queries from '@/app/api/queries';
+import { PopularPostType } from '@/types';
 
 export const GET = async () => {
   let popularPostsSlug: PopularPostType[] = [];

@@ -4,9 +4,9 @@ import { RowDataPacket } from 'mysql2';
 import { getServerSession } from 'next-auth';
 
 import { db } from '@/lib/db';
-import { UserType } from '@/lib/types';
 
 import queries from '@/app/api/queries';
+import { UserType } from '@/types';
 
 export const GET = async () => {
   let connection = null;

@@ -57,9 +57,13 @@ export const POST = async (
   context: { params: { slug: string[] } }
 ) => {
   const ipAddress =
-    (req.headers.get('x-forwarded-for') as string)?.split(',')[0] || '0.0.0.0';
+    (req.headers.get('x-forwarded-for') as string)?.split(',')[0] || '::1';
 
-  if (ipAddress === process.env.OWN_IP || ipAddress === '127.0.0.1') {
+  if (
+    ipAddress === process.env.OWN_IP ||
+    ipAddress === '127.0.0.1' ||
+    ipAddress === '::1'
+  ) {
     return NextResponse.json(
       {
         message: "View counts are not increased at owner's viewing",
