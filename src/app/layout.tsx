@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import localFont from 'next/font/local';
 
 import phrases from 'data/phrases';
-import siteMetadata from 'data/siteMetadata.mjs';
+import siteMetadata from 'data/site-metadata.mjs';
 
 import { ServerThemeProvider } from '@wits/next-themes';
 

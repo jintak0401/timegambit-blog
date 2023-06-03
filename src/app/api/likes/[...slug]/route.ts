@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import siteMetadata from 'data/siteMetadata.mjs';
+import siteMetadata from 'data/site-metadata.mjs';
 
 import { createHash } from 'crypto';
 import { RowDataPacket } from 'mysql2';

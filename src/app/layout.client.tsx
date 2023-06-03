@@ -2,7 +2,7 @@
 
 import { ReactNode } from 'react';
 
-import siteMetadata from 'data/siteMetadata.mjs';
+import siteMetadata from 'data/site-metadata.mjs';
 
 import { ThemeProvider } from '@wits/next-themes';
 import { ToastContainer } from 'react-toastify';

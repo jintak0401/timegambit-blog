@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
 import phrases from 'data/phrases';
-import siteMetadata from 'data/siteMetadata.mjs';
+import siteMetadata from 'data/site-metadata.mjs';
 
 import { filterBlogPosts } from '@/lib/contentlayer';
 import { scrollPosStore } from '@/lib/scroll-pos-store';

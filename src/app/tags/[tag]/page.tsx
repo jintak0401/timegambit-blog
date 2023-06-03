@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 
 import phrases from 'data/phrases';
-import siteMetadata from 'data/siteMetadata.mjs';
+import siteMetadata from 'data/site-metadata.mjs';
 
 import { allBlogs } from 'contentlayer/generated';
 import { slug } from 'github-slugger';

@@ -1,7 +1,7 @@
 import React from 'react';
 import NextImage from 'next/image';
 
-import siteMetaData from 'data/siteMetadata.mjs';
+import siteMetaData from 'data/site-metadata.mjs';
 
 import ErrorBoundary from '@/components/common/error-boundary';
 import Zoom from '@/components/image/zoom';

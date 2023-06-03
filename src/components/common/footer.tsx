@@ -1,4 +1,4 @@
-import siteMetadata from 'data/siteMetadata.mjs';
+import siteMetadata from 'data/site-metadata.mjs';
 
 import SocialIcon from '@/components/social-icons';
 

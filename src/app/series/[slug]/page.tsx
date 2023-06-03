@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 
 import phrases from 'data/phrases';
 import seriesData from 'data/series-data.mjs';
-import siteMetadata from 'data/siteMetadata.mjs';
+import siteMetadata from 'data/site-metadata.mjs';
 
 import { allBlogs } from 'contentlayer/generated';
 import { slug as slugger } from 'github-slugger';

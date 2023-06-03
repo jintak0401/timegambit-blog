@@ -4,7 +4,7 @@ import path from "path";
 
 import { escape } from "./html-escaper.mjs";
 import { allBlogs } from "../.contentlayer/generated/Blog/_index.mjs";
-import siteMetadata from "../data/siteMetadata.mjs";
+import siteMetadata from "../data/site-metadata.mjs";
 import { getAllSeries, getAllTags } from "../src/lib/get-blog-info.mjs";
 import seriesData from "../data/series-data.mjs";
 

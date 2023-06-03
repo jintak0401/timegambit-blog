@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 import about from 'data/about';
 import phrases from 'data/phrases';
-import siteMetadata from 'data/siteMetadata.mjs';
+import siteMetadata from 'data/site-metadata.mjs';
 
 import { omit } from '@/lib/contentlayer';
 

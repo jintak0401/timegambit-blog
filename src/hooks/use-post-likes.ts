@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import siteMetadata from 'data/siteMetadata.mjs';
+import siteMetadata from 'data/site-metadata.mjs';
 
 import useSWR, { SWRConfiguration } from 'swr';
 

@@ -3,7 +3,7 @@ import { usePathname } from 'next/navigation';
 
 import { DarkLogo, DarkLogoTitle, Logo, LogoTitle } from 'data/logo';
 import navLinks from 'data/nav-links';
-import siteMetadata from 'data/siteMetadata.mjs';
+import siteMetadata from 'data/site-metadata.mjs';
 
 import { useScrollDirection } from '@/hooks/use-scroll-direction';
 

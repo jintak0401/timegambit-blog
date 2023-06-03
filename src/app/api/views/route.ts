@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import siteMetadata from 'data/siteMetadata.mjs';
+import siteMetadata from 'data/site-metadata.mjs';
 
 import { db } from '@/lib/db';
 

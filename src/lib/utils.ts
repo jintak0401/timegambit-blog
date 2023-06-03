@@ -1,4 +1,4 @@
-import siteMetadata from 'data/siteMetadata.mjs';
+import siteMetadata from 'data/site-metadata.mjs';
 
 export const getImageWithFallback = (
   url: string,

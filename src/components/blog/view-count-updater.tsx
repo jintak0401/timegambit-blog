@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 
-import siteMetadata from 'data/siteMetadata.mjs';
+import siteMetadata from 'data/site-metadata.mjs';
 
 import usePostViews from '@/hooks/use-post-views';
 

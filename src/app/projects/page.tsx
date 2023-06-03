@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 
 import phrases from 'data/phrases';
 import projectData from 'data/project-data';
-import siteMetadata from 'data/siteMetadata.mjs';
+import siteMetadata from 'data/site-metadata.mjs';
 
 import ProjectCard from '@/components/card-and-list/project-card';
 
