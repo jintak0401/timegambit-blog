@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 
 import phrases from 'data/phrases';
-import seriesData from 'data/seriesData.mjs';
+import seriesData from 'data/series-data.mjs';
 import siteMetadata from 'data/siteMetadata.mjs';
 
 import { allBlogs } from 'contentlayer/generated';

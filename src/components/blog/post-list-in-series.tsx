@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import phrases from 'data/phrases';
-import seriesData from 'data/seriesData.mjs';
+import seriesData from 'data/series-data.mjs';
 
 import { slug } from 'github-slugger';
 import { GoTriangleDown } from 'react-icons/go';

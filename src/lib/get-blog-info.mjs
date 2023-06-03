@@ -1,6 +1,6 @@
 import { allBlogs } from "../../.contentlayer/generated/index.mjs";
 import { slug } from "github-slugger";
-import seriesData from "../../data/seriesData.mjs";
+import seriesData from "../../data/series-data.mjs";
 
 const tagCount = {};
 
