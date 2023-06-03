@@ -8,7 +8,6 @@ import { slug } from 'github-slugger';
 
 import { pickBlogItem, sortedBlogPost } from '@/lib/contentlayer';
 import { getAllTags } from '@/lib/getBlogInfo.mjs';
-import { PostListItem } from '@/lib/types';
 
 import ListLayout from '@/layouts/ListLayout';
 
@@ -46,11 +45,10 @@ const getPosts = (tagSlug: string) => {
       ({ tags, draft }) =>
         !draft && (tags ?? []).map((t) => slug(t)).includes(tagSlug)
     )
-    .map(pickBlogItem) as PostListItem[];
+    .map(pickBlogItem);
 };
 
 const TagPostListPage = async ({ params }: Props) => {
-  console.log(await getAllTags());
   const tag = decodeURI(params.tag);
   const posts = getPosts(tag);
   return <ListLayout posts={posts} title={tag} />;
