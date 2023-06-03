@@ -56,7 +56,7 @@ export const scrollPosStore = (() => {
     return store[path];
   };
 
-  const onStartCb = (before: string, after: string) => {
+  const onStartRouteCb = (before: string, after: string) => {
     if (isNeedRestoreScroll(after)) {
       initScrollPosState(after);
     }
@@ -65,7 +65,7 @@ export const scrollPosStore = (() => {
     }
   };
 
-  const onCompleteCb = (after: string) => {
+  const onCompleteRouteCb = (after: string) => {
     if (isNeedRestoreScroll(after)) {
       window.scrollTo({
         top: getScrollPosState(after).scrollPos,
@@ -78,7 +78,7 @@ export const scrollPosStore = (() => {
     setListLengthState,
     setScrollPosState,
     getScrollPosState,
-    onStartCb,
-    onCompleteCb,
+    onStartRouteCb,
+    onCompleteRouteCb,
   };
 })();
