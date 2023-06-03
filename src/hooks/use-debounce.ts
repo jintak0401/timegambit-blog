@@ -1,6 +1,6 @@
 import { DependencyList, useEffect } from 'react';
 
-import useTimeout from './useTimeout';
+import useTimeout from './use-timeout';
 
 export type UseDebounceReturn = [() => boolean | null, () => void];
 
