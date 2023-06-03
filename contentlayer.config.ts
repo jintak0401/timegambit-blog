@@ -61,7 +61,6 @@ export default makeSource({
   mdx: {
     cwd: process.cwd(),
     remarkPlugins: [
-      // remarkExtractFrontmatter,
       remarkGfm,
       remarkCodeTitles,
       [remarkFootnotes, { inlineNotes: true }],
