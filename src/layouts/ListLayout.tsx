@@ -10,7 +10,7 @@ import { filterBlogPosts } from '@/lib/contentlayer';
 import { scrollPosStore } from '@/lib/scroll-pos-store';
 import { sameAllElements } from '@/lib/utils';
 import useDebounce from '@/hooks/use-debounce';
-import useInfiniteScrollObserver from '@/hooks/useInfiniteScrollObserver';
+import useInfiniteScrollObserver from '@/hooks/use-infinite-scroll-observer';
 import useIsFirstRender from '@/hooks/useIsFirstRender';
 
 import PostList from '@/components/card-and-list/post-list';
