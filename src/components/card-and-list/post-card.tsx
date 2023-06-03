@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { IoEyeOutline, IoHeartOutline } from 'react-icons/io5';
 
-import formattedDate from '@/lib/formattedDate';
+import formatDate from '@/lib/format-date';
 import { usePostLikes } from '@/hooks/use-post-likes';
 import usePostViews from '@/hooks/use-post-views';
 
@@ -108,7 +108,7 @@ const PostCard = ({ post }: Props) => {
         <dl className="middle-text flex items-center gap-2 font-medium">
           <dt className="sr-only">Creation Date</dt>
           <dd>
-            <time dateTime={date}>{formattedDate(date)}</time>
+            <time dateTime={date}>{formatDate(date)}</time>
           </dd>
           <Counter slug={slug} />
         </dl>

@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 import type { Blog } from 'contentlayer/generated';
 
 import { CoreContent } from '@/lib/contentlayer';
-import formattedDate from '@/lib/formattedDate';
+import formatDate from '@/lib/format-date';
 import { isProd } from '@/lib/is-production';
 
 import PageTitle from '@/components/blog/page-title';
@@ -47,7 +47,7 @@ export default function PostLayout({
           <dl>
             <dt className="sr-only">Published on</dt>
             <dd className="middle-text font-medium leading-6">
-              <time dateTime={date}>{formattedDate(date)}</time>
+              <time dateTime={date}>{formatDate(date)}</time>
             </dd>
           </dl>
           <PageTitle>{title}</PageTitle>

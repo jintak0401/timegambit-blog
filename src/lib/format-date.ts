@@ -9,7 +9,7 @@ const OPTIONS: Intl.DateTimeFormatOptions = {
 
 const ONE_DAY_MILLISECONDS = 60 * 60 * 24 * 1000;
 
-const formattedDate = (date: string, absolute = true) => {
+const formatDate = (date: string, absolute = true) => {
   const createdAt = new Date(date);
   if (absolute)
     return createdAt.toLocaleDateString(siteMetadata.locale, OPTIONS);
@@ -29,4 +29,4 @@ const formattedDate = (date: string, absolute = true) => {
   return `${Math.floor(years)}${phrases.formattingDate.yearsAgo}`; // years ago
 };
 
-export default formattedDate;
+export default formatDate;

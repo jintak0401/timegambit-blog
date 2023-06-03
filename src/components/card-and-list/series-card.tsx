@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import phrases from 'data/phrases';
 
-import formattedDate from '@/lib/formattedDate';
+import formatDate from '@/lib/format-date';
 
 import NavLink from '@/components/common/nav-link';
 import ImageWithFallback from '@/components/image/image-with-fallback';
@@ -42,7 +42,7 @@ const SeriesCard = ({ series }: Props) => {
           </span>
           <span className="weak-text"> · </span>
           <span className="weak-text">
-            {phrases.Series.lastUpdate} {formattedDate(lastmod, false)}
+            {phrases.Series.lastUpdate} {formatDate(lastmod, false)}
           </span>
         </div>
       </NavLink>
