@@ -4,17 +4,19 @@ import siteMetadata from 'data/siteMetadata.mjs';
 import { allBlogs, Blog } from 'contentlayer/generated';
 
 import { pickBlogItem, sortedBlogPost } from '@/lib/contentlayer';
-import { PopularPostType } from '@/lib/types';
-import { PostListItem } from '@/lib/types';
 
-import PostList from '@/components/card-and-list/PostList';
-import Introduction from '@/components/common/Introduction';
+import PostList from '@/components/card-and-list/post-list';
 import NavLink from '@/components/common/nav-link';
+
+import { PopularPostType } from '@/types';
+import { PostListItem } from '@/types';
+
+import Introduction from './introduction';
 
 const getPosts = async () => {
   const recentPosts = sortedBlogPost(allBlogs)
     .slice(0, siteMetadata.blogPost.homeRecentPostLength)
-    .map(pickBlogItem) as PostListItem[];
+    .map(pickBlogItem);
 
   const res = await fetch(`${process.env.API_URL}/api/views`, {
     method: 'GET',
@@ -30,7 +32,7 @@ const getPosts = async () => {
       popularPosts = popularPostsSlug.map(({ slug }) => {
         const post = allBlogs.find((item) => item.slug === slug) as Blog;
         return pickBlogItem(post);
-      }) as PostListItem[];
+      });
     }
   }
 

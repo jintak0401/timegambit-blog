@@ -4,9 +4,10 @@ import phrases from 'data/phrases';
 import siteMetadata from 'data/siteMetadata.mjs';
 
 import { getAllSeries } from '@/lib/getBlogInfo.mjs';
-import { SeriesListItem } from '@/lib/types';
 
-import SeriesList from '@/components/card-and-list/SeriesList';
+import SeriesList from '@/components/card-and-list/series-list';
+
+import { SeriesListItem } from '@/types';
 
 export const metadata: Metadata = {
   title: 'Series',
