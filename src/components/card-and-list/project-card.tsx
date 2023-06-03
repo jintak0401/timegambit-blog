@@ -5,7 +5,7 @@ import { useState } from 'react';
 import phrases from 'data/phrases';
 
 import NavLink from '@/components/common/nav-link';
-import ImageWithFallback from '@/components/Image/ImageWithFallback';
+import ImageWithFallback from '@/components/image/image-with-fallback';
 
 interface Props {
   title: string;
