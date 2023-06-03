@@ -6,7 +6,7 @@ import phrases from 'data/phrases';
 
 import { IoCloseSharp } from 'react-icons/io5';
 
-import { useScrollDirection } from '@/hooks/useScrollDirection';
+import { useScrollDirection } from '@/hooks/use-scroll-direction';
 
 import TocList from './toc-list';
 

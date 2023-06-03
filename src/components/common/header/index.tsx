@@ -5,7 +5,7 @@ import { DarkLogo, DarkLogoTitle, Logo, LogoTitle } from 'data/logo';
 import navLinks from 'data/navLinks';
 import siteMetadata from 'data/siteMetadata.mjs';
 
-import { useScrollDirection } from '@/hooks/useScrollDirection';
+import { useScrollDirection } from '@/hooks/use-scroll-direction';
 
 import NavLink from '@/components/common/nav-link';
 import SvgSwitcher from '@/components/image/svg-switcher';
