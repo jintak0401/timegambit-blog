@@ -9,8 +9,8 @@ import PageTitle from '@/components/blog/page-title';
 import ScrollIndicator from '@/components/blog/scroll-indicator';
 import Comments from '@/components/comments';
 import ScrollTopAndBottom from '@/components/common/scroll-top-and-bottom';
-import LargeWidthToc from '@/components/TOC/large-width-toc';
-import SmallWidthToc from '@/components/TOC/small-width-toc';
+import LargeWidthToc from '@/components/toc/large-width-toc';
+import SmallWidthToc from '@/components/toc/small-width-toc';
 
 interface Props {
   children: ReactNode;
