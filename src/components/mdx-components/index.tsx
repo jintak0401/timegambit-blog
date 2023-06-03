@@ -9,10 +9,10 @@ import { coreContent } from '@/lib/contentlayer';
 import PostLayout from '@/layouts/PostLayout';
 import ProjectLayout from '@/layouts/ProjectLayout';
 
-import Alert from './Alert';
-import CustomLink from './CustomLink';
-import CustomMedia from './CustomMedia';
-import Pre from './Pre';
+import Alert from './alert';
+import CustomLink from './custom-link';
+import CustomMedia from './custom-media';
+import Pre from './pre';
 
 const Logo = dynamic(() => import('data/logo/Logo'));
 
