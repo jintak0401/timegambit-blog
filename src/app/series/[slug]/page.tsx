@@ -9,10 +9,10 @@ import { slug as slugger } from 'github-slugger';
 
 import { pickBlogItem, sortedBlogPost } from '@/lib/contentlayer';
 import { getAllSeries } from '@/lib/getBlogInfo.mjs';
-import { PostListItem, SeriesListItem } from '@/lib/types';
 import { getImageWithFallback } from '@/lib/utils';
 
 import ListLayout from '@/layouts/ListLayout';
+import { SeriesListItem } from '@/types';
 
 interface Props {
   params: {
@@ -78,14 +78,13 @@ const getSeriesData = async (slug: string) => {
     allSeries[posts[0].series as keyof typeof allSeries];
 
   return {
-    posts: posts.map(pickBlogItem) as PostListItem[],
+    posts: posts.map(pickBlogItem),
     series,
   };
 };
 
 const SeriesPostListPage = async ({ params }: Props) => {
   const { posts, series } = await getSeriesData(params.slug);
-
   return <ListLayout posts={posts} title={series.title} />;
 };
 
