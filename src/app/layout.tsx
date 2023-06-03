@@ -46,7 +46,11 @@ export const metadata: Metadata = {
   twitter: {
     title: siteMetadata.title,
     description: phrases.Seo.homeDesc || siteMetadata.description,
-    images: siteMetadata.socialBanner,
+    images: {
+      url: siteMetadata.socialBanner,
+      width: 1200,
+      height: 630,
+    },
     site: siteMetadata.twitter,
   },
   openGraph: {
@@ -56,7 +60,11 @@ export const metadata: Metadata = {
     siteName: siteMetadata.title,
     description: phrases.Seo.homeDesc || siteMetadata.description,
     locale: siteMetadata.locale,
-    images: siteMetadata.socialBanner,
+    images: {
+      url: siteMetadata.socialBanner,
+      width: 1200,
+      height: 630,
+    },
   },
   icons: {
     icon: [
