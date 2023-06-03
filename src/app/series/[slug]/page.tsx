@@ -8,7 +8,7 @@ import { allBlogs } from 'contentlayer/generated';
 import { slug as slugger } from 'github-slugger';
 
 import { pickBlogItem, sortedBlogPost } from '@/lib/contentlayer';
-import { getAllSeries } from '@/lib/getBlogInfo.mjs';
+import { getAllSeries } from '@/lib/get-blog-info.mjs';
 import { getImageWithFallback } from '@/lib/utils';
 
 import ListLayout from '@/layouts/ListLayout';

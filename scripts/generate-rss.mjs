@@ -5,7 +5,7 @@ import path from "path";
 import { escape } from "./html-escaper.mjs";
 import { allBlogs } from "../.contentlayer/generated/Blog/_index.mjs";
 import siteMetadata from "../data/siteMetadata.mjs";
-import { getAllSeries, getAllTags } from "../src/lib/getBlogInfo.mjs";
+import { getAllSeries, getAllTags } from "../src/lib/get-blog-info.mjs";
 import seriesData from "../data/seriesData.mjs";
 
 const generateRssItem = (post) => `

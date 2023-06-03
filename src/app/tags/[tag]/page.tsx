@@ -7,7 +7,7 @@ import { allBlogs } from 'contentlayer/generated';
 import { slug } from 'github-slugger';
 
 import { pickBlogItem, sortedBlogPost } from '@/lib/contentlayer';
-import { getAllTags } from '@/lib/getBlogInfo.mjs';
+import { getAllTags } from '@/lib/get-blog-info.mjs';
 
 import ListLayout from '@/layouts/ListLayout';
 

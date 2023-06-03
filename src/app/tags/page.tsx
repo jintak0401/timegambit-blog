@@ -5,7 +5,7 @@ import siteMetadata from 'data/siteMetadata.mjs';
 
 import { slug } from 'github-slugger';
 
-import { getAllTags } from '@/lib/getBlogInfo.mjs';
+import { getAllTags } from '@/lib/get-blog-info.mjs';
 
 import Tag from '@/components/card-and-list/tag';
 import NavLink from '@/components/common/nav-link';
