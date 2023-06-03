@@ -1,26 +1,27 @@
-import type { Blog } from 'contentlayer/generated';
 import { ReactNode } from 'react';
+
+import type { Blog } from 'contentlayer/generated';
 
 import { CoreContent } from '@/lib/contentlayer';
 import formattedDate from '@/lib/formattedDate';
-import { isProd } from '@/lib/isProduction';
+import { isProd } from '@/lib/is-production';
 
-import PageTitle from '@/components/blog/PageTitle';
-import PostLike from '@/components/blog/PostLike';
-import PostListInSeries from '@/components/blog/PostListInSeries';
-import RoutePostBtn from '@/components/blog/RoutePostBtn';
-import ScrollIndicator from '@/components/blog/ScrollIndicator';
-import ShareBtn from '@/components/blog/ShareBtn';
-import TagInPost from '@/components/blog/TagInPost';
-import ViewCounter from '@/components/blog/ViewCounter';
+import PageTitle from '@/components/blog/page-title';
+import PostLike from '@/components/blog/post-like';
+import PostListInSeries from '@/components/blog/post-list-in-series';
+import RoutePostButton from '@/components/blog/route-post-button';
+import ScrollIndicator from '@/components/blog/scroll-indicator';
+import ShareButton from '@/components/blog/share-button';
+import TagInPost from '@/components/blog/tag-in-post';
+import ViewCountUpdater from '@/components/blog/view-count-updater';
 import Comments from '@/components/comments';
-import ScrollTopAndBottom from '@/components/common/ScrollTopAndBottom';
-import LargeWidthTOC from '@/components/TOC/LargeWidthTOC';
-import SmallWidthTOC from '@/components/TOC/SmallWidthTOC';
+import ScrollTopAndBottom from '@/components/common/scroll-top-and-bottom';
+import LargeWidthToc from '@/components/TOC/large-width-toc';
+import SmallWidthToc from '@/components/TOC/small-width-toc';
 
 interface Props {
-  content: CoreContent<Blog>;
   children: ReactNode;
+  content: CoreContent<Blog>;
   next?: { slug: string; title: string };
   prev?: { slug: string; title: string };
   series?: { slug: string; title: string }[];
@@ -50,7 +51,7 @@ export default function PostLayout({
             </dd>
           </dl>
           <PageTitle>{title}</PageTitle>
-          {isProd && <ViewCounter slug={slug} />}
+          {isProd && <ViewCountUpdater slug={slug} />}
         </header>
         <div
           className="divide-y divide-gray-200 pb-2 dark:divide-gray-700"
@@ -63,28 +64,28 @@ export default function PostLayout({
             <div className="prose max-w-none pb-10 pt-10 dark:prose-dark sm:pb-12 xl:pb-20">
               {children}
             </div>
-            <LargeWidthTOC />
-            <SmallWidthTOC />
+            <LargeWidthToc />
+            <SmallWidthToc />
             <PostLike slug={slug} />
             {tags && (
               <div className="flex flex-wrap gap-3">
                 {tags.map((tag) => (
                   <TagInPost key={tag} title={tag} />
                 ))}
-                <ShareBtn title={title} text={summary} />
+                <ShareButton title={title} text={summary} />
               </div>
             )}
           </div>
           <footer className="space-y-2 pt-5 md:space-y-4">
             {(prev || next) && (
               <div className="flex w-full flex-col-reverse gap-2 md:flex-row">
-                <RoutePostBtn
+                <RoutePostButton
                   title={prev?.title}
                   slug={prev?.slug}
                   direction={'prev'}
                   empty={!prev}
                 />
-                <RoutePostBtn
+                <RoutePostButton
                   title={next?.title}
                   slug={next?.slug}
                   direction={'next'}
