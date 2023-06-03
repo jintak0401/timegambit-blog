@@ -6,17 +6,35 @@ import siteMetadata from 'data/site-metadata.mjs';
 import { getServerSession } from 'next-auth';
 
 import { authOptions } from '@/lib/auth';
+import { defaultOpenGraph, defaultTwitter } from '@/lib/metadata';
 
 import GuestbookEntries from './entries';
 import Guestbook from './guestbook';
 
-export const dynamic = 'force-static';
-export const metadata: Metadata = {
-  title: 'Guestbook',
-  description: phrases.Seo.guestbookDesc || siteMetadata.description,
-  alternates: {
-    canonical: `${siteMetadata.siteUrl}/guestbook`,
-  },
+export const generateMetadata = (): Metadata => {
+  const title = 'Guestbook';
+  const ogTitle = siteMetadata.titleTemplate.replace('%s', title);
+  const description = phrases.Seo.guestbookDesc || siteMetadata.description;
+  const url = `${siteMetadata.siteUrl}/guestbook`;
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      ...defaultOpenGraph,
+      title: ogTitle,
+      description,
+      url,
+    },
+    twitter: {
+      ...defaultTwitter,
+      title: ogTitle,
+      description,
+    },
+  };
 };
 
 const getGuestbooks = async () => {
