@@ -9,7 +9,7 @@ import {
 } from 'react';
 import NextLink, { LinkProps } from 'next/link';
 
-import { scrollPosStore } from '@/lib/scrollPosStore';
+import { scrollPosStore } from '@/lib/scroll-pos-store';
 
 const isModifiedEvent = (event: MouseEvent): boolean => {
   const eventTarget = event.currentTarget as HTMLAnchorElement | SVGAElement;
