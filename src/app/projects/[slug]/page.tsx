@@ -5,6 +5,8 @@ import siteMetadata from 'data/siteMetadata.mjs';
 
 import { allProjects, Project } from 'contentlayer/generated';
 
+import { getImageWithFallback } from '@/lib/utils';
+
 import { MDXLayoutRenderer } from '@/components/mdx-components';
 
 const DEFAULT_LAYOUT = 'PostLayout';
@@ -63,6 +65,44 @@ export const generateMetadata = ({ params: { slug } }: Props): Metadata => {
   };
 };
 
+const getJsonLd = (post: Project) => {
+  const url =
+    post.canonicalUrl || `${siteMetadata.siteUrl}/projects/${post.slug}`;
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': url,
+    },
+    headline: post.title,
+    description: post.summary,
+    image: post.images?.length
+      ? post.images.map((imageUrl) => ({
+          '@type': 'ImageObject',
+          url: getImageWithFallback(imageUrl),
+        }))
+      : siteMetadata.socialBanner,
+    author: {
+      '@type': 'Person',
+      name: siteMetadata.author,
+      url,
+    },
+    publisher: {
+      '@type': 'Person',
+      name: siteMetadata.author,
+      logo: {
+        '@type': 'ImageObject',
+        url: getImageWithFallback(
+          siteMetadata.siteLogo,
+          `${siteMetadata.siteUrl}${siteMetadata.siteLogo}`
+        ),
+      },
+    },
+  };
+};
+
 const ProjectPost = ({ params: { slug } }: Props) => {
   const post = getPost(slug);
 
@@ -71,10 +111,16 @@ const ProjectPost = ({ params: { slug } }: Props) => {
   }
 
   return (
-    <MDXLayoutRenderer
-      layout={post['layout'] || DEFAULT_LAYOUT}
-      content={post}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(getJsonLd(post)) }}
+      />
+      <MDXLayoutRenderer
+        layout={post['layout'] || DEFAULT_LAYOUT}
+        content={post}
+      />
+    </>
   );
 };
 
