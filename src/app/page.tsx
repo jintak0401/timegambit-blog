@@ -18,7 +18,7 @@ const getPosts = async () => {
     .slice(0, siteMetadata.blogPost.homeRecentPostLength)
     .map(pickBlogItem);
 
-  const res = await fetch(`/api/views`, {
+  const res = await fetch(`${process.env.API_URL}/api/views`, {
     method: 'GET',
     next: {
       revalidate: siteMetadata.rebuildPeriod,
