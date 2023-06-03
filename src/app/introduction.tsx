@@ -1,11 +1,11 @@
 import { DarkLogo, DarkLogoTitle, Logo, LogoTitle } from 'data/logo';
 import phrases from 'data/phrases';
 
-import SvgSwitcher from '@/components/Image/SvgSwitcher';
+import SvgSwitcher from '@/components/image/svg-switcher';
 
 const Introduction = () => {
   return (
-    <div className="mt-5 mb-14 flex w-full flex-col items-center justify-around lg:flex-row-reverse">
+    <div className="mb-14 mt-5 flex w-full flex-col items-center justify-around lg:flex-row-reverse">
       <div className="flex flex-1 items-center justify-center">
         <SvgSwitcher
           className="h-32 w-32"
