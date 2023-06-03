@@ -5,6 +5,7 @@ import siteMetadata from 'data/site-metadata.mjs';
 
 import { allProjects, Project } from 'contentlayer/generated';
 
+import { defaultOpenGraph, defaultTwitter } from '@/lib/metadata';
 import { getImageWithFallback } from '@/lib/utils';
 
 import { MDXLayoutRenderer } from '@/components/mdx-components';
@@ -51,6 +52,7 @@ export const generateMetadata = ({ params: { slug } }: Props): Metadata => {
       canonical: url,
     },
     openGraph: {
+      ...defaultOpenGraph,
       url,
       type: 'article',
       title: post.title,
@@ -58,6 +60,7 @@ export const generateMetadata = ({ params: { slug } }: Props): Metadata => {
       images,
     },
     twitter: {
+      ...defaultTwitter,
       title: post.title,
       description,
       images,
