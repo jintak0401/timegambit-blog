@@ -6,17 +6,16 @@ import siteMetadata from 'data/site-metadata.mjs';
 import { slug } from 'github-slugger';
 
 import { getAllTags } from '@/lib/get-blog-info.mjs';
+import { generateDefaultMetadata } from '@/lib/metadata';
 
 import Tag from '@/components/card-and-list/tag';
 import NavLink from '@/components/common/nav-link';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = generateDefaultMetadata({
   title: 'Tags',
   description: phrases.Seo.tagDesc || siteMetadata.description,
-  alternates: {
-    canonical: `${siteMetadata.siteUrl}/tags`,
-  },
-};
+  url: `${siteMetadata.siteUrl}/tags`,
+});
 
 const getTags = async () => {
   return (await getAllTags()) as Record<string, number>;
