@@ -18,7 +18,7 @@ const getPosts = async () => {
     .slice(0, siteMetadata.blogPost.homeRecentPostLength)
     .map(pickBlogItem);
 
-  const res = await fetch(`${process.env.API_URL}/api/views`, {
+  const res = await fetch(`/api/views`, {
     method: 'GET',
     next: {
       revalidate: siteMetadata.rebuildPeriod,
@@ -63,7 +63,7 @@ const HomePage = async () => {
         {phrases.Main.recentPosts}
       </h2>
       <PostList posts={recentPosts} />
-      {popularPosts && (
+      {popularPosts.length > 0 && (
         <>
           <hr />
           <h2 className="strong-text mt-4 text-xl font-semibold xl:text-2xl">
