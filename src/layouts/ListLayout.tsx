@@ -9,7 +9,7 @@ import siteMetadata from 'data/siteMetadata.mjs';
 import { filterBlogPosts } from '@/lib/contentlayer';
 import { scrollPosStore } from '@/lib/scroll-pos-store';
 import { sameAllElements } from '@/lib/utils';
-import useDebounce from '@/hooks/useDebounce';
+import useDebounce from '@/hooks/use-debounce';
 import useInfiniteScrollObserver from '@/hooks/useInfiniteScrollObserver';
 import useIsFirstRender from '@/hooks/useIsFirstRender';
 

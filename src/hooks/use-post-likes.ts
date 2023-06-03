@@ -4,7 +4,7 @@ import siteMetadata from 'data/siteMetadata.mjs';
 
 import useSWR, { SWRConfiguration } from 'swr';
 
-import useDebounce from './useDebounce';
+import useDebounce from './use-debounce';
 
 const API_URL = `/api/likes`;
 const DEDUPING_INTERVAL = 60000;
