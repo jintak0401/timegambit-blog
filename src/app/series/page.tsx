@@ -1,21 +1,18 @@
-import { Metadata } from 'next';
-
 import phrases from 'data/phrases';
 import siteMetadata from 'data/site-metadata.mjs';
 
 import { getAllSeries } from '@/lib/get-blog-info.mjs';
+import { generateDefaultMetadata } from '@/lib/metadata';
 
 import SeriesList from '@/components/card-and-list/series-list';
 
 import { SeriesListItem } from '@/types';
 
-export const metadata: Metadata = {
+export const metadata = generateDefaultMetadata({
   title: 'Series',
   description: phrases.Seo.seriesDesc || siteMetadata.description,
-  alternates: {
-    canonical: `${siteMetadata.siteUrl}/series`,
-  },
-};
+  url: `${siteMetadata.siteUrl}/series`,
+});
 
 const getSeries = async (): Promise<SeriesListItem[]> => {
   return Object.values(await getAllSeries()).sort((a, b) => {
