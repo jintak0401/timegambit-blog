@@ -7,6 +7,7 @@ import { allBlogs, Blog } from 'contentlayer/generated';
 
 import { coreContent, sortedBlogPost } from '@/lib/contentlayer';
 import { isProd } from '@/lib/is-production';
+import { defaultOpenGraph, defaultTwitter } from '@/lib/metadata';
 import { getImageWithFallback } from '@/lib/utils';
 
 import PageTitle from '@/components/blog/page-title';
@@ -50,6 +51,7 @@ export const generateMetadata = ({ params }: Props): Metadata => {
       canonical: url,
     },
     openGraph: {
+      ...defaultOpenGraph,
       url,
       type: 'article',
       title: post.title,
@@ -59,6 +61,7 @@ export const generateMetadata = ({ params }: Props): Metadata => {
       modifiedTime,
     },
     twitter: {
+      ...defaultTwitter,
       title: post.title,
       description,
       images,
