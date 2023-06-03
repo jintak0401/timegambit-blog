@@ -1,4 +1,4 @@
-import { AboutCardType } from '@/lib/types';
+import { AboutCardType } from '@/types';
 
 const AboutCard = ({ title, date, info }: AboutCardType) => {
   return (
