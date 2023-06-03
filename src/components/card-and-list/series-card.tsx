@@ -7,7 +7,7 @@ import phrases from 'data/phrases';
 import formattedDate from '@/lib/formattedDate';
 
 import NavLink from '@/components/common/nav-link';
-import ImageWithFallback from '@/components/Image/ImageWithFallback';
+import ImageWithFallback from '@/components/image/image-with-fallback';
 
 import { SeriesListItem } from '@/types';
 
