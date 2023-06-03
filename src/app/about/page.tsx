@@ -13,13 +13,29 @@ import AboutList from '@/components/card-and-list/about-list';
 
 import { AboutCardType } from '@/types';
 
-export const dynamic = 'force-static';
-export const metadata: Metadata = {
-  title: 'About',
-  description: phrases.Seo.aboutDesc || siteMetadata.description,
-  alternates: {
-    canonical: `${siteMetadata.siteUrl}/about`,
-  },
+export const generateMetadata = (): Metadata => {
+  const title = 'About';
+  const ogTitle = siteMetadata.titleTemplate.replace('%s', title);
+  const url = `${siteMetadata.siteUrl}/about`;
+  const description = phrases.Seo.aboutDesc || siteMetadata.description;
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      type: 'profile',
+      title: ogTitle,
+      description,
+      url,
+      siteName: siteMetadata.title,
+    },
+    twitter: {
+      title: ogTitle,
+      description,
+    },
+  };
 };
 
 const SELFIE_URL = about.Selfie;
