@@ -8,9 +8,10 @@ import phrases from 'data/phrases';
 import siteMetadata from 'data/siteMetadata.mjs';
 
 import { omit } from '@/lib/contentlayer';
-import { AboutCardType } from '@/lib/types';
 
-import AboutList from '@/components/card-and-list/AboutList';
+import AboutList from '@/components/card-and-list/about-list';
+
+import { AboutCardType } from '@/types';
 
 export const metadata: Metadata = {
   title: 'About',
