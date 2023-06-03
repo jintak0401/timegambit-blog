@@ -4,14 +4,34 @@ import phrases from 'data/phrases';
 import projectData from 'data/project-data';
 import siteMetadata from 'data/site-metadata.mjs';
 
+import { defaultOpenGraph, defaultTwitter } from '@/lib/metadata';
+
 import ProjectCard from '@/components/card-and-list/project-card';
 
-export const metadata: Metadata = {
-  title: 'Projects',
-  description: phrases.Seo.projectDesc || siteMetadata.description,
-  alternates: {
-    canonical: `${siteMetadata.siteUrl}/projects`,
-  },
+export const generateMetadata = (): Metadata => {
+  const title = 'Projects';
+  const ogTitle = siteMetadata.titleTemplate.replace('%s', title);
+  const description = phrases.Seo.projectDesc || siteMetadata.description;
+  const url = `${siteMetadata.siteUrl}/projects`;
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      ...defaultOpenGraph,
+      title: ogTitle,
+      description,
+      url,
+    },
+    twitter: {
+      ...defaultTwitter,
+      title: ogTitle,
+      description,
+    },
+  };
 };
 
 const ProjectPage = () => {
