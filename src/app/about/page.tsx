@@ -8,6 +8,7 @@ import phrases from 'data/phrases';
 import siteMetadata from 'data/site-metadata.mjs';
 
 import { omit } from '@/lib/contentlayer';
+import { defaultOpenGraph, defaultTwitter } from '@/lib/metadata';
 
 import AboutList from '@/components/card-and-list/about-list';
 
@@ -25,13 +26,14 @@ export const generateMetadata = (): Metadata => {
       canonical: url,
     },
     openGraph: {
+      ...defaultOpenGraph,
       type: 'profile',
       title: ogTitle,
       description,
       url,
-      siteName: siteMetadata.title,
     },
     twitter: {
+      ...defaultTwitter,
       title: ogTitle,
       description,
     },
