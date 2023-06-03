@@ -1,18 +1,22 @@
+'use client';
+
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { usePathname } from 'next/navigation';
+
 import phrases from 'data/phrases';
 import siteMetadata from 'data/siteMetadata.mjs';
-import { useRouter } from 'next/router';
-import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { filterBlogPosts } from '@/lib/contentlayer';
-import { scrollPosStore } from '@/lib/scrollPosStore';
-import { PostListItem } from '@/lib/types';
+import { scrollPosStore } from '@/lib/scroll-pos-store';
 import { sameAllElements } from '@/lib/utils';
 import useDebounce from '@/hooks/useDebounce';
 import useInfiniteScrollObserver from '@/hooks/useInfiniteScrollObserver';
 import useIsFirstRender from '@/hooks/useIsFirstRender';
 
-import PostList from '@/components/card-and-list/PostList';
-import ScrollTopAndBottom from '@/components/common/ScrollTopAndBottom';
+import PostList from '@/components/card-and-list/post-list';
+import ScrollTopAndBottom from '@/components/common/scroll-top-and-bottom';
+
+import { PostListItem } from '@/types';
 
 interface Props {
   posts: PostListItem[];
@@ -21,9 +25,9 @@ interface Props {
 }
 
 export default function ListLayout({ posts, title, description }: Props) {
-  const router = useRouter();
+  const pathname = usePathname();
   const { getScrollPosState, setListLengthState } = scrollPosStore;
-  const { listLength } = getScrollPosState(router.pathname);
+  const { listLength } = getScrollPosState(pathname);
   const infScrollRef = useRef<HTMLDivElement | null>(null);
   const isFirstRender = useIsFirstRender();
   const [searchValue, setSearchValue] = useState('');
@@ -38,12 +42,12 @@ export default function ListLayout({ posts, title, description }: Props) {
       const nextState = sameAllElements(prev, posts)
         ? prev
         : posts.slice(0, siteMetadata.blogPost.postsPerScroll);
-      setListLengthState(router.pathname, nextState.length);
+      setListLengthState(pathname, nextState.length);
       return nextState;
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.asPath]);
-
+  }, [pathname]);
+  //
   const setNextDisplayPosts = (init = false) => {
     const _posts = filterBlogPosts(posts, searchValue);
     setPostsLength(_posts.length);
@@ -54,7 +58,7 @@ export default function ListLayout({ posts, title, description }: Props) {
       );
 
       const nextState = sameAllElements(nextPosts, prev) ? prev : nextPosts;
-      setListLengthState(router.pathname, nextState.length);
+      setListLengthState(pathname, nextState.length);
       return nextState;
     });
   };
@@ -80,7 +84,7 @@ export default function ListLayout({ posts, title, description }: Props) {
     <>
       <ScrollTopAndBottom goBottom={false} />
       <div className="divide-y">
-        <div className="space-y-2 pt-6 pb-8 md:space-y-5">
+        <div className="space-y-2 pb-8 pt-6 md:space-y-5">
           <h1 className="strong-text text-3xl font-extrabold leading-9 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
             {title} ({postsLength})
           </h1>
