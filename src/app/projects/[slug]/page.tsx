@@ -5,7 +5,7 @@ import siteMetadata from 'data/siteMetadata.mjs';
 
 import { allProjects, Project } from 'contentlayer/generated';
 
-import { MDXLayoutRenderer } from '@/components/mdxComponents/MDXComponents';
+import { MDXLayoutRenderer } from '@/components/mdx-components';
 
 const DEFAULT_LAYOUT = 'PostLayout';
 
