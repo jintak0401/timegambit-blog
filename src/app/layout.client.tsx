@@ -1,6 +1,6 @@
 'use client';
 
-import { PropsWithChildren } from 'react';
+import { ReactNode } from 'react';
 
 import siteMetadata from 'data/siteMetadata.mjs';
 
@@ -9,10 +9,11 @@ import { ToastContainer } from 'react-toastify';
 
 import { useRestoreScroll } from '@/hooks/use-restore-scroll';
 
-import Footer from '@/components/common/Footer';
+import Footer from '@/components/common/footer';
 import Header from '@/components/common/Header';
 
-interface Props extends PropsWithChildren {
+interface Props {
+  children: ReactNode;
   className: string;
 }
 
