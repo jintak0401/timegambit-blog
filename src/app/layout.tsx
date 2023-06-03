@@ -1,4 +1,4 @@
-import { PropsWithChildren, Suspense } from 'react';
+import { ReactNode, Suspense } from 'react';
 import { Metadata } from 'next';
 import localFont from 'next/font/local';
 
@@ -94,7 +94,7 @@ const dejavu = localFont({
   fallback: ['Pretendard'],
 });
 
-const RootLayout = async ({ children }: PropsWithChildren) => {
+const RootLayout = async ({ children }: { children: ReactNode }) => {
   return (
     <ServerThemeProvider
       attribute="class"
@@ -102,7 +102,7 @@ const RootLayout = async ({ children }: PropsWithChildren) => {
       enableColorScheme={false}
     >
       <html lang={siteMetadata.language} className="scroll-smooth">
-        <body className="antialiased">
+        <body className="overflow-x-hidden antialiased">
           <Analytics />
           <Suspense>
             <RootLayoutClient className={`${dejavu.variable} font-sans`}>
