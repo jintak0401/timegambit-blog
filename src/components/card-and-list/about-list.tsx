@@ -1,6 +1,6 @@
-import { AboutCardType } from '@/lib/types';
+import { AboutCardType } from '@/types';
 
-import AboutCard from './AboutCard';
+import AboutCard from './about-card';
 
 interface Props {
   sectionName: string;
