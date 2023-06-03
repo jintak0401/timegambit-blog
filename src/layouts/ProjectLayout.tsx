@@ -1,19 +1,20 @@
-import type { Project } from 'contentlayer/generated';
-import NextImage from 'next/image';
 import { ReactNode } from 'react';
+import NextImage from 'next/image';
+
+import type { Project } from 'contentlayer/generated';
 
 import { CoreContent } from '@/lib/contentlayer';
 
-import PageTitle from '@/components/blog/PageTitle';
-import ScrollIndicator from '@/components/blog/ScrollIndicator';
+import PageTitle from '@/components/blog/page-title';
+import ScrollIndicator from '@/components/blog/scroll-indicator';
 import Comments from '@/components/comments';
-import ScrollTopAndBottom from '@/components/common/ScrollTopAndBottom';
-import LargeWidthTOC from '@/components/TOC/LargeWidthTOC';
-import SmallWidthTOC from '@/components/TOC/SmallWidthTOC';
+import ScrollTopAndBottom from '@/components/common/scroll-top-and-bottom';
+import LargeWidthToc from '@/components/TOC/large-width-toc';
+import SmallWidthToc from '@/components/TOC/small-width-toc';
 
 interface Props {
-  content: CoreContent<Project>;
   children: ReactNode;
+  content: CoreContent<Project>;
 }
 
 export default function ProjectLayout({ content, children }: Props) {
@@ -38,14 +39,14 @@ export default function ProjectLayout({ content, children }: Props) {
                 height="1000"
               />
             )}
-            <header className="mt-10 text-center xl:mt-14 xl:mb-5">
+            <header className="mt-10 text-center xl:mb-5 xl:mt-14">
               <PageTitle>{title}</PageTitle>
             </header>
-            <div className="prose max-w-none pt-10 pb-5 dark:prose-dark">
+            <div className="prose max-w-none pb-5 pt-10 dark:prose-dark">
               {children}
             </div>
-            <LargeWidthTOC />
-            <SmallWidthTOC />
+            <LargeWidthToc />
+            <SmallWidthToc />
           </div>
           <footer>
             <Comments />
