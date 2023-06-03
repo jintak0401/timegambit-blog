@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import phrases from 'data/phrases';
 import seriesData from 'data/seriesData.mjs';
@@ -12,6 +11,8 @@ import { GoTriangleDown } from 'react-icons/go';
 import { ImBookmark } from 'react-icons/im';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 
+import NavLink from '@/components/common/nav-link';
+
 interface Props {
   seriesTitle: string;
   series: { title: string; slug: string }[];
@@ -19,17 +20,19 @@ interface Props {
 
 const PostListInSeries = ({ seriesTitle, series }: Props) => {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [disclosure, setDisclosure] = useState(
-    router.query.disclosure === 'true'
+    searchParams.get('disclosure') === 'true'
   );
 
   const curSlug = decodeURI(
-    router.asPath.split('/').slice(2).join('/').split('#')[0]
+    pathname.split('/').slice(2).join('/').split('#')[0]
   );
 
   const idx = series.map(({ slug }) => slug).indexOf(curSlug as string) + 1;
 
-  const routeBtns = (
+  const routeButtons = (
     <span className="flex items-center justify-center space-x-3">
       {[
         {
@@ -50,17 +53,13 @@ const PostListInSeries = ({ seriesTitle, series }: Props) => {
               : 'hover:bg-primary-100 hover:dark:bg-primary-800'
           }`}
           key={index}
-          onClick={() =>
+          onClick={() => {
             router.push(
-              {
-                pathname: '/blog/[...slug]',
-                query: {
-                  disclosure,
-                },
-              },
-              `/blog/${series[nextIdx].slug}`
-            )
-          }
+              `/blog/${series[nextIdx].slug}${
+                disclosure ? '?disclosure=true' : ''
+              }`
+            );
+          }}
           disabled={isDisabled}
         >
           <span className="sr-only">
@@ -76,26 +75,22 @@ const PostListInSeries = ({ seriesTitle, series }: Props) => {
     <div className="duration-default mt-5 rounded-md bg-gray-100 px-6 py-5 dark:bg-gray-800">
       <ImBookmark className="absolute right-2 top-0 h-auto w-10 fill-current text-primary-500 lg:right-4 lg:w-12" />
       <header>
-        <Link
-          className="mb-7 block inline-block text-xl font-semibold text-gray-700 hover:text-gray-500 hover:underline dark:text-gray-200 hover:dark:text-gray-400 md:text-3xl"
+        <NavLink
+          className="mb-7 block text-xl font-semibold text-gray-700 hover:text-gray-500 hover:underline dark:text-gray-200 hover:dark:text-gray-400 md:text-3xl"
           href={`/series/${slug(
             seriesData[seriesTitle as keyof typeof seriesData]?.slug ||
               seriesTitle
           )}`}
         >
           {seriesTitle}
-        </Link>
+        </NavLink>
       </header>
       {disclosure && (
         <ol className="list-inside list-decimal space-y-1 marker:italic marker:text-gray-400 marker:before:mr-1 marker:dark:text-gray-500">
           {series.map(({ slug, title }) => (
             <li key={slug}>
-              <Link
-                href={{
-                  pathname: '/blog/[...slug]',
-                  query: { disclosure },
-                }}
-                as={`/blog/${slug}`}
+              <NavLink
+                href={`/blog/${slug}${disclosure ? '?disclosure=true' : ''}`}
                 className={`hover:underline
                 ${
                   slug === curSlug
@@ -104,7 +99,7 @@ const PostListInSeries = ({ seriesTitle, series }: Props) => {
                 }`}
               >
                 {title}
-              </Link>
+              </NavLink>
             </li>
           ))}
         </ol>
@@ -121,7 +116,7 @@ const PostListInSeries = ({ seriesTitle, series }: Props) => {
           <span className="dark:text-gray-400">
             {idx} / {series.length}
           </span>
-          {routeBtns}
+          {routeButtons}
         </span>
       </div>
     </div>
