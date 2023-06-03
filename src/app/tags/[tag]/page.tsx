@@ -9,7 +9,7 @@ import { slug } from 'github-slugger';
 import { pickBlogItem, sortedBlogPost } from '@/lib/contentlayer';
 import { getAllTags } from '@/lib/get-blog-info.mjs';
 
-import ListLayout from '@/layouts/ListLayout';
+import ListLayout from '@/layouts/list-layout';
 
 interface Props {
   params: {

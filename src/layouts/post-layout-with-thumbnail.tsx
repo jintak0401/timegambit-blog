@@ -17,7 +17,7 @@ interface Props {
   content: CoreContent<Project>;
 }
 
-export default function ProjectLayout({ content, children }: Props) {
+export default function PostLayoutWithThumbnail({ content, children }: Props) {
   const { title, images } = content;
 
   return (

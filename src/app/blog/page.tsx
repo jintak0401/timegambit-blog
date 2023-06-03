@@ -7,7 +7,7 @@ import { allBlogs } from 'contentlayer/generated';
 
 import { pickBlogItem, sortedBlogPost } from '@/lib/contentlayer';
 
-import ListLayout from '@/layouts/ListLayout';
+import ListLayout from '@/layouts/list-layout';
 
 export const metadata: Metadata = {
   title: 'Blog',

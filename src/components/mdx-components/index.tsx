@@ -6,8 +6,8 @@ import { useMDXComponent } from 'next-contentlayer/hooks';
 
 import { coreContent } from '@/lib/contentlayer';
 
-import PostLayout from '@/layouts/PostLayout';
-import ProjectLayout from '@/layouts/ProjectLayout';
+import PostLayout from '@/layouts/post-layout';
+import PostLayoutWithThumbnail from '@/layouts/post-layout-with-thumbnail';
 
 import Alert from './alert';
 import CustomLink from './custom-link';
@@ -21,7 +21,7 @@ const LAYOUT_MAP: {
   [key: string]: ComponentType<any>;
 } = {
   PostLayout,
-  ProjectLayout,
+  PostLayoutWithThumbnail,
 };
 
 interface MDXLayout {
