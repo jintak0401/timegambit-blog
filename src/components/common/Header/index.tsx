@@ -8,7 +8,7 @@ import siteMetadata from 'data/siteMetadata.mjs';
 import { useScrollDirection } from '@/hooks/useScrollDirection';
 
 import NavLink from '@/components/common/nav-link';
-import SvgSwitcher from '@/components/Image/SvgSwitcher';
+import SvgSwitcher from '@/components/image/svg-switcher';
 
 import MobileNav from './mobile-nav';
 import MobileNavButton from './MobileNavButton';
