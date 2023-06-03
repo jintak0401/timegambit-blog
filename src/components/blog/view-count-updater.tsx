@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 
 import siteMetadata from 'data/siteMetadata.mjs';
 
-import usePostViews from '@/hooks/usePostViews';
+import usePostViews from '@/hooks/use-post-views';
 
 interface Props {
   slug: string;

@@ -6,7 +6,7 @@ import { IoEyeOutline, IoHeartOutline } from 'react-icons/io5';
 
 import formattedDate from '@/lib/formattedDate';
 import { usePostLikes } from '@/hooks/use-post-likes';
-import usePostViews from '@/hooks/usePostViews';
+import usePostViews from '@/hooks/use-post-views';
 
 import NavLink from '@/components/common/nav-link';
 import ImageWithFallback from '@/components/image/image-with-fallback';
