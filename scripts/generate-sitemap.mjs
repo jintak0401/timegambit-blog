@@ -3,7 +3,7 @@ import { globby } from "globby";
 import prettier from "prettier";
 
 import { allBlogs } from "../.contentlayer/generated/index.mjs";
-import siteMetadata from "../data/siteMetadata.mjs";
+import siteMetadata from "../data/site-metadata.mjs";
 
 (async () => {
   const prettierConfig = await prettier.resolveConfig("./.prettierrc.js");

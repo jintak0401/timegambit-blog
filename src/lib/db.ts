@@ -1,6 +1,6 @@
 import mysql from 'mysql2/promise';
 
-import { isProd } from '@/lib/isProduction';
+import { isProd } from '@/lib/is-production';
 
 declare global {
   // allow global `var` declarations

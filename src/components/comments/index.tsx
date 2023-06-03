@@ -1,7 +1,8 @@
-import siteMetadata from 'data/siteMetadata.mjs';
 import dynamic from 'next/dynamic';
 
-const GiscusComponent = dynamic(() => import('./Giscus'), {
+import siteMetadata from 'data/site-metadata.mjs';
+
+const GiscusComponent = dynamic(() => import('./giscus'), {
   ssr: false,
 });
 

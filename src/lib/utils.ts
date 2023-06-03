@@ -1,14 +1,22 @@
-const getImageWithFallback = (url: string, fallbackUrl: string) =>
-  url.startsWith('http') ? url : fallbackUrl;
+import siteMetadata from 'data/site-metadata.mjs';
 
-const sameAllElements = (a: unknown[], b: unknown[]) => {
+export const getImageWithFallback = (
+  url: string,
+  fallbackUrl = `${siteMetadata.siteUrl}${url}`
+) => {
+  return url.startsWith('http') ? url : fallbackUrl;
+};
+
+export const sameAllElements = (a: unknown[], b: unknown[]) => {
   if (a.length !== b.length) return false;
   return a.every((item, idx) => item === b[idx]);
 };
 
-const isTouchDevice = () => {
+export const isTouchDevice = () => {
   if (typeof window === 'undefined') return false;
   return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 };
 
-export { getImageWithFallback, isTouchDevice, sameAllElements };
+export const joinSlugs = (slug: string | string[] = []) => {
+  return Array.isArray(slug) ? slug.join('/') : slug;
+};
