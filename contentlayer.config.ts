@@ -5,14 +5,13 @@ import {
 } from 'contentlayer/source-files';
 import rehypePresetMinify from 'rehype-preset-minify';
 import rehypePrismPlus from 'rehype-prism-plus';
-// Rehype packages
 import rehypeSlug from 'rehype-slug';
+// Rehype packages
 import remarkFootnotes from 'remark-footnotes';
 // Remark packages
 import remarkGfm from 'remark-gfm';
 
 import remarkCodeTitles from './src/lib/remark/remark-code-title';
-import remarkExtractFrontmatter from './src/lib/remark/remark-extract-frontmatter';
 import remarkImgToJsx from './src/lib/remark/remark-img-to-jsx';
 
 const computedFields: ComputedFields = {
@@ -62,7 +61,6 @@ export default makeSource({
   mdx: {
     cwd: process.cwd(),
     remarkPlugins: [
-      remarkExtractFrontmatter,
       remarkGfm,
       remarkCodeTitles,
       [remarkFootnotes, { inlineNotes: true }],
@@ -70,7 +68,6 @@ export default makeSource({
     ],
     rehypePlugins: [
       rehypeSlug,
-      // rehypeAutolinkHeadings,
       [rehypePrismPlus, { ignoreMissing: true }],
       rehypePresetMinify,
     ],

@@ -1,6 +1,6 @@
 import type { Blog, DocumentTypes } from 'contentlayer/generated';
 
-import { PostListItem } from '@/lib/types';
+import { PostListItem } from '@/types';
 
 export function dateSortDesc(a: string, b: string, reverse: boolean) {
   if (a > b) return reverse ? 1 : -1;
@@ -16,7 +16,7 @@ type ConvertUndefined<T> = OrNull<{
   [K in keyof T as undefined extends T[K] ? K : never]-?: T[K];
 }>;
 type OrNull<T> = { [K in keyof T]: Exclude<T[K], undefined> | null };
-type PickRequired<T> = {
+export type PickRequired<T> = {
   [K in keyof T as undefined extends T[K] ? never : K]: T[K];
 };
 export type ConvertPick<T> = ConvertUndefined<T> & PickRequired<T>;
@@ -58,8 +58,8 @@ export function allCoreContent<T extends DocumentTypes>(contents: T[]) {
   return contents.map((c) => coreContent(c));
 }
 
-export function pickBlogItem(blog: Blog) {
-  return pick(blog, ['title', 'slug', 'date', 'tags', 'summary', 'images']);
+export function pickBlogItem<T = PostListItem>(blog: Blog) {
+  return <T>pick(blog, ['title', 'slug', 'date', 'tags', 'summary', 'images']);
 }
 
 export function filterBlogPosts(posts: PostListItem[], word: string) {
