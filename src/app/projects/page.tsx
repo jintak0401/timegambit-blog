@@ -4,7 +4,7 @@ import phrases from 'data/phrases';
 import projectData from 'data/projectData';
 import siteMetadata from 'data/siteMetadata.mjs';
 
-import ProjectCard from '@/components/card-and-list/ProjectCard';
+import ProjectCard from '@/components/card-and-list/project-card';
 
 export const metadata: Metadata = {
   title: 'Projects',
