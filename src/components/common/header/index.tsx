@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { memo, useCallback, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
 import { DarkLogo, DarkLogoTitle, Logo, LogoTitle } from 'data/logo';
@@ -47,11 +47,45 @@ const NavItems = () => {
   );
 };
 
+const HeaderBody = memo(function HeadBody({
+  onToggleNav,
+}: {
+  onToggleNav: () => void;
+}) {
+  return (
+    <>
+      <NavLink
+        href="/"
+        aria-label={siteMetadata.headerTitle}
+        className="flex cursor-pointer items-center justify-between"
+      >
+        <SvgSwitcher
+          className="mr-3 h-8 w-8"
+          svgkey="header_logo"
+          LightModeSvg={Logo}
+          DarkModeSvg={DarkLogo}
+        />
+        <SvgSwitcher
+          className="hidden h-6 w-52 md:block"
+          svgkey="header_title"
+          LightModeSvg={LogoTitle}
+          DarkModeSvg={DarkLogoTitle}
+        />
+      </NavLink>
+      <div className="flex items-center py-1 leading-5 sm:py-0">
+        <NavItems />
+        <ThemeSwitch />
+        <MobileNavButton onToggleNav={onToggleNav} />
+      </div>
+    </>
+  );
+});
+
 const Header = () => {
   const scrollDirection = useScrollDirection();
   const [navShow, setNavShow] = useState(false);
 
-  const onToggleNav = () => {
+  const onToggleNav = useCallback(() => {
     setNavShow((status) => {
       if (status) {
         document.body.style.overflow = 'auto';
@@ -61,7 +95,7 @@ const Header = () => {
       }
       return !status;
     });
-  };
+  }, []);
 
   return (
     <>
@@ -72,29 +106,7 @@ const Header = () => {
             : 'translate-y-0'
         }`}
       >
-        <NavLink
-          href="/"
-          aria-label={siteMetadata.headerTitle}
-          className="flex cursor-pointer items-center justify-between"
-        >
-          <SvgSwitcher
-            className="mr-3 h-8 w-8"
-            svgkey="header_logo"
-            LightModeSvg={Logo}
-            DarkModeSvg={DarkLogo}
-          />
-          <SvgSwitcher
-            className="hidden h-6 w-52 md:block"
-            svgkey="header_title"
-            LightModeSvg={LogoTitle}
-            DarkModeSvg={DarkLogoTitle}
-          />
-        </NavLink>
-        <div className="flex items-center py-1 leading-5 sm:py-0">
-          <NavItems />
-          <ThemeSwitch />
-          <MobileNavButton onToggleNav={onToggleNav} />
-        </div>
+        <HeaderBody onToggleNav={onToggleNav} />
       </header>
       <MobileNav onToggleNav={onToggleNav} navShow={navShow} />
     </>
