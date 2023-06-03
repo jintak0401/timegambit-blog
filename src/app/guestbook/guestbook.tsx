@@ -6,12 +6,11 @@ import phrases from 'data/phrases';
 
 import { DefaultSession } from 'next-auth';
 
-import { UserType } from '@/lib/types';
-
-import Spinner from '@/components/common/Spinner';
+import { UserType } from '@/types';
 
 import GuestbookForm from './form';
 import GuestbookLogin from './login';
+import Spinner from './spinner';
 
 interface Props {
   user: DefaultSession['user'];

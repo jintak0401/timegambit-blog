@@ -7,7 +7,7 @@ import { signOut } from 'next-auth/react';
 import { toast } from 'react-toastify';
 import { mutate } from 'swr';
 
-import { UserType } from '@/lib/types';
+import { UserType } from '@/types';
 
 interface Props {
   user: UserType;

@@ -6,7 +6,7 @@ import { DefaultSession } from 'next-auth';
 import { toast } from 'react-toastify';
 import { useSWRConfig } from 'swr';
 
-import { GuestbookEntryType } from '@/lib/types';
+import { GuestbookEntryType } from '@/types';
 
 interface Props {
   entry: GuestbookEntryType;
