@@ -9,6 +9,7 @@ import { slug as slugger } from 'github-slugger';
 
 import { pickBlogItem, sortedBlogPost } from '@/lib/contentlayer';
 import { getAllSeries } from '@/lib/get-blog-info.mjs';
+import { defaultOpenGraph, defaultTwitter } from '@/lib/metadata';
 import { getImageWithFallback } from '@/lib/utils';
 
 import ListLayout from '@/layouts/list-layout';
@@ -41,12 +42,14 @@ export const generateMetadata = async ({
       canonical: url,
     },
     openGraph: {
+      ...defaultOpenGraph,
       url,
       title: seriesTitle,
       description,
       images,
     },
     twitter: {
+      ...defaultTwitter,
       title: seriesTitle,
       description,
       images,
