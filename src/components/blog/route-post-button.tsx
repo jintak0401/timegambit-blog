@@ -1,5 +1,7 @@
+import NextLink from 'next/link';
+
 import phrases from 'data/phrases';
-import Link from 'next/link';
+
 import {
   IoArrowBackCircleOutline,
   IoArrowForwardCircleOutline,
@@ -8,12 +10,11 @@ import {
 interface Props {
   title?: string;
   slug?: string;
-
-  direction: 'prev' | 'next';
   empty?: boolean;
+  direction: 'prev' | 'next';
 }
 
-const RoutePostBtn = ({ title, slug, direction, empty }: Props) => {
+const RoutePostButton = ({ title, slug, direction, empty }: Props) => {
   if (empty) {
     return <div className="h-full w-full md:w-1/2" />;
   }
@@ -24,9 +25,9 @@ const RoutePostBtn = ({ title, slug, direction, empty }: Props) => {
       : IoArrowForwardCircleOutline;
 
   return (
-    <Link
+    <NextLink
       href={`/blog/${slug}`}
-      className={`group flex w-full items-center gap-2 rounded-md bg-gray-100 py-2 px-3 text-2xl font-semibold duration-300 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 md:w-1/2 ${
+      className={`group flex w-full items-center gap-2 rounded-md bg-gray-100 px-3 py-2 text-2xl font-semibold duration-300 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 md:w-1/2 ${
         direction === 'prev' ? 'flex-row-reverse justify-start' : 'justify-end'
       }`}
     >
@@ -49,8 +50,8 @@ const RoutePostBtn = ({ title, slug, direction, empty }: Props) => {
             : 'group-hover:animate-bounce-right'
         }`}
       />
-    </Link>
+    </NextLink>
   );
 };
 
-export default RoutePostBtn;
+export default RoutePostButton;
