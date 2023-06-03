@@ -6,11 +6,11 @@ import siteMetadata from 'data/siteMetadata.mjs';
 
 import { ThemeProvider } from '@wits/next-themes';
 import { ToastContainer } from 'react-toastify';
+import Header from 'src/components/common/header';
 
 import { useRestoreScroll } from '@/hooks/use-restore-scroll';
 
 import Footer from '@/components/common/footer';
-import Header from '@/components/common/Header';
 
 interface Props {
   children: ReactNode;
