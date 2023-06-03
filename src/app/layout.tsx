@@ -11,6 +11,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import '@/css/tailwind.css';
 import '@/css/prism.css';
 
+import { defaultOpenGraph, defaultTwitter } from '@/lib/metadata';
+
 import Analytics from '@/components/analytics';
 
 import RootLayoutClient from './layout.client';
@@ -44,27 +46,10 @@ export const metadata: Metadata = {
     },
   },
   twitter: {
-    title: siteMetadata.title,
-    description: phrases.Seo.homeDesc || siteMetadata.description,
-    images: {
-      url: siteMetadata.socialBanner,
-      width: 1200,
-      height: 630,
-    },
-    site: siteMetadata.twitter,
+    ...defaultTwitter,
   },
   openGraph: {
-    url: siteMetadata.siteUrl,
-    type: 'website',
-    title: siteMetadata.title,
-    siteName: siteMetadata.title,
-    description: phrases.Seo.homeDesc || siteMetadata.description,
-    locale: siteMetadata.locale,
-    images: {
-      url: siteMetadata.socialBanner,
-      width: 1200,
-      height: 630,
-    },
+    ...defaultOpenGraph,
   },
   icons: {
     icon: [
