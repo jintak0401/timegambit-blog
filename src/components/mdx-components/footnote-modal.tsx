@@ -4,7 +4,7 @@ import phrases from 'data/phrases';
 
 import { createPortal } from 'react-dom';
 
-import useGetFootnoteBody from '@/hooks/useGetFootnoteBody';
+import useGetFootnoteBody from '@/hooks/use-get-footnote-body';
 
 interface Props {
   onClose: () => void;
