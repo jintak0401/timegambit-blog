@@ -2,7 +2,7 @@ import React, { memo, useCallback, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
 import { DarkLogo, DarkLogoTitle, Logo, LogoTitle } from 'data/logo';
-import navLinks from 'data/navLinks';
+import navLinks from 'data/nav-links';
 import siteMetadata from 'data/siteMetadata.mjs';
 
 import { useScrollDirection } from '@/hooks/use-scroll-direction';

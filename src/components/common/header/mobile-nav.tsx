@@ -1,6 +1,6 @@
 import { usePathname } from 'next/navigation';
 
-import navLinks from 'data/navLinks';
+import navLinks from 'data/nav-links';
 
 import NavLink from '@/components/common/nav-link';
 
