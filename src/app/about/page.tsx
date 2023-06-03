@@ -8,35 +8,24 @@ import phrases from 'data/phrases';
 import siteMetadata from 'data/site-metadata.mjs';
 
 import { omit } from '@/lib/contentlayer';
-import { defaultOpenGraph, defaultTwitter } from '@/lib/metadata';
+import { generateDefaultMetadata } from '@/lib/metadata';
 
 import AboutList from '@/components/card-and-list/about-list';
 
 import { AboutCardType } from '@/types';
 
 export const generateMetadata = (): Metadata => {
-  const title = 'About';
-  const ogTitle = siteMetadata.titleTemplate.replace('%s', title);
-  const url = `${siteMetadata.siteUrl}/about`;
-  const description = phrases.Seo.aboutDesc || siteMetadata.description;
+  const { openGraph, twitter, ...rest } = generateDefaultMetadata({
+    title: 'About',
+    description: phrases.Seo.aboutDesc || siteMetadata.description,
+    url: `${siteMetadata.siteUrl}/about`,
+  });
+  openGraph.type = 'profile';
+
   return {
-    title,
-    description,
-    alternates: {
-      canonical: url,
-    },
-    openGraph: {
-      ...defaultOpenGraph,
-      type: 'profile',
-      title: ogTitle,
-      description,
-      url,
-    },
-    twitter: {
-      ...defaultTwitter,
-      title: ogTitle,
-      description,
-    },
+    openGraph,
+    twitter,
+    ...rest,
   };
 };
 
