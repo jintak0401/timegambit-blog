@@ -113,7 +113,6 @@ const phrases = {
     title: '에러가 발생했어요 😢',
     description:
       '에러가 발생했어요. 새로고침해도 해결되지 않는다면 알려주세요!',
-    button: '새로고침',
   },
 };
 
