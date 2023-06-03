@@ -7,7 +7,7 @@ import { slug } from 'github-slugger';
 
 import { getAllTags } from '@/lib/getBlogInfo.mjs';
 
-import Tag from '@/components/card-and-list/Tag';
+import Tag from '@/components/card-and-list/tag';
 import NavLink from '@/components/common/nav-link';
 
 export const metadata: Metadata = {

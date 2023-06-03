@@ -13,7 +13,7 @@ import ImageWithFallback from '@/components/image/image-with-fallback';
 
 import { PostListItem } from '@/types';
 
-import Tag from './Tag';
+import Tag from './tag';
 
 interface Props {
   post: PostListItem;
