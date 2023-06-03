@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-import { TocElement } from '@/lib/types';
+import { TocElement } from '@/types';
 
 const observerOption = {
   threshold: 0.4,
