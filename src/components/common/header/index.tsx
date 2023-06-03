@@ -11,7 +11,7 @@ import NavLink from '@/components/common/nav-link';
 import SvgSwitcher from '@/components/image/svg-switcher';
 
 import MobileNav from './mobile-nav';
-import MobileNavButton from './MobileNavButton';
+import MobileNavButton from './mobile-nav-button';
 import ThemeSwitch from './theme-switch';
 
 const REDUCED_NAV_LINKS = ['Blog', 'Tags', 'Series', 'Projects'];
