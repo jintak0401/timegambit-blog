@@ -15,7 +15,7 @@ const LAST_POST = 'last-post';
 const LIMIT_TIME =
   (siteMetadata.blogPost.viewCountTimeLimit || 0) * 60 * 60 * 1000;
 
-const ViewCounter = ({ slug }: Props) => {
+const ViewCountUpdater = ({ slug }: Props) => {
   const { increment } = usePostViews(slug);
 
   useEffect(() => {
@@ -39,4 +39,4 @@ const ViewCounter = ({ slug }: Props) => {
   return null;
 };
 
-export default ViewCounter;
+export default ViewCountUpdater;
