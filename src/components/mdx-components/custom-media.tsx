@@ -3,7 +3,7 @@ import NextImage from 'next/image';
 
 import siteMetaData from 'data/siteMetadata.mjs';
 
-import ErrorBoundary from '@/components/common/ErrorBoundary';
+import ErrorBoundary from '@/components/common/error-boundary';
 import Zoom from '@/components/image/zoom';
 
 interface Props {
