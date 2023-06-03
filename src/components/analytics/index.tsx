@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import siteMetadata from 'data/siteMetadata.mjs';
+import siteMetadata from 'data/site-metadata.mjs';
 
-import { isProd } from '@/lib/isProduction';
+import { isProd } from '@/lib/is-production';
 
-import GA from './GoogleAnalytics';
+import GA from './google-analytics';
 
 declare global {
   interface Window {
