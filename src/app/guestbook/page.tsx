@@ -10,6 +10,7 @@ import { authOptions } from '@/lib/auth';
 import GuestbookEntries from './entries';
 import Guestbook from './guestbook';
 
+export const dynamic = 'force-static';
 export const metadata: Metadata = {
   title: 'Guestbook',
   description: phrases.Seo.guestbookDesc || siteMetadata.description,

@@ -9,14 +9,13 @@ import { pickBlogItem, sortedBlogPost } from '@/lib/contentlayer';
 
 import ListLayout from '@/layouts/list-layout';
 
-export const generateMetadata = (): Metadata => {
-  return {
-    title: 'Blog',
-    description: phrases.Seo.blogDesc || siteMetadata.description,
-    alternates: {
-      canonical: `${siteMetadata.siteUrl}/blog`,
-    },
-  };
+export const dynamic = 'force-static';
+export const metadata: Metadata = {
+  title: 'Blog',
+  description: phrases.Seo.blogDesc || siteMetadata.description,
+  alternates: {
+    canonical: `${siteMetadata.siteUrl}/blog`,
+  },
 };
 
 const getPosts = async () => {

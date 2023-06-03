@@ -13,6 +13,7 @@ import AboutList from '@/components/card-and-list/about-list';
 
 import { AboutCardType } from '@/types';
 
+export const dynamic = 'force-static';
 export const metadata: Metadata = {
   title: 'About',
   description: phrases.Seo.aboutDesc || siteMetadata.description,
