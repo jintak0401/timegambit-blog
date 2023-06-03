@@ -1,5 +1,3 @@
-import { Metadata } from 'next';
-
 import phrases from 'data/phrases';
 import siteMetadata from 'data/site-metadata.mjs';
 
@@ -11,7 +9,7 @@ import { generateDefaultMetadata } from '@/lib/metadata';
 import Tag from '@/components/card-and-list/tag';
 import NavLink from '@/components/common/nav-link';
 
-export const metadata: Metadata = generateDefaultMetadata({
+export const metadata = generateDefaultMetadata({
   title: 'Tags',
   description: phrases.Seo.tagDesc || siteMetadata.description,
   url: `${siteMetadata.siteUrl}/tags`,
