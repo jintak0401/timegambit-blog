@@ -2,7 +2,7 @@ import { mkdirSync, writeFileSync } from "fs";
 import { slug } from "github-slugger";
 import path from "path";
 
-import { escape } from "./htmlEscaper.mjs";
+import { escape } from "./html-escaper.mjs";
 import { allBlogs } from "../.contentlayer/generated/Blog/_index.mjs";
 import siteMetadata from "../data/siteMetadata.mjs";
 import { getAllSeries, getAllTags } from "../src/lib/getBlogInfo.mjs";
