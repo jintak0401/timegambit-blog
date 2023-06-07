@@ -8,6 +8,7 @@ import { joinSlugs } from '@/lib/utils';
 
 import queries from '@/app/api/queries';
 
+export const dynamic = 'force-dynamic';
 const handler = async (method: 'GET' | 'POST', _slug: string[]) => {
   const query =
     method === 'GET'

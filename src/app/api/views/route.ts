@@ -7,6 +7,7 @@ import { db } from '@/lib/db';
 import queries from '@/app/api/queries';
 import { PopularPostType } from '@/types';
 
+export const dynamic = 'force-dynamic';
 export const GET = async () => {
   let popularPostsSlug: PopularPostType[] = [];
   let connection;
