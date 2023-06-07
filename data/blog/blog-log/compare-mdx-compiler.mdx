@@ -1,7 +1,7 @@
 ---
 title: 'next-mdx-remote vs mdx-bundler'
 date: '2022-11-06'
-lastmod: '2023-04-01'
+lastmod: '2023-06-08'
 tags: ['블로그','mdx','라이브러리 비교']
 draft: false
 series: 블로그 제작일지
@@ -40,7 +40,7 @@ Next.js로 개발한 제 블로그는 mdx 형식으로 글을 작성합니다. �
 
 ### mdx-bundler 컴파일 결과
 
-![next-mdx-remote](https://i.imgur.com/KMf8EvK.png)
+![mdx-bundler](https://i.imgur.com/KMf8EvK.png)
 
 mdx-bundler를 사용하여 컴파일한 결과에서는 **83.3KB**였습니다. next-mdx-remote의 150KB보다 훨씬 적었습니다.
 (참고로 19.4KB는 컴파일되기 전 mdx 파일입니다.) 둘의 컴파일 결과가 어떻게 다르길래 용량차이가 나는 것이었을까요?
@@ -171,3 +171,12 @@ Here's a **neat** demo:
 그래서 저는 next-mdx-remote 보다는 mdx-bundler를 사용하는 것이 좋다고 생각합니다.
 컴파일 결과가 더 적을뿐만 아니라 원하는 컴포넌트를 맘대로 import해서 사용할 수 있는 점 또한 큰 장점이라고 생각하기 때문입니다.
 next-mdx-remote가 더 좋은 점이 있다면 댓글로 알려주세요!
+
+## 비교 프로젝트
+
+직접 비교해볼 수 있도록 [프로젝트](https://github.com/jintak0401/compare-mdx-library)를 만들었습니다. 이 프로젝트로 제 블로그 포스트 중 [가장 긴 포스트](https://www.timegambit.com/blog/digging/react-query/01)로 비교한 결과는 다음과 같습니다.
+
+|            |mdx-bundler|next-mdx-remote|
+|:----------:|:---:|:---:|
+|    dev     |621KB|531KB|
+| production |176KB|264KB|
