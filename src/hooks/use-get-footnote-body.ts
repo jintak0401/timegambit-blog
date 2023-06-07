@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 const removeBackTag = (innerHtml: string) => {
   return innerHtml.replace(
-    /<a href="#user-content-fnref-[0-9a-zA-Z%]+" aria-label="Back to content".*>↩<\/a>/g,
+    /<a href="#user-content-fnref-[0-9a-zA-Z%-]+" aria-label="Back to content".*>↩<\/a>/g,
     ''
   );
 };

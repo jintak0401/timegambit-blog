@@ -10,6 +10,7 @@ import { joinSlugs } from '@/lib/utils';
 
 import queries from '@/app/api/queries';
 
+export const dynamic = 'force-dynamic';
 export const GET = async (
   req: NextRequest,
   context: { params: { slug: string[] } }
