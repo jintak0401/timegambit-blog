@@ -8,6 +8,7 @@ import { db } from '@/lib/db';
 import queries from '@/app/api/queries';
 import { UserType } from '@/types';
 
+export const dynamic = 'force-dynamic';
 export const DELETE = async (
   req: NextRequest,
   context: { params: { id: string } }
