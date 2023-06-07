@@ -1,0 +1,187 @@
+---
+title: '[Next JS] Pages Router 에서 App Router 전환기'
+date: '2023-06-06'
+lastmod: '2023-06-06'
+tags: ['블로그','Next JS']
+draft: false
+series: 블로그 제작일지
+summary: Next JS의 Pages Router 방식으로 개발된 블로그를 App Router로 전환하면서 겪은 것, 알게된 점들을 정리한 포스트입니다.
+images: [https://i.imgur.com/DraliUu.png]
+layout: PostLayout
+---
+
+## 이 글을 쓰게 된 계기
+
+App Router 방식은 Next JS 13 버전부터 사용할 수 있게된 방식으로, 이전에는 Beta였지만 13.4 버전부터 Stable로 바뀌었습니다. 이 블로그는 Pages Router 방식으로 개발하였지만 새로운 방식, Stable 이라는 말에 솔깃하여 App Router로 마이그레이션하였습니다. 그 과정에서 느꼈던 단점과 장점을 공유하기 위해 이 포스트를 작성합니다.
+
+<Alert type="danger">
+  * 이 글은 App Router로 개발하는 방법을 말하는 포스트가 아닙니다.
+  * 이 글은 2023년 6월 6일을 기준으로 하고 있습니다. 이 글을 보고 계시는 현 시점과는 다소 다를 수 있습니다.
+</Alert>
+
+## 단점
+
+### 새로운 키워드와 방법들
+
+App Router 방식에서는 새롭게 추가되는 키워드가 너무 많습니다. 아직 익숙하지 않아서겠지만 많아서 좀 헷갈리더라구요.
+
+* [error, layout, loading, not-found, page, route, default, template 등](https://nextjs.org/docs/app/api-reference/file-conventions): 라우팅을 위한 파일명
+* [force-cache, no-store](https://nextjs.org/docs/app/api-reference/functions/fetch): SSR, SSG를 위한 fetch options
+* [dynamic, dynamicParams 등](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config): Page, Layout, Route Handler의 동작 방식을 명시하는 변수들
+
+파일명에 대한 것들은 Beta 버전일 때에 들어서 알고 있었는데, 그 외에도 꽤나 새로운 키워드들이 많았습니다. 그리고 Pages Router에서의 기능을 App Router에서 동작하도록 만들기 위해, 이러한 키워드들을 어떻게 사용해야 하며 어떤식으로 코드를 짜야하는지 찾아보고 공부하는데 많은 시간이 소요되었습니다.
+
+* api는 route.ts 파일에 작성해야하며, 추가적인 설정이 없다면 api 결과 또한 캐싱합니다.[^api]
+* Pages Router에서 SSR/SSG로 개발할 때 React Query의 `<Hydrate />`를 _app.tsx에서 손쉽게 사용할 수 있었지만, App Router에서는 각 page.tsx에 `<Hydrate />`를 매번 선언해주어야 합니다. 자세한 방법은 [이 글](https://codevoweb.com/setup-react-query-in-nextjs-13-app-directory/)을 참고하세요.
+* 클라이언트 컴포넌트에서는 서버 컴포넌트를 import 할 수 없습니다. 클라이언트 컴포넌트의 하위에 서버 컴포넌트가 있어야 한다면 상위의 서버 컴포넌트에서 children으로 넘겨주어야 합니다.
+
+꽤나 많이 공부했지만 아직 공부할 것들이 한참 남았습니다. 언제 다 공부할 수 있을런지... 😂
+
+### 다소 난잡해지는 app 폴더 구조
+
+페이지를 구성하기 위한 파일이 꽤나 많습니다. error, layout, loading, not-found, page 와 아직 공식문서가 작성되지 않은 [default](https://nextjs.org/docs/app/api-reference/file-conventions/default), [template](https://nextjs.org/docs/app/api-reference/file-conventions/template)이 그것들입니다. 모든 파일이 다 필요하지 않고 page만 있어도 페이지를 구성할 수도 있지만, 각 상황 및 상태에 맞게 다양한 기능을 구현하려면 추가적인 파일들이 필요해집니다.
+
+간단히 페이지 구성 방법을 소개하자면 App Router에서 페이지를 구성하기 위해서는 url 경로와 동일한 이름의 폴더가 반드시 필요하며 그 하위에 page 파일이 있어야 합니다. 즉 `blog/page.tsx`가 `/blog` 페이지를 구성하게 됩니다.
+
+*이게 뭐가 문제지?* 라고 생각하시나요? 예를 하나 들어드리겠습니다. 여러분은 `/a/b/c/d` 페이지를 구성하는 코드를 보기 위해 `/app/a/b/c/d/page.tsx` 파일을 찾아야합니다. 그런데 a, b, c, d 폴더 내에 page 파일뿐만 아니라 layout, error, loading, not-found 파일들도 함께 있습니다. a 폴더를 여는 순간 b 폴더와 5개의 파일들이 보이고, b 폴더를 여는 순간 c 폴더와 5개의 파일들이, c 폴더를 열면 d 폴더와 5개의 파일들, d 폴더를 열면 보이는 5개의 파일들 중 page 파일을 찾아야 합니다. 이 상황은 극단적인 상황이긴 하지만 아예 없을 상황은 아니라고 생각합니다. 생각만해도 어지럽지 않나요? 저는 이보다 덜 복잡한 상황이었지만 파일 구조가 너무 복잡하다는 느낌을 받았습니다.
+
+### 지원하지 않는 라이브러리들
+
+제 블로그는 Tailwind CSS를 사용하고 있어서 괜찮았습니다만, emotion을 사용하고 있던 다른 프로젝트에서는 에러가 발생했으며 아무리해도 해결할 수 없었습니다. [공식문서](https://nextjs.org/docs/app/building-your-application/styling/css-in-js)를 찾아본 결과 emotion은 아직 App Router를 지원하지 않는다는 것을 알 수 있었습니다. 그리고 Material UI 또한 내부적으로 emotion을 사용하고 있기 때문에, 이 라이브러리도 App Router를 지원하지 않고 있는 것으로 보입니다.
+
+이 외에도 App Router를 지원하지 않는 라이브러리들이 있을 수 있습니다. 만약 App Router 방식으로 마이그레이션 하거나 개발하려고 한다면, 사용(하려고)하는 라이브러리들이 App Router를 지원하는지 꼭 확인해보세요. 확인하지 않고 바로 들어가면 저처럼 삽질을 오래하실 거에요... 😢 [^use-client]
+
+<Alert type="info">
+  만약 App Router 방식을 이용하여 emotion을 사용하려고 하신다면 비슷한 라이브러리인 styled-components를 사용하세요! styled-components는 [추가적인 로직](https://nextjs.org/docs/app/building-your-application/styling/css-in-js#styled-components)을 적용하면 App Router에서도 사용할 수 있습니다.
+</Alert>
+
+### Server/Client 컴포넌트
+
+[공식문서](https://nextjs.org/docs/getting-started/react-essentials#when-to-use-server-and-client-components)를 참고하면 서버 컴포넌트와 클라이언트 컴포넌트는 다음과 같은 특징을 갖습니다.
+
+* 서버 컴포넌트
+  * 서버에서 직접 데이터 가져오기
+  * 보안에 민감한 정보에 안전하게 접근
+  * 렌더링에 필요한 라이브러리를 번들에 포함하지 않음으로써 JS 사이즈 줄이기
+
+* 클라이언트 컴포넌트
+  * onClick, onChange와 같은 이벤트 리스너
+  * useState, useReducer, useEffect와 같은 상태와 생명주기
+  * browser에서 사용할 수 있는 api
+  * state, effect, brower api를 사용하는 커스텀 훅
+
+#### 컴포넌트 설계
+
+> To improve the performance of your application, we recommend moving Client Components to the leaves of your component tree where possible.
+>
+> 출처: [Next JS 공식문서 - React Essentials](https://nextjs.org/docs/getting-started/react-essentials#patterns)
+
+클라이언트 컴포넌트를 리프노드에 가깝게 위치하도록 설계하고 구현한다면 성능상 이점을 챙길 수 있습니다. 솔직히 단점보다는 장점에 가까운 특징이라고 생각합니다. 약간의 단점이라면 컴포넌트 설계시 고려해야할 포인트가 하나 더 늘었다는 정도?
+
+#### 서버 컴포넌트와 CSS-in-JS
+
+> Warning: CSS-in-JS libraries which require runtime JavaScript are not currently supported in Server Components. Using CSS-in-JS with newer React features like Server Components and Streaming requires library authors to support the latest version of React, including [concurrent rendering](https://react.dev/blog/2022/03/29/react-v18#what-is-concurrent-react).
+>
+> We're working with the React team on upstream APIs to handle CSS and JavaScript assets with support for React Server Components and streaming architecture.
+>
+> 출처: [Next JS 공식문서 - CSS-in-JS](https://nextjs.org/docs/app/building-your-application/styling/css-in-js)
+
+이 부분은 꽤 치명적인 단점이라고 생각합니다. 현재 서버 컴포넌트에서는 CSS-in-JS를 사용할 수 없습니다. 따라서 CSS-in-JS를 사용하려 한다면 서버 컴포넌트에서는 CSS-in-JS를 사용할 수 없다는 점도 고려하며 컴포넌트들을 설계해야 합니다. 실제로 App Router로 마이그레이션하면서 useState와 useEffect를 작성하지 않은 컴포넌트를 서버 컴포넌트로 만들려고 했는데, CSS-in-JS 코드가 많이 작성되어서 다소 번거로웠습니다.
+
+### 새롭게 바뀐 useRouter
+
+Pages Router에서는 `next/router`로부터 useRouter를 가져와서 사용했지만, App Router에서는 `next/navigation`으로부터 useRouter를 가져와야 합니다. 그리고 기존의 useRouter에서 제공하는 기능들 중 라우팅과 관련된 기능들만 담당합니다. pathname, query와 관련된 기능은 next/navigation의 `usePathname`, `useSearchParams`로 분리되었습니다.
+
+#### 숨겨진 쿼리와 useSearchParams
+
+기존의 useRouter에는 많은 기능들이 있었습니다. url을 얻고 쿼리들을 얻으며 라우팅을 할 수도 있었습니다. 지금 생각해보면 router라는 이름에 맞지 않게 꽤나 과도한 기능들이 탑재되어 있었네요. App Router에서는 useRouter, usePathname, useParams, useSearchParams 등으로 각 기능에 맞게 분리되었습니다. 분리 된 것은 좋습니다만 다소 불만족스러운 부분이 있습니다. 그것은 useSearchParams가 숨겨진 쿼리를 가져오지 못한다는 점입니다.
+
+```tsx
+import NextLink from 'next/link';
+
+<NextLink href="/blog/tmp?disclosure=true" as="/blog/tmp">
+  다음 포스트
+</NextLink>
+```
+
+예를들어 위와 같이 NextLink를 통해 url에서 `disclosure=true`를 숨기면서 라우팅하도록 만들었다고 해보겠습니다. Pages Router에서는 router.query를 통해 숨겨져있던 disclosure 값을 얻어낼 수 있었습니다. 하지만 App Router에서 쿼리를 얻는 훅인 useSearchParams로는 disclosure 값을 얻어낼 수 없었습니다. 솔직히 기존에 되던 것을 왜 안되도록 만들었는지 이해가 안갑니다... 기술적으로 가능하지만 잊어버리고 기능을 아직 구현해놓지 않은 것이었으면 하네요.
+
+#### Router events의 부재
+
+이 부분도 꽤나 아쉬웠습니다. Pages Router에는 router에 [이벤트](https://nextjs.org/docs/pages/api-reference/functions/use-router#routerevents)를 등록하여 라우팅 되기 전, 후 등 특정 시점에 특정 동작을 하도록 만들 수 있었습니다. 그런데 App Router에서는 불가능합니다. 이 기능에 대해 [GitHub Discussion](https://github.com/vercel/next.js/discussions/41745#discussioncomment-3987025)에서 꽤 많은 논의가 있었습니다만, 아직 Next JS에서 공식적으로 지원하지 않습니다. [공식문서](https://nextjs.org/docs/app/api-reference/functions/use-router#router-events)에서 App Router에서의 이벤트를 등록하는 방법을 설명하고는 있지만, 라우팅 전에는 아무 동작하지 않고 라우팅 이후에만 동작하는 반쪽자리 해결책입니다.
+
+저는 이 기능을 제 블로그에서 스크롤 위치 복원을 위해 사용하고 있어 꽤나 중요한 기능이었습니다. 그래서 구현하기 위한 다른 방법을 탐색하였습니다. 그리고 [next/link](https://github.com/vercel/next.js/blob/400ccf7b1c802c94127d8d8e0d5e9bdf9aab270c/packages/next/src/client/link.tsx#L580)의 소스코드를 보고 `onClick`을 사용하는 방법을 떠올렸습니다. 소스코드를 보면 라우팅을 진행하는 `linkClicked` 함수를 수행하기 **이전**에 props로 넘겨주었던 onClick 함수를 수행해줍니다. 그래서 라우팅 전에는 NextLink의 onClick을 통해, 라우팅 후에는 공식문서의 방법을 통해 라우팅 이벤트를 등록한 것처럼 만들어줄 수 있었습니다.
+
+Discussion의 답변을 보면 React의 concurrent rendering으로 인해 라우팅이 취소될 수도 있으므로 기존의 `router.events`가 동작하는건 이치에 맞지 않다고 합니다. 하지만 많은 사람들이 스크롤 복원기능 및 기타 이유로 이 기능을 필요로 하고 있습니다. 하루빨리 공식적으로 지원되었으면 합니다.
+
+### 내장 i18n 지원 부재
+
+Pages Router에서는 `next.config.js`에 간단한 설정을 추가하면 내장된 i18n 기능을 사용할 수 있었습니다. 그런데 App Router에서는 이 기능을 직접 구현해야합니다. 이를 위해서는 다음 작업들이 필요합니다.
+
+* middleware 직접 작성하여 locale이 없을 경우 리다이렉션
+* `app/[locale]` 폴더를 통해 dynamic 라우팅을 구현하여 직접 locale을 얻기
+
+아주 간단한 설정으로 손쉽게 locale을 지원해주었던 Pages Router와는 다르게, App Router는 직접 기능을 구현해야해서 매우 번거로웠습니다. 이 기능을 지원해주지 않는 것도 잘 이해가 안갑니다. 없던 기능이면 모르겠는데, 이미 만들어놓은 기능을 없앤다? 저로서는 이해가 잘 안가네요... 🤔
+
+### 남아있는 약간의 버그
+
+치명적이지는 않지만 몇몇 버그들이 남아있는듯 합니다. 제가 발견한 버그로는 404 페이지와 관련된 버그가 있습니다. pages 폴더를 삭제하고 `/app/not-found.tsx`에 404 페이지를 구현하였는데 빌드를 하면 Pages Router 방식의 404 페이지도 함께 빌드가 되었습니다. [이슈](https://github.com/vercel/next.js/issues/49796)를 찾아보니 Next JS 팀에서도 인지하고 있지만 아직 처리해야할 이슈들이 많이 있어서 추후에 처리하겠다고 답변한 것을 발견하였습니다. 이 버그 외에도 기능 구현에 치명적인 영향을 주지 않는 자잘한 버그들이 있지 않을까 생각합니다.
+
+## 좋았던 점
+
+### metadata, sitemap 간편 생성
+
+[metadata](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/opengraph-image)와 [sitemap](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap)을 진짜 엄청 간편하게 생성할 수 있습니다. 저는 metadata 생성을 이 기능을 이용하여 구현하였는데 layout 혹은 page에서 `metadata`라는 이름의 객체를 export하거나 `generateMetadata` 함수가 return 해주는 객체로 메타태그들을 생성할 수 있었습니다. 또, 꽤나 좋았던 점은 각 페이지별로 정의된 metadata에 정의되지 않는 속성들은 루트 layout에 정의된 metadata로부터 상속받는 것처럼 동작한다는 점입니다. 이를 통해 중복된 코드를 줄일 수 있었습니다.
+
+Pages Router에서 메타태그 생성을 위해 꽤나 번거로운 작업을 하기도 했고 [에러](https://www.timegambit.com/blog/solve/dynamic-import-og-error)도 겪었습니다. 만약 App Router의 이 기능이 있었다면 이런 문제들을 겪지 않았을 것이라고 생각합니다.
+
+### layout, loading, error 핸들링
+
+위에서는 라우팅을 위한 수많은 파일들이 단점이라고 이야기했지만 사실 장점도 있습니다. 파일이 많아진만큼 한 파일 내에 존재하는 코드가 분산된다는 점입니다. 즉, Pages Router에서 `/pages/blog.tsx`에 있어야할 코드가 layout, loading, error 등의 파일로 분산되면서 코드 가독성은 좋아졌습니다. `if (isError) { ... }` 이나 `if (isLoading) { ... }` 같은 코드가 없어지고 각 상황의 코드만 파일 내에 존재하게되니까요. 일종의 trade off라고 생각할 수 있겠네요. 코드 가독성을 높이는 대신, 폴더 가독성(?)을 떨어뜨리는 것이죠.
+
+협업 측면에서는 훨씬 좋다고 생각합니다. A는 로딩, 에러 페이지를 구현하고, B는 레이아웃과 페이지를 구현해야한다면, 한 파일 내에서 작업하지 않아도 되므로 충돌날 가능성도 적을 것입니다.
+
+### 번들 사이즈 감소
+
+위에서 서버 컴포넌트의 특징으로 번들 사이즈가 감소한다고 했습니다. 모든 컴포넌트가 클라이언트 컴포넌트였던 Pages Router에 비해, 서버 컴포넌트를 지원하는 App Router는 번들 사이즈가 얼마나 개선되는지 직접 봅시다.
+
+![좌: App Router / 우: Pages Router](https://i.imgur.com/fK66rAN.png)
+
+대략 10 ~ 20 kb 정도 개선이 되었습니다. 만약 클라이언트 컴포넌트를 트리의 leaf 노드에 가깝게 존재하도록 설계한다면 더욱 개선될 것입니다.
+
+## App Router로 개발할까?
+
+Stable이라는 말에 낚여(?) App Router로 마이그레이션하면서 안좋은 점들도 있었고 좋은점들도 있었습니다. 하지만 솔직히 얘기하자면 현시점으로써는 안좋은 점이 좋은 점보다 많았습니다. 이 경험으로 얻게된 소감을 한 마디로 말하자면 *Stable이라는 포장 뒤에 존재하는 불완전한 Next JS* 라고 할 수 있을 것 같아요. 그래도 App Router는 아직 출시된지 얼마 안된 방법이기도 하고, Next JS는 매우 빠르게 업데이트해주는 프레임워크니까 앞으로 빠르게 개선될 것이라고 생각합니다.
+
+#### App Router로 개발/전환할만한 상황
+
+* 소규모 혹은 토이 프로젝트를 새롭게 시작하려는 경우
+* 서버 컴포넌트를 적용하여 성능개선을 하고 싶은 경우
+
+#### Pages Router로 개발/유지할만한 상황
+
+* 이미 많이 진행되었거나 대규모의 프로젝트를 진행하려는 경우
+* 안정적으로 프로젝트를 진행해 나가고 싶은 경우
+
+App Router로 개발해야할지 Pages Router로 개발해야할지 고민되신다면, 위의 상황 중 어떤 상황인지 판단하시고 그에 맞게 진행하시면 될 것 같습니다. 하지만 솔직히 App Router 끌리시죠? 한 번 직접 찍먹해보시고 결정하시는 것도 좋아요 🙃
+
+[^api]: 캐싱하지 않고 매번 요청될 때마다 동작하도록 만드려면 다음과 같은 설정을 해야합니다.
+
+    ```ts:/app/api/some/route.ts
+    export const dynamic = 'force-dynamic'; // ⓐ
+
+    export const revalidate = 0 // ⓑ
+    ```
+    [ⓐ](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamic) 혹은 [ⓑ](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#revalidate) 중 하나를 해줘야합니다.
+
+
+[^use-client]: 단순히 `use client` 키워드 때문에 발생하는 에러라면 아래와 같은 방법으로 해결할 수 있습니다.
+
+    ```tsx:hydrate.client.tsx
+    'use client';
+
+    import { Hydrate as HydrationOnClient } from '@tanstack/react-query';
+    export default HydrationOnClient;
+    ```
+
+    `use client`를 파일 최상단에 적고, 라이브러리를 import한 후 바로 export 해줌으로써 해결할 수 있습니다.

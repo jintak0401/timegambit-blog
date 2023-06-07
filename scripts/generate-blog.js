@@ -5,6 +5,9 @@ const dedent = require('dedent');
 
 const root = process.cwd();
 
+const clearAndUpper = (text) => text.replace(/-/, '').toUpperCase();
+const toPascalCase = (text) => text.replace(/(^\w|-\w)/g, clearAndUpper);
+
 const getLayouts = () => {
   const layoutPath = path.join(root, 'src', 'layouts');
   return fs
@@ -33,7 +36,7 @@ const genFrontMatter = (answers) => {
   series: ${answers.series || `''`}
   summary: ${answers.summary ? answers.summary : `''`}
   images: []
-  layout: ${answers.layout}
+  layout: ${toPascalCase(answers.layout)}
   `;
 
   frontMatter = frontMatter + '\n---';
