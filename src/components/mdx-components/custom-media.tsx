@@ -25,6 +25,7 @@ const FallbackImage = ({ alt }: { alt: string }) => (
 
 const CustomMedia = ({ src, alt }: Props) => {
   const [src1, src2] = src?.split(',') || [];
+
   return (
     <figure className="my-12">
       {isVideo(src) ? (
@@ -40,7 +41,6 @@ const CustomMedia = ({ src, alt }: Props) => {
         <ErrorBoundary fallback={<FallbackImage alt={alt as string} />}>
           <Zoom
             className={`mx-auto w-auto max-w-full${src2 ? ' dark:hidden' : ''}`}
-            priority={true}
             src={src1 as string}
             alt={alt as string}
             width="1000"
@@ -49,7 +49,6 @@ const CustomMedia = ({ src, alt }: Props) => {
           {src2 && (
             <Zoom
               className="absolute top-0 mx-auto hidden w-auto max-w-full dark:block"
-              priority={true}
               src={src2 as string}
               alt={alt as string}
               width="1000"

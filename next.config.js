@@ -16,7 +16,6 @@ const nextConfig = withContentlayer(
     reactStrictMode: true,
     swcMinify: true,
     experimental: {
-      appDir: true,
       serverComponentsExternalPackages: ['mysql2'],
     },
 
