@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from 'react';
 import NextImage, { ImageProps } from 'next/image';
 
+import { onCompleteImageLoad } from '@/lib/image-load';
+
 const DURATION = 300;
 const TIMEOUT_DELAY = 100;
 const BACKGROUND_OPACITY = 0.9;
@@ -82,6 +84,7 @@ const Zoom = (props: ImageProps) => {
         ref={imageRef}
         onClick={handleImageZoom}
         onError={() => setError(true)}
+        onLoadingComplete={onCompleteImageLoad}
         {...imageProps}
       />
     </>
