@@ -27,7 +27,7 @@ interface Props {
 export default function ListLayout({ posts, title, description }: Props) {
   const pathname = usePathname();
   const { getScrollPosState, setListLengthState } = scrollPosStore;
-  const { listLength } = getScrollPosState(pathname);
+  const listLength = getScrollPosState(pathname);
   const infScrollRef = useRef<HTMLDivElement | null>(null);
   const isFirstRender = useIsFirstRender();
   const [searchValue, setSearchValue] = useState('');

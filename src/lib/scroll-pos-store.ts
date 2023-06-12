@@ -2,12 +2,14 @@ import siteMetadata from 'data/site-metadata.mjs';
 
 interface StoreElement {
   scrollPos: number;
-  listLength: number;
+  listLength?: number;
 }
 
 interface StoreType {
-  [path: string]: StoreElement;
+  [path: string]: number;
 }
+
+const isBlogPost = (url: string) => /\/blog\/.+/.test(url);
 
 export const scrollPosStore = (() => {
   const store: StoreType = {};
@@ -24,51 +26,22 @@ export const scrollPosStore = (() => {
     return needRestoreScrollRegs.some((reg) => reg.test(asPath));
   };
 
-  const initScrollPosState = (
-    path: string,
-    storeElement?: { scrollPos?: number; listLength?: number }
-  ) => {
-    const { scrollPos = 0, listLength = siteMetadata.blogPost.postsPerScroll } =
-      storeElement || {};
-    store[path] = {
-      scrollPos,
-      listLength,
-    };
+  const initScrollPosState = (path: string, listLength: number) => {
+    store[path] = listLength;
   };
   const setListLengthState = (path: string, listLength: number) => {
-    if (!store[path]) {
-      initScrollPosState(path, { listLength });
-    }
-    store[path].listLength = listLength;
-  };
-
-  const setScrollPosState = (path: string, scrollPos: number) => {
-    if (!store[path]) {
-      initScrollPosState(path, { scrollPos });
-    }
-    store[path].scrollPos = scrollPos;
+    store[path] = listLength;
   };
 
   const getScrollPosState = (path: string) => {
-    if (!store[path]) {
-      initScrollPosState(path);
-    }
-    return store[path];
-  };
-
-  const onStartRouteCb = (before: string, after: string) => {
-    if (isNeedRestoreScroll(after)) {
-      initScrollPosState(after);
-    }
-    if (isNeedRestoreScroll(before)) {
-      setScrollPosState(before, window.scrollY);
-    }
+    return (store[path] ??= siteMetadata.blogPost.postsPerScroll);
   };
 
   const onCompleteRouteCb = (after: string) => {
-    if (isNeedRestoreScroll(after)) {
+    console.log(store);
+    if (isBlogPost(after)) {
       window.scrollTo({
-        top: getScrollPosState(after).scrollPos,
+        top: 0,
       });
     }
   };
@@ -76,9 +49,7 @@ export const scrollPosStore = (() => {
   return {
     initScrollPosState,
     setListLengthState,
-    setScrollPosState,
     getScrollPosState,
-    onStartRouteCb,
     onCompleteRouteCb,
   };
 })();
