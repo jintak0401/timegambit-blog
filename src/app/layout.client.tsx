@@ -7,6 +7,8 @@ import siteMetadata from 'data/site-metadata.mjs';
 import { ThemeProvider } from '@wits/next-themes';
 import { ToastContainer } from 'react-toastify';
 
+import { useRestoreScroll } from '@/hooks/use-restore-scroll';
+
 import Footer from '@/components/common/footer';
 import Header from '@/components/common/header';
 
@@ -30,7 +32,7 @@ const BodyLayout = ({ children, className }: Props) => {
 };
 
 const RootLayoutClient = ({ children, className }: Props) => {
-  // useRestoreScroll();
+  useRestoreScroll();
 
   return (
     <>
