@@ -22,7 +22,7 @@ const getPosts = async () => {
   const res = await fetch(`${process.env.API_URL}/api/views`, {
     method: 'GET',
     next: {
-      revalidate: siteMetadata.rebuildPeriod,
+      revalidate: siteMetadata.revalidate,
     },
   });
 

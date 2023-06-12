@@ -24,8 +24,7 @@ const siteMetadata = {
   youtube: '',
   linkedin: '',
 
-  needRestoreScrollPosPage: ['/blog', '/tags/[tag]', '/series/[slug]'],
-  rebuildPeriod: 10, // renewal period of popular post list at home page and guestbook logs (in seconds)
+  revalidate: 10, // renewal period of popular post list at home page and guestbook logs (in seconds)
   blogPost: {
     maxLikeCount: 4,
     postsPerScroll: 10,

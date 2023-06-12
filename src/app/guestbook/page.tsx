@@ -21,7 +21,7 @@ const getGuestbooks = async () => {
   const res = await fetch(`${process.env.API_URL}/api/guestbook`, {
     method: 'GET',
     next: {
-      revalidate: siteMetadata.rebuildPeriod,
+      revalidate: siteMetadata.revalidate,
     },
   });
 
