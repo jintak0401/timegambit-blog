@@ -1,3 +1,5 @@
+import NextLink from 'next/link';
+
 import phrases from 'data/phrases';
 import siteMetadata from 'data/site-metadata.mjs';
 
@@ -6,7 +8,6 @@ import { allBlogs, Blog } from 'contentlayer/generated';
 import { pickBlogItem, sortedBlogPost } from '@/lib/contentlayer';
 
 import PostList from '@/components/card-and-list/post-list';
-import NavLink from '@/components/common/nav-link';
 
 import { PopularPostType } from '@/types';
 import { PostListItem } from '@/types';
@@ -52,12 +53,12 @@ const HomePage = async () => {
         <h1 className="strong-text text-2xl font-semibold xl:text-3xl">
           {phrases.Main.blogPosts}
         </h1>
-        <NavLink
+        <NextLink
           href="/blog"
           className="rounded-md p-2 text-center font-semibold text-primary-500 hover:bg-gray-100 dark:text-primary-400 dark:hover:bg-gray-800 xl:text-lg"
         >
           {phrases.Main.allPosts}
-        </NavLink>
+        </NextLink>
       </div>
       <h2 className="strong-text mt-2 text-xl font-semibold xl:mt-4 xl:text-2xl">
         {phrases.Main.recentPosts}

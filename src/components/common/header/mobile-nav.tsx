@@ -1,8 +1,7 @@
+import NextLink from 'next/link';
 import { usePathname } from 'next/navigation';
 
 import navLinks from 'data/nav-links';
-
-import NavLink from '@/components/common/nav-link';
 
 interface Props {
   navShow: boolean;
@@ -44,7 +43,7 @@ const MobileNav = ({ navShow, onToggleNav }: Props) => {
       </div>
       <nav className="fixed mt-8 h-full">
         {navLinks.map((link) => (
-          <NavLink
+          <NextLink
             key={link.title}
             href={link.href}
             className={`mx-12 my-8 block w-fit text-2xl font-bold tracking-widest text-gray-900 decoration-primary-600 decoration-4 underline-offset-8 dark:text-gray-100 dark:decoration-primary-400 ${
@@ -53,7 +52,7 @@ const MobileNav = ({ navShow, onToggleNav }: Props) => {
             onClick={onToggleNav}
           >
             {link.title}
-          </NavLink>
+          </NextLink>
         ))}
       </nav>
     </div>
