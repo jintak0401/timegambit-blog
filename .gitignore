@@ -48,6 +48,3 @@ next-env.d.ts
 
 # Contentlayer
 .contentlayer
-
-# Prisma
-generated

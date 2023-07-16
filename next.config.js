@@ -3,13 +3,6 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
 
-const REDIRECT = {
-  '/blog/blog-log/dynamic-import-og-error':
-    '/blog/solve/dynamic-import-og-error',
-  '/blog/blog-log/contribute-next-auth': '/blog/solve/contribute-next-auth',
-  '/blog/blog-log/svg-usage-fix-bug': '/blog/solve/svg-usage-fix-bug',
-};
-
 /** @type {import('next').NextConfig} */
 const nextConfig = withContentlayer(
   withBundleAnalyzer({
@@ -17,14 +10,6 @@ const nextConfig = withContentlayer(
     swcMinify: true,
     experimental: {
       serverComponentsExternalPackages: ['mysql2'],
-    },
-
-    async redirects() {
-      return Object.entries(REDIRECT).map(([source, destination]) => ({
-        source,
-        destination,
-        permanent: false,
-      }));
     },
 
     images: {
@@ -40,9 +25,6 @@ const nextConfig = withContentlayer(
     },
 
     pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
-    eslint: {
-      dirs: ['pages', 'components', 'lib', 'layouts'],
-    },
 
     webpack: (config) => {
       config.module.rules.push({

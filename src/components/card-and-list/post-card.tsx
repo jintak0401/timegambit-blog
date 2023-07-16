@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import NextLink from 'next/link';
 
 import { IoEyeOutline, IoHeartOutline } from 'react-icons/io5';
 
@@ -8,7 +9,6 @@ import formatDate from '@/lib/format-date';
 import { usePostLikes } from '@/hooks/use-post-likes';
 import usePostViews from '@/hooks/use-post-views';
 
-import NavLink from '@/components/common/nav-link';
 import ImageWithFallback from '@/components/image/image-with-fallback';
 
 import { PostListItem } from '@/types';
@@ -71,7 +71,7 @@ const PostCard = ({ post }: Props) => {
 
   return (
     <div className="strong-text box-border max-w-full gap-4 space-y-2 rounded-md p-3 duration-300 hover:bg-gray-200 dark:hover:bg-gray-800 md:grid md:grid-cols-5 md:items-center md:space-y-0 xl:grid-cols-3">
-      <NavLink
+      <NextLink
         href={`/blog/${slug}`}
         className="relative md:col-span-2 xl:col-span-1"
       >
@@ -87,14 +87,14 @@ const PostCard = ({ post }: Props) => {
             loading ? 'block' : 'hidden'
           }`}
         />
-      </NavLink>
+      </NextLink>
       <div className="flex flex-col justify-between gap-4 md:col-span-3 md:h-full xl:col-span-2">
         <div className="space-y-2 md:space-y-1">
-          <NavLink href={`/blog/${slug}`}>
+          <NextLink href={`/blog/${slug}`}>
             <h2 className="w-fit cursor-pointer text-start text-xl font-bold leading-8 tracking-tight hover:text-primary-500 xl:text-2xl">
               {title}
             </h2>
-          </NavLink>
+          </NextLink>
           <ul className="flex flex-wrap">
             {tags &&
               tags.map((tag) => (
