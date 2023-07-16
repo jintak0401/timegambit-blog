@@ -1,12 +1,12 @@
 'use client';
 
 import { useState } from 'react';
+import NextLink from 'next/link';
 
 import phrases from 'data/phrases';
 
 import formatDate from '@/lib/format-date';
 
-import NavLink from '@/components/common/nav-link';
 import ImageWithFallback from '@/components/image/image-with-fallback';
 
 import { SeriesListItem } from '@/types';
@@ -24,7 +24,7 @@ const SeriesCard = ({ series }: Props) => {
         loaded ? 'animate-card' : 'opacity-0'
       }`}
     >
-      <NavLink href={`/series/${href}`} aria-label={`Link to ${title}`}>
+      <NextLink href={`/series/${href}`} aria-label={`Link to ${title}`}>
         <ImageWithFallback
           src={image}
           alt={title}
@@ -45,7 +45,7 @@ const SeriesCard = ({ series }: Props) => {
             {phrases.Series.lastUpdate} {formatDate(lastmod, false)}
           </span>
         </div>
-      </NavLink>
+      </NextLink>
     </article>
   );
 };

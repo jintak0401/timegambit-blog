@@ -4,7 +4,7 @@
  */
 const seriesData = {
   동작원리: {
-    image: 'https://i.imgur.com/EjubtWQ.png',
+    image: 'https://i.imgur.com/TICulLz.png',
     slug: 'digging',
   },
   'HTTP 완벽 가이드': {

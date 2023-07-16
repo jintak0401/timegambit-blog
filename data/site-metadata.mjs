@@ -13,10 +13,10 @@ const siteMetadata = {
   siteUrl: 'https://www.timegambit.com',
   siteRepo: 'https://github.com/jintak/timegambit-blog',
   siteLogo: '/static/images/logo.png',
-  image: '/static/images/logo.png',
   socialBanner: '/static/images/twitter-card.png',
   fallbackImage: '/static/images/fallback.webp',
 
+  // for footer
   email: 'jintak0401@naver.com',
   github: 'https://github.com/jintak0401',
   twitter: '',
@@ -24,8 +24,7 @@ const siteMetadata = {
   youtube: '',
   linkedin: '',
 
-  needRestoreScrollPosPage: ['/blog', '/tags/[tag]', '/series/[slug]'],
-  rebuildPeriod: 10, // renewal period of popular post list at home page and guestbook logs (in seconds)
+  revalidate: 10, // renewal period of popular post list at home page and guestbook logs (in seconds)
   blogPost: {
     maxLikeCount: 4,
     postsPerScroll: 10,
@@ -38,12 +37,7 @@ const siteMetadata = {
     providers: ['google', 'github', 'naver', 'kakao'],
   },
   analytics: {
-    googleAnalyticsId: 'G-W3YPJJJVS7', // e.g. UA-000000-2 or G-XXXXXXX
-  },
-  newsletter: {
-    // supports mailchimp, buttondown, convertkit, klaviyo, revue
-    // Please add your .env file and modify it according to your selection
-    provider: 'buttondown',
+    googleAnalyticsId: 'G-W3YPJJJVS7', // e.g. G-XXXXXXX
   },
   comment: {
     provider: 'giscus', // supported providers: giscus, utterances, disqus

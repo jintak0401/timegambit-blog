@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
+import NextLink from 'next/link';
 
 import phrases from 'data/phrases';
 
@@ -20,12 +20,12 @@ const _404Page = () => {
       <div className="middle-text duration-default break-keep text-center text-lg font-semibold text-gray-500 sm:text-xl">
         {phrases._404.description}
       </div>
-      <Link
+      <NextLink
         href="/"
         className="button-color rounded-md px-5 py-2 font-semibold duration-300 sm:text-lg"
       >
         {phrases._404.goToMain}
-      </Link>
+      </NextLink>
     </div>
   );
 };

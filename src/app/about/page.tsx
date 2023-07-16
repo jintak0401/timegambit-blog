@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { Metadata } from 'next';
 import NextImage from 'next/image';
-import Link from 'next/link';
+import NextLink from 'next/link';
 
 import about from 'data/about';
 import phrases from 'data/phrases';
@@ -59,12 +59,12 @@ const AboutPage = () => {
                 <span className="strong-text -ml-1.5 inline-block w-[72px] md:w-20">
                   {key}.
                 </span>
-                <Link
+                <NextLink
                   href={`${value.includes('@') ? 'mailto:' : ''}${value}`}
                   className="primary-color-text font-medium hover:underline"
                 >
                   {value}
-                </Link>
+                </NextLink>
               </li>
             ))}
           </ul>

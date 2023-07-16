@@ -7,7 +7,7 @@ import phrases from 'data/phrases';
 import siteMetadata from 'data/site-metadata.mjs';
 
 import { filterBlogPosts } from '@/lib/contentlayer';
-import { scrollPosStore } from '@/lib/scroll-pos-store';
+import { postListLengthStore } from '@/lib/post-list-length-store';
 import { sameAllElements } from '@/lib/utils';
 import useDebounce from '@/hooks/use-debounce';
 import useInfiniteScrollObserver from '@/hooks/use-infinite-scroll-observer';
@@ -26,8 +26,8 @@ interface Props {
 
 export default function ListLayout({ posts, title, description }: Props) {
   const pathname = usePathname();
-  const { getScrollPosState, setListLengthState } = scrollPosStore;
-  const { listLength } = getScrollPosState(pathname);
+  const { getListLengthState, setListLengthState } = postListLengthStore;
+  const listLength = getListLengthState(pathname);
   const infScrollRef = useRef<HTMLDivElement | null>(null);
   const isFirstRender = useIsFirstRender();
   const [searchValue, setSearchValue] = useState('');

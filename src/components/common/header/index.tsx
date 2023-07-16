@@ -1,4 +1,5 @@
 import React, { memo, useCallback, useState } from 'react';
+import NextLink from 'next/link';
 import { usePathname } from 'next/navigation';
 
 import { DarkLogo, DarkLogoTitle, Logo, LogoTitle } from 'data/logo';
@@ -7,7 +8,6 @@ import siteMetadata from 'data/site-metadata.mjs';
 
 import { useScrollDirection } from '@/hooks/use-scroll-direction';
 
-import NavLink from '@/components/common/nav-link';
 import SvgSwitcher from '@/components/image/svg-switcher';
 
 import MobileNav from './mobile-nav';
@@ -30,7 +30,7 @@ const NavItems = () => {
               !REDUCED_NAV_LINKS.includes(title) ? 'hidden xl:block' : ''
             }`}
           >
-            <NavLink
+            <NextLink
               href={href}
               className={`duration-default mx-1 rounded p-1 font-semibold sm:px-4 sm:py-2 ${
                 isSamePath(title)
@@ -39,7 +39,7 @@ const NavItems = () => {
               }`}
             >
               {title}
-            </NavLink>
+            </NextLink>
           </li>
         ))}
       </ul>
@@ -54,7 +54,7 @@ const HeaderBody = memo(function HeadBody({
 }) {
   return (
     <>
-      <NavLink
+      <NextLink
         href="/"
         aria-label={siteMetadata.headerTitle}
         className="flex cursor-pointer items-center justify-between"
@@ -71,7 +71,7 @@ const HeaderBody = memo(function HeadBody({
           LightModeSvg={LogoTitle}
           DarkModeSvg={DarkLogoTitle}
         />
-      </NavLink>
+      </NextLink>
       <div className="flex items-center py-1 leading-5 sm:py-0">
         <NavItems />
         <ThemeSwitch />

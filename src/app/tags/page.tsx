@@ -1,3 +1,5 @@
+import NextLink from 'next/link';
+
 import phrases from 'data/phrases';
 import siteMetadata from 'data/site-metadata.mjs';
 
@@ -7,7 +9,6 @@ import { getAllTags } from '@/lib/get-blog-info.mjs';
 import { generateDefaultMetadata } from '@/lib/metadata';
 
 import Tag from '@/components/card-and-list/tag';
-import NavLink from '@/components/common/nav-link';
 
 export const metadata = generateDefaultMetadata({
   title: 'Tags',
@@ -36,12 +37,12 @@ const TagListPage = async () => {
           return (
             <div key={t} className="mb-2 mr-5 mt-2">
               <Tag text={t} />
-              <NavLink
+              <NextLink
                 href={`/tags/${slug(t)}`}
                 className="duration-default -ml-2 text-sm font-semibold uppercase text-gray-600 dark:text-gray-300"
               >
                 {` (${tags[t]})`}
-              </NavLink>
+              </NextLink>
             </div>
           );
         })}

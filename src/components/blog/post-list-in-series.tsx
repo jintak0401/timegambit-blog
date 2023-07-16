@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import NextLink from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import phrases from 'data/phrases';
@@ -10,8 +11,6 @@ import { slug } from 'github-slugger';
 import { GoTriangleDown } from 'react-icons/go';
 import { ImBookmark } from 'react-icons/im';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
-
-import NavLink from '@/components/common/nav-link';
 
 interface Props {
   seriesTitle: string;
@@ -75,7 +74,7 @@ const PostListInSeries = ({ seriesTitle, series }: Props) => {
     <div className="duration-default mt-5 rounded-md bg-gray-100 px-6 py-5 dark:bg-gray-800">
       <ImBookmark className="absolute right-2 top-0 h-auto w-10 fill-current text-primary-500 lg:right-4 lg:w-12" />
       <header>
-        <NavLink
+        <NextLink
           className="mb-7 block text-xl font-semibold text-gray-700 hover:text-gray-500 hover:underline dark:text-gray-200 hover:dark:text-gray-400 md:text-3xl"
           href={`/series/${slug(
             seriesData[seriesTitle as keyof typeof seriesData]?.slug ||
@@ -83,13 +82,13 @@ const PostListInSeries = ({ seriesTitle, series }: Props) => {
           )}`}
         >
           {seriesTitle}
-        </NavLink>
+        </NextLink>
       </header>
       {disclosure && (
         <ol className="list-inside list-decimal space-y-1 marker:italic marker:text-gray-400 marker:before:mr-1 marker:dark:text-gray-500">
           {series.map(({ slug, title }) => (
             <li key={slug}>
-              <NavLink
+              <NextLink
                 href={`/blog/${slug}${disclosure ? '?disclosure=true' : ''}`}
                 className={`hover:underline
                 ${
@@ -99,7 +98,7 @@ const PostListInSeries = ({ seriesTitle, series }: Props) => {
                 }`}
               >
                 {title}
-              </NavLink>
+              </NextLink>
             </li>
           ))}
         </ol>
