@@ -622,7 +622,7 @@ obj1.getNext().getNext().sayName();
 
 ```js
 Array.prototype.findLastIndex = (el) => {
-  for (let i = this.length; i >= 0; i++) {
+  for (let i = this.length; i >= 0; i--) {
     if (this[i] === el) return i;
   }
   return -1;
