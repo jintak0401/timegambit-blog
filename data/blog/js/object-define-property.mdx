@@ -34,7 +34,7 @@ Object.defineProperty(obj, 'key', {
 * `get`: getter 함수로 obj.key에 접근할 때 동작하며, 이 함수의 return 값을 obj.key로 가집니다. 기본값은 undefined
 * `set`: setter 함수로 obj.key에 값을 할당할 때 동작하며, 할당할 값이 인자로 들어옵니다. 기본값은 undefined
 
-<Alert type="danger">
+<Callout type="danger">
   **[value, writable]과 [get, set]은 동시에 사용할 수 없습니다.** 즉, 다음과 같이 [value, writable] 중 하나(또는 전체)와 [get, set] 중 하나(또는 전체)를 함께 사용할 수 없습니다.
   ```js
   Object.defineProperty(obj, 'key', {
@@ -44,7 +44,7 @@ Object.defineProperty(obj, 'key', {
     },
   });
   ```
-</Alert>
+</Callout>
 
 ```js
 const obj = {};

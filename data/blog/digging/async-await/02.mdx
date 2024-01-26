@@ -177,7 +177,7 @@ function _regeneratorRuntime() {
 
 마지막으로 `exports` 객체를 return 해줍니다.
 
-<Alert type="info">
+<Callout type="info">
   ```js showLineNumbers {3-5}
   function _regeneratorRuntime() {
     "use strict";
@@ -193,7 +193,7 @@ function _regeneratorRuntime() {
 }
   ```
   3~5번 라인도 배울점이 있는 코드라고 생각합니다. `_regeneratorRuntime` 함수를 처음 호출하면 수백줄에 걸쳐서 `exports` 객체를 설정해줍니다. 그리고 `_regeneratorRuntime` 함수를 재호출했을 때, `exports` 객체를 다시 설정해주는 것이 아닌 기존의 설정되어있던 `exports` 객체를 return해주도록 구현되어 있습니다.
-</Alert>
+</Callout>
 
 간단하게 `_regeneratorRuntime` 함수를 살펴보았습니다. 무작정 코드를 살펴보아서 이 함수가 뭔가 싶으시죠? 이 함수를 왜 살펴보았는지 처음으로 돌아가 설명드리겠습니다.
 

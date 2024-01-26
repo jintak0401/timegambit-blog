@@ -44,7 +44,7 @@ export const MDXComponents = {
   img: CustomMedia,
   a: CustomLink,
   pre: Pre,
-  Alert: Callout,
+  Callout,
 
   // dynamic import
   Logo,

@@ -136,21 +136,21 @@ class InterceptorManager {
 함수들이었네요. 인터셉터 함수들이 담길 `this.handlers` 리스트에 각 함수들과 `synchronous, runWhen`을 함께 객체로 만들어 추가하네요.
 그리고 해당 객체의 index를 return해주어 eject할 때 해당 index로 접근해서 인터셉터 함수를 제거해줍니다.
 
-<Alert type="info">
+<Callout type="info">
   위에서 `synchronous`는 `fulfilled, rejected` 함수들의 async 함수 여부를 나타내는 속성입니다.
   (synchronous: true일 경우 async 함수가 아니라는 것입니다.)
   뒤에서 이 값에 따라 동작이 어떻게 달라지는지 설명하겠습니다. 지금은 이 속성이 있다는 것만 기억해주세요.
-</Alert>
+</Callout>
 
 ## Interceptor 실행
 
 방금까지 우리는 request/response 인터셉터 함수들이 어떻게 등록되는지 알아보았습니다.
 이번에는 등록했던 인터셉터 함수들이 어떻게 실행되는지 알아봅시다.
 
-<Alert type="warning">
+<Callout type="warning">
   아래 설명에서 메소드는 GET, POST, PUT, DELETE 등과 같은 HTTP의 메소드들을 지칭합니다.
   클래스에 정의된 함수들은 메소드가 아닌 함수로 지칭합니다.
-</Alert>
+</Callout>
 
 ### Axios 각 메소드 정의
 
@@ -209,7 +209,7 @@ Axios 클래스 내에 각 메소드들의 동작이 각각 정의되어 있는 
 * request 단 1개의 함수를 이용해서 모든 메소드를 수행함으로써, 각 메소드를 담당하는 7개 함수를 모두 정의하지 않고 1개의 함수만 정의하면 됩니다.
 * prototype으로 각 메소드 동작을 정의함으로써, axios 객체를 아무리 생성해도, 각 메소드의 동작을 수행하는 함수는 항상 7개만 존재합니다.
 
-<Alert type="info">
+<Callout type="info">
   Q. 클래스 내부에 각 메소드의 함수를 static으로 정의하면 안될까요? 이렇게 정의해도 prototype으로 정의하는 것처럼 7개만 존재하게되지 않나요?
 
   static 함수로 정의하게되면 객체를 생성하지 않아도 쓸 수 있도록, 객체가 고유하게 갖고 있는 값에는 접근할 수 없게 됩니다.
@@ -222,7 +222,7 @@ Axios 클래스 내에 각 메소드들의 동작이 각각 정의되어 있는 
   예를 들어 axios1, axios2 객체 각각에 timeout을 1000, 2000으로 주었다고 하더라도
   static 함수 내에서는 각 timeout인 1000과 2000을 가져올 수 없게 됩니다. 그래서 axios에서는
   static이 아닌 prototype을 이용하는 것 같습니다.
-</Alert>
+</Callout>
 
 ### Axios request 함수
 
@@ -405,13 +405,13 @@ promise = Promise.resolve(config)
              .then(onResFulfilled2, onResRejected2)
 ```
 
-<Alert type="info">
+<Callout type="info">
   Q. Promise의 then에 함수가 왜 2개가 들어가죠? 원래 1개만 있어야 하는 것 아닌가요?
 
   then함수에 함수가 2개 들어갈 수 있습니다. 앞쪽의 함수는 resolve함수, 뒤쪽의 함수는 reject함수입니다.
   catch의 역할을 then에서 해준다고 할 수 있죠. 단, 동일한 then에서 발생한 에러는 뒤 쪽의 reject 함수가 잡아주지는 않습니다.
   위의 경우, onReqFulfilled2에서 에러가 발생하면 onReqRejected2가 아닌 onReqRejected1에서 잡아줍니다.
-</Alert>
+</Callout>
 
 그렇다면 promise는 어떻게 동작하게 될까요? interceptor를 수행하기 전 설정인 config로 시작해서
 onReqFulfilled2, onReqFulfilled1을 거쳐가며 설정이 추가되고, dispatchRequest를 통해 HTTP 요청을 하고 응답이 오면,

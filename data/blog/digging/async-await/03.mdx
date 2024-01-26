@@ -69,7 +69,7 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
 
 `generator` 객체에는 `next` 함수가 정의되지 않았기 때문에 프로토체이닝을 통해 `next` 함수를 찾아나갑니다. 우선 `generator`의 __proto__인 ⓐ 객체를 찾아봅니다. 하지만 여기에도 `next` 함수가 없습니다. 다시 ⓐ 객체의 __proto__인 `Gp` 객체를 찾아봅니다. 그리고 `Gp` 객체에는 `defineIteratorMethods` 함수를 통해 설정해준 `next` 함수가 있습니다. 그래서 위 코드의 11번 라인을 통해 `Gp.next` 함수를 호출하게 됩니다! 그리고 `next` 함수에서는 `this._invoke` 함수를 호출하므로 결국 `generator._invoke` 함수를 호출하게 됩니다.
 
-<Alert type="info">
+<Callout type="info">
   Q. 어떻게 `this._invoke`로 `generator._invoke`를 호출할 수 있나요?
 
   A. 자바스크립트에서 `this`는 꽤 난해한 개념이죠. 그래서 헷갈릴 때가 많습니다. 지금처럼 객체에 정의되어 있는 메소드를 사용할 때에 `this`는 해당 메소드를 호출한 객체를 가리키게 됩니다. 즉, 위 코드의 4번 라인의 `this`는 `generator` 객체를 가리키게 됩니다. 왜냐하면 11번 라인의 `gen`은 `generator` 객체이기 때문입니다.
@@ -100,7 +100,7 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
 
   generator.next();
   ```
-</Alert>
+</Callout>
 
 ## `makeInvokeMethod` 함수
 
@@ -166,7 +166,7 @@ function tryCatch(fn, obj, arg) {
 
 5번, 8번 라인을 `context`는 \{ method: 'next', arg: undefined, sent: undefined, _sent: undefined, ... \}인 객체가 됩니다. 그리고 이 `context`와 함께 `_callee$`(= `innerFn`)를 인자로 넣어 `tryCatch` 함수를 호출합니다. 그리고 `tryCatch` 함수에서 `fn.call`을 통해 `_callee$`를 호출해줍니다.
 
-<Alert type="info">
+<Callout type="info">
   중요하지는 않지만 `context`에 대해 부연설명을 합니다. `context`는 `wrap` 함수에서 `new Context()`를 통해 객체를 생성합니다. 이 때 `Context` 함수에서 아래 코드의 `reset` 함수를 호출하여 `context`의 여러 속성들을 초기화해줍니다.
 
   ```js
@@ -188,7 +188,7 @@ function tryCatch(fn, obj, arg) {
     }
   },
   ```
-</Alert>
+</Callout>
 
 ## `_callee$`
 

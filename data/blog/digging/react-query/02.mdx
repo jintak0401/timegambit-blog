@@ -314,7 +314,7 @@ export class Subscribable<TListener extends Function = Listener> {
 
 3번 라인에서 인자로 받는 `listener`가 정확히 무엇일까요? [notifyManager.ts 코드](#batchcalls)의 16 ~ 20번 라인의 함수입니다. 즉, 리렌더링을 야기하는 함수가 `listener`입니다. 이러한 리렌더링 유발 함수가 4번 라인을 통해 `QueryObserver`의 `listeners`에 추가됩니다. 그리고 `onSubscribe()` 함수가 호출되죠.
 
-<Alert type="info">
+<Callout type="info">
   갑자기 못 보던 클래스인 `Subscribable`이 튀어 나왔네요. 하지만 사실 이 클래스를 자세히 다루지 않았을 뿐, 저번 포스트에서 스쳐지나가듯 보았습니다.
 
   ```ts
@@ -330,7 +330,7 @@ export class Subscribable<TListener extends Function = Listener> {
   ```
 
   `QueryCache`와 `QueryObserver` 클래스는 `Subscribable` 클래스를 상속받고 있습니다. 따라서 `QueryCache`와 `QueryObserver` 객체는 `Subscribable` 클래스가 가지는 `listeners`와 `subscribe()`를 가집니다.
-</Alert>
+</Callout>
 
 ### onSubscribe()
 
