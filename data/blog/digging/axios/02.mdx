@@ -92,7 +92,7 @@ export default {
 `getAdapter` 함수에 들어온 `adapters` 인자가 무엇인지에 따라 adapter에 `httpAdapter` 혹은 `xhrAdapter`가 들어가겠네요.
 저희는 이 중 httpAdapter를 집중해서 보도록 하겠습니다.
 
-<Alert type="info">
+<Callout type="info">
   Q. 어떻게 adapters에 'http'가 들어갈 수가 있죠?
 
   A. dispatchRequest 코드에서 getAdapter 함수의 인자로 `config.adapter || defaults.adapter`를 넣어주고 있습니다.
@@ -106,7 +106,7 @@ export default {
   }
   ```
   기본적인 adapter로 'xhr'과 'http'를 가지고 있습니다. 그래서 getAdapters의 인자로 'http'가 들어갈 수 있습니다.
-</Alert>
+</Callout>
 
 ## timeout 기능 코드
 

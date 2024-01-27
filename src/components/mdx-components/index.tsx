@@ -9,7 +9,7 @@ import { coreContent } from '@/lib/contentlayer';
 import PostLayout from '@/layouts/post-layout';
 import PostLayoutWithThumbnail from '@/layouts/post-layout-with-thumbnail';
 
-import Alert from './alert';
+import Callout from './callout';
 import CustomLink from './custom-link';
 import CustomMedia from './custom-media';
 import Pre from './pre';
@@ -44,7 +44,7 @@ export const MDXComponents = {
   img: CustomMedia,
   a: CustomLink,
   pre: Pre,
-  Alert,
+  Callout,
 
   // dynamic import
   Logo,

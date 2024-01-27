@@ -135,15 +135,12 @@ code[class*=language-] ::selection, code[class*=language-]::selection, pre[class
 }
 
 .token.boolean,
-.token.constant,
 .token.unit,
-.token.hexcode
+.token.hexcode,
+.token.dom,
+.token.number
 {
     color: var(--purple);
-}
-
-.token.number {
-    color: rgba(189, 147, 249, 1);
 }
 
 .token.at,

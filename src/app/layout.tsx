@@ -1,5 +1,5 @@
 import { ReactNode, Suspense } from 'react';
-import { Metadata } from 'next';
+import { Metadata, Viewport } from 'next';
 import localFont from 'next/font/local';
 
 import phrases from 'data/phrases';
@@ -17,8 +17,16 @@ import Analytics from '@/components/analytics';
 
 import RootLayoutClient from './layout.client';
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: [
+    { media: '(prefers-color-scheme: dark)', color: '#171717' },
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+  ],
+};
+
 export const metadata: Metadata = {
-  viewport: 'width=device-width, initial-scale=1',
   metadataBase: siteMetadata.siteUrl as unknown as URL,
   title: {
     absolute: siteMetadata.title,
@@ -26,7 +34,6 @@ export const metadata: Metadata = {
   },
   description: phrases.Seo.homeDesc || siteMetadata.description,
   applicationName: siteMetadata.applicationName,
-  themeColor: '#ffffff',
   alternates: {
     canonical: siteMetadata.siteUrl,
     types: {

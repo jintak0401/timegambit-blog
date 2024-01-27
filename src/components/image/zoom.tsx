@@ -84,7 +84,7 @@ const Zoom = (props: ImageProps) => {
         ref={imageRef}
         onClick={handleImageZoom}
         onError={() => setError(true)}
-        onLoadingComplete={onCompleteImageLoad}
+        onLoad={onCompleteImageLoad}
         {...imageProps}
       />
     </>
