@@ -80,7 +80,7 @@ const PostCard = ({ post }: Props) => {
           src={images[0]}
           className="aspect-[191/100] rounded-md object-cover"
           loading="lazy"
-          onLoadingComplete={() => setLoading(false)}
+          onLoad={() => setLoading(false)}
         />
         <div
           className={`placeholder absolute left-0 top-1/2 my-auto aspect-[191/101] w-full -translate-y-1/2 overflow-hidden rounded-md bg-gray-200 dark:bg-gray-700 ${

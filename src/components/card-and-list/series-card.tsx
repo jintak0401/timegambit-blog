@@ -29,7 +29,7 @@ const SeriesCard = ({ series }: Props) => {
           src={image}
           alt={title}
           className="aspect-[191/100] rounded-md object-cover"
-          onLoadingComplete={() => {
+          onLoad={() => {
             setLoaded(true);
           }}
         />

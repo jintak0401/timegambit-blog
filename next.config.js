@@ -13,14 +13,42 @@ const nextConfig = withContentlayer(
     },
 
     images: {
-      domains: [
-        'lh3.googleusercontent.com',
-        'k.kakaocdn.net',
-        'avatars.githubusercontent.com',
-        'ssl.pstatic.net',
-        'phinf.pstatic.net',
-        'imgur.com',
-        'i.imgur.com',
+      remotePatterns: [
+        {
+          protocol: 'https',
+          hostname: 'lh3.googleusercontent.com',
+          pathname: '**',
+        },
+        {
+          protocol: 'http',
+          hostname: 'k.kakaocdn.net',
+          pathname: '**',
+        },
+        {
+          protocol: 'https',
+          hostname: 'avatars.githubusercontent.com',
+          pathname: '**',
+        },
+        {
+          protocol: 'https',
+          hostname: 'ssl.pstatic.net',
+          pathname: '**',
+        },
+        {
+          protocol: 'https',
+          hostname: 'phinf.pstatic.net',
+          pathname: '**',
+        },
+        {
+          protocol: 'https',
+          hostname: 'imgur.com',
+          pathname: '**',
+        },
+        {
+          protocol: 'https',
+          hostname: 'i.imgur.com',
+          pathname: '**',
+        },
       ],
     },
 

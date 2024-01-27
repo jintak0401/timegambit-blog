@@ -22,7 +22,7 @@ const ProjectCard = ({ title, description, imgSrc, href }: Props) => {
       src={imgSrc}
       alt={title}
       className="aspect-video object-cover"
-      onLoadingComplete={() => {
+      onLoad={() => {
         setLoaded(true);
       }}
     />
