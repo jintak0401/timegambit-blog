@@ -2892,10 +2892,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:*":
+  version: 20.11.30
+  resolution: "@types/node@npm:20.11.30"
+  dependencies:
+    undici-types: "npm:~5.26.4"
+  checksum: 78515bc768d2b878e2e06a1c20eb4f5840072b79b8d28ff3dd0a7feaaf48fd3a2ac03cfa5bc7564da82db5906b43e9ba0e5df9f43d870b7aae2942306e208815
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:>=12.12.47, @types/node@npm:>=13.7.0, @types/node@npm:^20.1.0":
   version: 20.1.0
   resolution: "@types/node@npm:20.1.0"
   checksum: 6140dc92b28adc80318633a1f8112a8b89273b9867258006cb9cf7b00bf94a69949426dd8ddbd420f03a1f57ea090cbd370889ef03eecfb764596c5920130830
+  languageName: node
+  linkType: hard
+
+"@types/oracledb@npm:^6.3.0":
+  version: 6.3.0
+  resolution: "@types/oracledb@npm:6.3.0"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: b7cececf1776d99361228f6a5b65de29349551f2cf32ce095f32b10a473e12b4f70444bfe1917e0909dbd5ef20463de5a96aecad5b3470cb58cc47bd9a1a8ee3
   languageName: node
   linkType: hard
 
@@ -8034,6 +8052,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"oracledb@npm:^6.4.0":
+  version: 6.4.0
+  resolution: "oracledb@npm:6.4.0"
+  checksum: ea00e32596c72dd62d35892d8f28dbe48df1f359ebbe4ddfe7029f5f2b6184dfe84a19a55ef071c577c740b465e2d8d2cd89021186b6e794a59e0c82b5706de7
+  languageName: node
+  linkType: hard
+
 "os-tmpdir@npm:~1.0.2":
   version: 1.0.2
   resolution: "os-tmpdir@npm:1.0.2"
@@ -9931,6 +9956,7 @@ __metadata:
     "@tailwindcss/forms": "npm:^0.5.3"
     "@tailwindcss/typography": "npm:^0.5.9"
     "@types/node": "npm:^20.1.0"
+    "@types/oracledb": "npm:^6.3.0"
     "@types/react": "npm:^18.2.5"
     "@types/react-dom": "npm:^18.2.4"
     "@types/unist": "npm:^2.0.6"
@@ -9955,6 +9981,7 @@ __metadata:
     next: "npm:^14.1.0"
     next-auth: "npm:^4.22.1"
     next-contentlayer: "npm:^0.3.4"
+    oracledb: "npm:^6.4.0"
     postcss: "npm:^8.4.33"
     prettier: "npm:^2.8.0"
     prettier-plugin-tailwindcss: "npm:^0.2.8"
@@ -10174,6 +10201,13 @@ __metadata:
     has-symbols: "npm:^1.0.3"
     which-boxed-primitive: "npm:^1.0.2"
   checksum: 06e1ee41c1095e37281cb71a975cb3350f7cb470a0665d2576f02cc9564f623bd90cfc0183693b8a7fdf2d242963dcc3010b509fa3ac683f540c765c0f3e7e43
+  languageName: node
+  linkType: hard
+
+"undici-types@npm:~5.26.4":
+  version: 5.26.5
+  resolution: "undici-types@npm:5.26.5"
+  checksum: 0097779d94bc0fd26f0418b3a05472410408877279141ded2bd449167be1aed7ea5b76f756562cb3586a07f251b90799bab22d9019ceba49c037c76445f7cddd
   languageName: node
   linkType: hard
 

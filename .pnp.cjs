@@ -32,6 +32,7 @@ const RAW_RUNTIME_STATE =
           ["@tailwindcss/forms", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:0.5.3"],\
           ["@tailwindcss/typography", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:0.5.9"],\
           ["@types/node", "npm:20.1.0"],\
+          ["@types/oracledb", "npm:6.3.0"],\
           ["@types/react", "npm:18.2.5"],\
           ["@types/react-dom", "npm:18.2.4"],\
           ["@types/unist", "npm:2.0.6"],\
@@ -56,6 +57,7 @@ const RAW_RUNTIME_STATE =
           ["next", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:14.1.0"],\
           ["next-auth", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:4.22.1"],\
           ["next-contentlayer", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:0.3.4"],\
+          ["oracledb", "npm:6.4.0"],\
           ["postcss", "npm:8.4.33"],\
           ["prettier", "npm:2.8.8"],\
           ["prettier-plugin-tailwindcss", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:0.2.8"],\
@@ -4659,6 +4661,24 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/@types-node-npm-20.1.0-c5561d67cd-6140dc92b2.zip/node_modules/@types/node/",\
         "packageDependencies": [\
           ["@types/node", "npm:20.1.0"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:20.11.30", {\
+        "packageLocation": "./.yarn/cache/@types-node-npm-20.11.30-b20dd3f11f-78515bc768.zip/node_modules/@types/node/",\
+        "packageDependencies": [\
+          ["@types/node", "npm:20.11.30"],\
+          ["undici-types", "npm:5.26.5"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/oracledb", [\
+      ["npm:6.3.0", {\
+        "packageLocation": "./.yarn/cache/@types-oracledb-npm-6.3.0-d9dd7fe123-b7cececf17.zip/node_modules/@types/oracledb/",\
+        "packageDependencies": [\
+          ["@types/oracledb", "npm:6.3.0"],\
+          ["@types/node", "npm:20.11.30"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -10733,6 +10753,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["oracledb", [\
+      ["npm:6.4.0", {\
+        "packageLocation": "./.yarn/unplugged/oracledb-npm-6.4.0-ac1608e6db/node_modules/oracledb/",\
+        "packageDependencies": [\
+          ["oracledb", "npm:6.4.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["os-tmpdir", [\
       ["npm:1.0.2", {\
         "packageLocation": "./.yarn/cache/os-tmpdir-npm-1.0.2-e305b0689b-5666560f7b.zip/node_modules/os-tmpdir/",\
@@ -12900,6 +12929,7 @@ const RAW_RUNTIME_STATE =
           ["@tailwindcss/forms", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:0.5.3"],\
           ["@tailwindcss/typography", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:0.5.9"],\
           ["@types/node", "npm:20.1.0"],\
+          ["@types/oracledb", "npm:6.3.0"],\
           ["@types/react", "npm:18.2.5"],\
           ["@types/react-dom", "npm:18.2.4"],\
           ["@types/unist", "npm:2.0.6"],\
@@ -12924,6 +12954,7 @@ const RAW_RUNTIME_STATE =
           ["next", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:14.1.0"],\
           ["next-auth", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:4.22.1"],\
           ["next-contentlayer", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:0.3.4"],\
+          ["oracledb", "npm:6.4.0"],\
           ["postcss", "npm:8.4.33"],\
           ["prettier", "npm:2.8.8"],\
           ["prettier-plugin-tailwindcss", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:0.2.8"],\
@@ -13184,6 +13215,15 @@ const RAW_RUNTIME_STATE =
           ["has-bigints", "npm:1.0.2"],\
           ["has-symbols", "npm:1.0.3"],\
           ["which-boxed-primitive", "npm:1.0.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["undici-types", [\
+      ["npm:5.26.5", {\
+        "packageLocation": "./.yarn/cache/undici-types-npm-5.26.5-de4f7c7bb9-0097779d94.zip/node_modules/undici-types/",\
+        "packageDependencies": [\
+          ["undici-types", "npm:5.26.5"]\
         ],\
         "linkType": "HARD"\
       }]\
