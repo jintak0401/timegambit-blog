@@ -1,20 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { RowDataPacket } from 'mysql2';
 import { getServerSession } from 'next-auth';
-
-import { db } from '@/lib/db';
+import oracledb from 'oracledb';
 
 import queries from '@/app/api/queries';
-import { UserType } from '@/types';
+import { closeConnection } from '@/app/api/utils';
+import { GuestbookEntryType, UserType } from '@/types';
+
+import dbConfig from '~/dbconfig';
 
 export const dynamic = 'force-dynamic';
 export const GET = async () => {
-  let connection = null;
+  let connection: oracledb.Connection | null = null;
   try {
-    connection = await db.getConnection();
-    const [guestbooks] = await connection.query<RowDataPacket[]>(
-      queries.READ_ALL_GUESTBOOK
+    connection = await oracledb.getConnection(dbConfig);
+    const { rows: guestbooks } = await connection.execute<GuestbookEntryType>(
+      queries.READ_ALL_GUESTBOOK,
+      [],
+      {
+        outFormat: oracledb.OUT_FORMAT_OBJECT,
+      }
     );
     return NextResponse.json(guestbooks);
   } catch (e) {
@@ -23,12 +28,12 @@ export const GET = async () => {
       { status: 500 }
     );
   } finally {
-    connection && connection.release();
+    await closeConnection(connection);
   }
 };
 
 export const POST = async (req: NextRequest) => {
-  let connection = null;
+  let connection: oracledb.Connection | null = null;
   try {
     const session = await getServerSession();
     const { body } = await req.json();
@@ -41,25 +46,24 @@ export const POST = async (req: NextRequest) => {
 
     const { email, name, image } = session.user as UserType;
 
-    connection = await db.getConnection();
-    await connection.beginTransaction();
+    connection = await oracledb.getConnection(dbConfig);
 
-    await connection.query<RowDataPacket[]>(queries.CREATE_GUESTBOOK, [
-      email,
-      name,
-      image,
-      body,
-    ]);
-    await connection.commit();
+    await connection.execute<GuestbookEntryType>(
+      queries.CREATE_GUESTBOOK,
+      [email, name, image, body],
+      {
+        outFormat: oracledb.OUT_FORMAT_OBJECT,
+        autoCommit: true,
+      }
+    );
 
     return NextResponse.json('success');
   } catch (e) {
-    connection && (await connection.rollback());
     return NextResponse.json(
       { message: (e as Error).message },
       { status: 500 }
     );
   } finally {
-    connection && connection.release();
+    await closeConnection(connection);
   }
 };
