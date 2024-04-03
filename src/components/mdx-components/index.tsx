@@ -16,6 +16,8 @@ import Pre from './pre';
 
 const Logo = dynamic(() => import('data/logo/Logo'));
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const DEFAULT_LAYOUT: ComponentType<any> = PostLayout;
 const LAYOUT_MAP: {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: ComponentType<any>;
@@ -25,13 +27,15 @@ const LAYOUT_MAP: {
 };
 
 interface MDXLayout {
-  layout: string;
+  layout?: string;
   content: DocumentTypes;
   [key: string]: unknown;
 }
 
 const Wrapper = ({ layout, children, content, ...rest }: MDXLayout) => {
-  const Layout = LAYOUT_MAP[layout as keyof typeof LAYOUT_MAP];
+  const Layout =
+    layout && layout in LAYOUT_MAP ? LAYOUT_MAP[layout] : DEFAULT_LAYOUT;
+
   return (
     <Layout content={content} {...rest}>
       {children}

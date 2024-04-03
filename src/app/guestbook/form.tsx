@@ -20,7 +20,7 @@ const GuestbookForm = ({ setLoading, user }: Props) => {
   const onSubmitEntry = async () => {
     setLoading(true);
 
-    const res = await fetch('/api/guestbook', {
+    const res = await fetch(`/api/guestbook`, {
       body: JSON.stringify({ body: ref.current?.value }),
       headers: { 'Content-Type': 'application/json' },
       method: 'POST',
@@ -28,9 +28,7 @@ const GuestbookForm = ({ setLoading, user }: Props) => {
 
     setLoading(false);
 
-    const { error } = await res.json();
-
-    if (error) {
+    if (!res.ok) {
       toast(phrases.Guestbook.errorSubmit, {
         type: 'error',
       });
