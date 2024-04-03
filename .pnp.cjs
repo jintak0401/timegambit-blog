@@ -53,7 +53,6 @@ const RAW_RUNTIME_STATE =
           ["globby", "npm:13.1.4"],\
           ["inquirer", "npm:8.0.0"],\
           ["mdx-bundler", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:9.2.1"],\
-          ["mysql2", "npm:3.2.4"],\
           ["next", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:14.1.4"],\
           ["next-auth", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:4.22.1"],\
           ["next-contentlayer", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:0.3.4"],\
@@ -6301,15 +6300,6 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
-    ["denque", [\
-      ["npm:2.1.0", {\
-        "packageLocation": "./.yarn/cache/denque-npm-2.1.0-578d0b6297-8ea0532157.zip/node_modules/denque/",\
-        "packageDependencies": [\
-          ["denque", "npm:2.1.0"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
     ["depd", [\
       ["npm:2.0.0", {\
         "packageLocation": "./.yarn/cache/depd-npm-2.0.0-b6c51a4b43-c0c8ff3607.zip/node_modules/depd/",\
@@ -7583,16 +7573,6 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
-    ["generate-function", [\
-      ["npm:2.3.1", {\
-        "packageLocation": "./.yarn/cache/generate-function-npm-2.3.1-c839dc559c-318f85af87.zip/node_modules/generate-function/",\
-        "packageDependencies": [\
-          ["generate-function", "npm:2.3.1"],\
-          ["is-property", "npm:1.0.2"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
     ["gensync", [\
       ["npm:1.0.0-beta.2", {\
         "packageLocation": "./.yarn/cache/gensync-npm-1.0.0-beta.2-224666d72f-17d8333460.zip/node_modules/gensync/",\
@@ -8678,15 +8658,6 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
-    ["is-property", [\
-      ["npm:1.0.2", {\
-        "packageLocation": "./.yarn/cache/is-property-npm-1.0.2-6eac53b30e-2f66eacb3d.zip/node_modules/is-property/",\
-        "packageDependencies": [\
-          ["is-property", "npm:1.0.2"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
     ["is-reference", [\
       ["npm:3.0.1", {\
         "packageLocation": "./.yarn/cache/is-reference-npm-3.0.1-6d25a4ca74-12c316d161.zip/node_modules/is-reference/",\
@@ -9133,13 +9104,6 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/lru-cache-npm-7.18.3-e68be5b11c-6029ca5aba.zip/node_modules/lru-cache/",\
         "packageDependencies": [\
           ["lru-cache", "npm:7.18.3"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
-      ["npm:8.0.5", {\
-        "packageLocation": "./.yarn/cache/lru-cache-npm-8.0.5-bb030cd93e-74153ab136.zip/node_modules/lru-cache/",\
-        "packageDependencies": [\
-          ["lru-cache", "npm:8.0.5"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -10231,23 +10195,6 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
-    ["mysql2", [\
-      ["npm:3.2.4", {\
-        "packageLocation": "./.yarn/cache/mysql2-npm-3.2.4-ebe6a0a7dc-c2285821f7.zip/node_modules/mysql2/",\
-        "packageDependencies": [\
-          ["mysql2", "npm:3.2.4"],\
-          ["denque", "npm:2.1.0"],\
-          ["generate-function", "npm:2.3.1"],\
-          ["iconv-lite", "npm:0.6.3"],\
-          ["long", "npm:5.2.3"],\
-          ["lru-cache", "npm:8.0.5"],\
-          ["named-placeholders", "npm:1.1.3"],\
-          ["seq-queue", "npm:0.0.5"],\
-          ["sqlstring", "npm:2.3.3"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
     ["mz", [\
       ["npm:2.7.0", {\
         "packageLocation": "./.yarn/cache/mz-npm-2.7.0-ec3cef4ec2-8427de0ece.zip/node_modules/mz/",\
@@ -10256,16 +10203,6 @@ const RAW_RUNTIME_STATE =
           ["any-promise", "npm:1.3.0"],\
           ["object-assign", "npm:4.1.1"],\
           ["thenify-all", "npm:1.6.0"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["named-placeholders", [\
-      ["npm:1.1.3", {\
-        "packageLocation": "./.yarn/cache/named-placeholders-npm-1.1.3-1b385febe5-7834adc91e.zip/node_modules/named-placeholders/",\
-        "packageDependencies": [\
-          ["named-placeholders", "npm:1.1.3"],\
-          ["lru-cache", "npm:7.18.3"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -12327,15 +12264,6 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
-    ["seq-queue", [\
-      ["npm:0.0.5", {\
-        "packageLocation": "./.yarn/cache/seq-queue-npm-0.0.5-d5064d9793-fa302e3b2a.zip/node_modules/seq-queue/",\
-        "packageDependencies": [\
-          ["seq-queue", "npm:0.0.5"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
     ["set-blocking", [\
       ["npm:2.0.0", {\
         "packageLocation": "./.yarn/cache/set-blocking-npm-2.0.0-49e2cffa24-8980ebf7ae.zip/node_modules/set-blocking/",\
@@ -12536,15 +12464,6 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/sprintf-js-npm-1.0.3-73f0a322fa-c34828732a.zip/node_modules/sprintf-js/",\
         "packageDependencies": [\
           ["sprintf-js", "npm:1.0.3"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["sqlstring", [\
-      ["npm:2.3.3", {\
-        "packageLocation": "./.yarn/cache/sqlstring-npm-2.3.3-2db6939570-4e5a25af2d.zip/node_modules/sqlstring/",\
-        "packageDependencies": [\
-          ["sqlstring", "npm:2.3.3"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -12957,7 +12876,6 @@ const RAW_RUNTIME_STATE =
           ["globby", "npm:13.1.4"],\
           ["inquirer", "npm:8.0.0"],\
           ["mdx-bundler", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:9.2.1"],\
-          ["mysql2", "npm:3.2.4"],\
           ["next", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:14.1.4"],\
           ["next-auth", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:4.22.1"],\
           ["next-contentlayer", "virtual:59267e37207ed0a0c83eeead135657808cbaf82a316fb37ea01f9a113a08ae96c7a16da60c02da318bea27a893af6d8ec6e32167e1202c128104bdc49153ad8e#npm:0.3.4"],\
@@ -14171,10 +14089,9 @@ async function copyImpl(prelayout, postlayout, destinationFs, destination, sourc
         updated = await copySymlink(prelayout, postlayout, destinationFs, destination, destinationStat, sourceFs, source, sourceStat, opts);
       }
       break;
-    default:
-      {
-        throw new Error(`Unsupported file type (${sourceStat.mode})`);
-      }
+    default: {
+      throw new Error(`Unsupported file type (${sourceStat.mode})`);
+    }
   }
   if (opts.linkStrategy?.type !== `HardlinkFromIndex` || !sourceStat.isFile()) {
     if (updated || destinationStat?.mtime?.getTime() !== mtime.getTime() || destinationStat?.atime?.getTime() !== atime.getTime()) {
@@ -14237,7 +14154,10 @@ async function copyFolder(prelayout, postlayout, destinationFs, destination, des
 }
 async function copyFileViaIndex(prelayout, postlayout, destinationFs, destination, destinationStat, sourceFs, source, sourceStat, opts, linkStrategy) {
   const sourceHash = await sourceFs.checksumFilePromise(source, { algorithm: `sha1` });
-  const indexPath = destinationFs.pathUtils.join(linkStrategy.indexPath, sourceHash.slice(0, 2), `${sourceHash}.dat`);
+  const defaultMode = 420;
+  const sourceMode = sourceStat.mode & 511;
+  const indexFileName = `${sourceHash}${sourceMode !== defaultMode ? sourceMode.toString(8) : ``}`;
+  const indexPath = destinationFs.pathUtils.join(linkStrategy.indexPath, sourceHash.slice(0, 2), `${indexFileName}.dat`);
   let AtomicBehavior;
   ((AtomicBehavior2) => {
     AtomicBehavior2[AtomicBehavior2["Lock"] = 0] = "Lock";
@@ -14293,8 +14213,12 @@ async function copyFileViaIndex(prelayout, postlayout, destinationFs, destinatio
     }
   });
   postlayout.push(async () => {
-    if (!indexStat)
+    if (!indexStat) {
       await destinationFs.lutimesPromise(indexPath, defaultTime, defaultTime);
+      if (sourceMode !== defaultMode) {
+        await destinationFs.chmodPromise(indexPath, sourceMode);
+      }
+    }
     if (tempPath && !tempPathCleaned) {
       await destinationFs.unlinkPromise(tempPath);
     }
@@ -16498,6 +16422,8 @@ class VirtualFS extends ProxiedFS {
   }
 }
 
+const URL = Number(process.versions.node.split('.', 1)[0]) < 20 ? url.URL : globalThis.URL;
+
 class NodePathFS extends ProxiedFS {
   constructor(baseFs) {
     super(npath);
@@ -16509,7 +16435,7 @@ class NodePathFS extends ProxiedFS {
   mapToBase(path) {
     if (typeof path === `string`)
       return path;
-    if (path instanceof url.URL)
+    if (path instanceof URL)
       return url.fileURLToPath(path);
     if (Buffer.isBuffer(path)) {
       const str = path.toString();
@@ -18075,8 +18001,10 @@ class ZipFS extends BasePortableFakeFS {
           throw new Error(`Incomplete read`);
         else if (rc > size)
           throw new Error(`Overread`);
-        const memory = this.libzip.HEAPU8.subarray(buffer, buffer + size);
-        return Buffer.from(memory);
+        let result = Buffer.from(this.libzip.HEAPU8.subarray(buffer, buffer + size));
+        if (process.env.YARN_IS_TEST_ENV && process.env.YARN_ZIP_DATA_EPILOGUE)
+          result = Buffer.concat([result, Buffer.from(process.env.YARN_ZIP_DATA_EPILOGUE)]);
+        return result;
       } finally {
         this.libzip.free(buffer);
       }
@@ -19134,7 +19062,7 @@ function applyPatch(pnpapi, opts) {
   process.versions.pnp = String(pnpapi.VERSIONS.std);
   const moduleExports = require$$0__default.default;
   moduleExports.findPnpApi = (lookupSource) => {
-    const lookupPath = lookupSource instanceof url.URL ? url.fileURLToPath(lookupSource) : lookupSource;
+    const lookupPath = lookupSource instanceof URL ? url.fileURLToPath(lookupSource) : lookupSource;
     const apiPath = opts.manager.findApiPathFor(lookupPath);
     if (apiPath === null)
       return null;
@@ -19556,28 +19484,6 @@ function getPackageScopeConfig(resolved, readFileSyncFn) {
   return packageConfig;
 }
 
-/**
-  @license
-  Copyright Node.js contributors. All rights reserved.
-
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to
-  deal in the Software without restriction, including without limitation the
-  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
-  sell copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in
-  all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
-  IN THE SOFTWARE.
-*/
 function throwImportNotDefined(specifier, packageJSONUrl, base) {
   throw new ERR_PACKAGE_IMPORT_NOT_DEFINED(
     specifier,
