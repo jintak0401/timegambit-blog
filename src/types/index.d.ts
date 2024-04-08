@@ -1,5 +1,3 @@
-import { RowDataPacket } from 'mysql2';
-
 import { ConvertPick } from '@/lib/contentlayer';
 
 export type PostListItem = ConvertPick<{
@@ -25,7 +23,7 @@ export interface SeriesListItem {
   href: string;
 }
 
-export interface GuestbookEntryType extends RowDataPacket {
+export interface GuestbookEntryType {
   id: number;
   email: string;
   name: string;
@@ -34,7 +32,7 @@ export interface GuestbookEntryType extends RowDataPacket {
   updatedAt: string;
 }
 
-export interface PopularPostType extends RowDataPacket {
+export interface PopularPostType {
   slug: string;
 }
 

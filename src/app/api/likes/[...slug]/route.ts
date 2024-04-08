@@ -3,12 +3,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import siteMetadata from 'data/site-metadata.mjs';
 
 import { createHash } from 'crypto';
-import { RowDataPacket } from 'mysql2';
+import oracledb from 'oracledb';
 
-import { db } from '@/lib/db';
 import { joinSlugs } from '@/lib/utils';
 
 import queries from '@/app/api/queries';
+import { closeConnection } from '@/app/api/utils';
+
+import dbconfig from '~/dbconfig';
 
 export const dynamic = 'force-dynamic';
 export const GET = async (
@@ -19,7 +21,7 @@ export const GET = async (
   if (!slug) {
     return NextResponse.json({ message: 'There is no post' }, { status: 400 });
   }
-  let connection = null;
+  let connection: oracledb.Connection | null = null;
   try {
     const ipAddress = req.headers.get('x-forwarded-for') || '0.0.0.0';
 
@@ -27,22 +29,32 @@ export const GET = async (
       .update(ipAddress + (process.env.IP_ADDRESS_SALT as string), 'utf8')
       .digest('hex');
 
-    connection = await db.getConnection();
+    connection = await oracledb.getConnection(dbconfig);
 
-    const [[postLikes], [userLikes]] = await Promise.all([
-      connection.query<RowDataPacket[]>(queries.READ_POST_LIKE_COUNT, [
-        slug,
-      ]) as Promise<RowDataPacket[]>,
-      connection.query<RowDataPacket[]>(queries.READ_USER_LIKE_COUNT, [
-        slug,
-        encryptedIP,
-      ]) as Promise<RowDataPacket[]>,
+    const [{ rows: postLikes }, { rows: userLikes }] = await Promise.all([
+      connection.execute<{ count: number }>(
+        queries.READ_POST_LIKE_COUNT,
+        [slug],
+        {
+          autoCommit: false,
+          outFormat: oracledb.OUT_FORMAT_OBJECT,
+        }
+      ),
+      connection.execute<{ count: number }>(
+        queries.READ_USER_LIKE_COUNT,
+        [slug, encryptedIP],
+        {
+          autoCommit: false,
+          outFormat: oracledb.OUT_FORMAT_OBJECT,
+        }
+      ),
     ]);
+    await connection.commit();
 
     return NextResponse.json(
       {
-        postLikes: postLikes[0].count || 0,
-        userLikes: userLikes[0]?.count || 0,
+        postLikes: postLikes?.[0].count || 0,
+        userLikes: userLikes?.[0]?.count || 0,
       },
       {
         status: 200,
@@ -58,7 +70,7 @@ export const GET = async (
       }
     );
   } finally {
-    connection && connection.release();
+    await closeConnection(connection);
   }
 };
 
@@ -71,9 +83,7 @@ export const POST = async (
     return NextResponse.json({ message: 'There is no post' }, { status: 400 });
   }
 
-  let connection = null,
-    userLikes,
-    postLikes;
+  let connection: oracledb.Connection | null = null;
   try {
     const ipAddress = req.headers.get('x-forwarded-for') || '0.0.0.0';
 
@@ -81,46 +91,62 @@ export const POST = async (
       .update(ipAddress + (process.env.IP_ADDRESS_SALT as string), 'utf8')
       .digest('hex');
 
-    connection = await db.getConnection();
-    await connection.beginTransaction();
-    [userLikes] = await connection.query<RowDataPacket[]>(
+    connection = await oracledb.getConnection(dbconfig);
+
+    const { rows: _userLikes } = await connection.execute<{ count: number }>(
       queries.READ_USER_LIKE_COUNT,
-      [slug, encryptedIP]
+      [slug, encryptedIP],
+      {
+        outFormat: oracledb.OUT_FORMAT_OBJECT,
+      }
     );
+
     const { count: _count } = await req.json();
     const count = Math.min(
       _count > 0 ? _count : 0,
-      siteMetadata.blogPost.maxLikeCount - (userLikes[0]?.count || 0)
+      siteMetadata.blogPost.maxLikeCount - (_userLikes?.[0]?.count || 0)
     );
 
     await Promise.all([
-      connection.query<RowDataPacket[]>(queries.UPDATE_POST_LIKE_COUNT, [
-        count,
-        slug,
-      ]),
-      connection.query<RowDataPacket[]>(queries.UPDATE_USER_LIKE_COUNT, [
-        slug,
-        encryptedIP,
-        count,
-        count,
-      ]),
+      connection.execute(queries.UPDATE_POST_LIKE_COUNT, [count, slug], {
+        autoCommit: false,
+      }),
+      connection.execute(
+        queries.UPDATE_USER_LIKE_COUNT,
+        {
+          slug: { val: slug },
+          ip: { val: encryptedIP },
+          count: { val: count },
+        },
+        {
+          autoCommit: false,
+        }
+      ),
     ]);
 
-    [[postLikes], [userLikes]] = await Promise.all([
-      connection.query<RowDataPacket[]>(queries.READ_POST_LIKE_COUNT, [
-        slug,
-      ]) as Promise<RowDataPacket[]>,
-      connection.query<RowDataPacket[]>(queries.READ_USER_LIKE_COUNT, [
-        slug,
-        encryptedIP,
-      ]) as Promise<RowDataPacket[]>,
-    ]);
     await connection.commit();
+
+    const [{ rows: postLikes }, { rows: userLikes }] = await Promise.all([
+      connection.execute<{ count: number }>(
+        queries.READ_POST_LIKE_COUNT,
+        [slug],
+        {
+          outFormat: oracledb.OUT_FORMAT_OBJECT,
+        }
+      ),
+      connection.execute<{ count: number }>(
+        queries.READ_USER_LIKE_COUNT,
+        [slug, encryptedIP],
+        {
+          outFormat: oracledb.OUT_FORMAT_OBJECT,
+        }
+      ),
+    ]);
 
     return NextResponse.json(
       {
-        postLikes: postLikes[0].count || 0,
-        userLikes: userLikes[0]?.count || 0,
+        postLikes: postLikes?.[0]?.count || 0,
+        userLikes: userLikes?.[0]?.count || 0,
       },
       { status: 200 }
     );
@@ -133,6 +159,6 @@ export const POST = async (
       { status: 500 }
     );
   } finally {
-    connection && connection.release();
+    await closeConnection(connection);
   }
 };

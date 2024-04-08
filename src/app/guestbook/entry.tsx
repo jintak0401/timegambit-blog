@@ -49,7 +49,7 @@ const GuestbookEntry = ({ entry, user }: Props) => {
           </div>
           {user?.email === entry.email && (
             <button
-              className="duration-default h-fit rounded-md border-2 border-primary-200 px-3 py-1 hover:bg-primary-200 dark:border-primary-700 dark:hover:bg-primary-700"
+              className="duration-default h-fit rounded-md border-2 border-primary-200 px-3 py-1 hover:bg-primary-200 dark:border-primary-700 dark:text-gray-300 dark:hover:bg-primary-700"
               onClick={deleteEntry}
             >
               {phrases.Guestbook.delete}

@@ -176,7 +176,7 @@ const BlogPostPage = ({ params }: Props) => {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(getJsonLd(post)) }}
         />
         <MDXLayoutRenderer
-          layout={post.layout || DEFAULT_LAYOUT}
+          layout={post.layout}
           content={post}
           prev={prev}
           next={next}

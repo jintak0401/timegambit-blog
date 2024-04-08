@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { RowDataPacket } from 'mysql2';
+import oracledb from 'oracledb';
 import * as process from 'process';
 
-import { db } from '@/lib/db';
 import { joinSlugs } from '@/lib/utils';
 
 import queries from '@/app/api/queries';
+import { closeConnection } from '@/app/api/utils';
+
+import dbconfig from '~/dbconfig';
 
 export const dynamic = 'force-dynamic';
 const handler = async (method: 'GET' | 'POST', _slug: string[]) => {
@@ -25,31 +27,42 @@ const handler = async (method: 'GET' | 'POST', _slug: string[]) => {
     );
   }
 
-  let connection = null;
+  let connection: oracledb.Connection | null = null;
   try {
-    connection = await db.getConnection();
-    await connection.beginTransaction();
-    await connection.query(query, [slug]);
-    const [result] = await connection.query<RowDataPacket[]>(
-      queries.READ_VIEW_COUNT,
-      [slug]
+    connection = await oracledb.getConnection(dbconfig);
+
+    await connection.execute(
+      query,
+      {
+        slug: { val: slug },
+      },
+      {
+        autoCommit: true,
+      }
     );
-    await connection.commit();
+
+    const { rows: result } = await connection.execute<{ count: number }>(
+      queries.READ_VIEW_COUNT,
+      [slug],
+      {
+        outFormat: oracledb.OUT_FORMAT_OBJECT,
+      }
+    );
 
     return NextResponse.json(
       {
-        viewCount: result[0].count,
+        viewCount: result?.[0]?.count || 1,
       },
       { status: 200 }
     );
   } catch (e) {
-    connection && (await connection.rollback());
+    console.error(e);
     return NextResponse.json(
       { message: (e as Error).message },
       { status: 500 }
     );
   } finally {
-    connection && connection.release();
+    await closeConnection(connection);
   }
 };
 
